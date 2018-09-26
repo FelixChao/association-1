@@ -5,7 +5,7 @@ public class User {
     /**
      * 用户编号
      */
-    private String userId;
+    private Integer userId;
 
     /**
      * 用户名
@@ -15,18 +15,18 @@ public class User {
     /**
      * 用户密码
      */
-    private String userPasswor;
+    private String userPassword;
 
     /**
      * 用户权限等级
      */
     private Integer userType;
 
-    public String getUserId() {
+    public Integer getUserId() {
         return userId;
     }
 
-    public void setUserId(String userId) {
+    public void setUserId(Integer userId) {
         this.userId = userId;
     }
 
@@ -38,12 +38,12 @@ public class User {
         this.userName = userName;
     }
 
-    public String getUserPasswor() {
-        return userPasswor;
+    public String getUserPassword() {
+        return userPassword;
     }
 
-    public void setUserPasswor(String userPasswor) {
-        this.userPasswor = userPasswor;
+    public void setUserPassword(String userPasswor) {
+        this.userPassword = userPasswor;
     }
 
     public Integer getUserType() {
