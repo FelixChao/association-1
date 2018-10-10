@@ -3,6 +3,7 @@ package top.lvjp.association.mapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,17 +24,17 @@ public class UserMapperTest {
 
     @Test
     public void selectUserByName() {
-        Assert.assertEquals(new Integer(1),userMapper.selectUserByName("root").getUserId());
+        Assert.assertEquals(new Integer(1),userMapper.selectByNameAndPassword("root","123456").getUserId());
     }
 
     @Test
     public void selectUserById() {
-        Assert.assertEquals("root",userMapper.selectUserById(1).getUserName());
+        Assert.assertEquals("root",userMapper.selectById(1).getUserName());
     }
 
     @Test
     public void selectUser() {
-        List<User> users = userMapper.selectUser();
+        List<User> users = userMapper.selectAll();
         for (User user: users) {
             logger.info(user.toString());
         }
@@ -46,7 +47,7 @@ public class UserMapperTest {
         user.setUserName("user1");
         user.setUserPassword("345678");
         user.setUserType(2);
-        Assert.assertEquals(1,userMapper.insertUser(user));
+        Assert.assertEquals(1,userMapper.insert(user));
     }
 
     @Test
@@ -56,11 +57,11 @@ public class UserMapperTest {
         user.setUserName("user");
         user.setUserPassword("345678");
         user.setUserType(2);
-        Assert.assertEquals(1,userMapper.updateUser(user));
+        Assert.assertEquals(1,userMapper.update(user));
     }
 
     @Test
     public void deleteUserById(){
-        Assert.assertEquals(1,userMapper.deleteUserById(5));
+        Assert.assertEquals(1,userMapper.deleteById(5));
     }
 }
