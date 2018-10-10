@@ -5,7 +5,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@MapperScan(value = "top.lvjp.assocaition.mapper")
+@MapperScan("top.lvjp.association.mapper")
 public class AssociationApplication {
 
     public static void main(String[] args) {

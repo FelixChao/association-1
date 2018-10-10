@@ -46,6 +46,11 @@ public class News {
     private Date updateTime;
 
     /**
+     * 新闻发布时间
+     */
+    private Date publishTime;
+
+    /**
      * 新闻图片
      */
     private String newsImage;
@@ -120,5 +125,13 @@ public class News {
 
     public void setNewsImage(String newsImage) {
         this.newsImage = newsImage;
+    }
+
+    public Date getPublishTime() {
+        return publishTime;
+    }
+
+    public void setPublishTime(Date publishTime) {
+        this.publishTime = publishTime;
     }
 }

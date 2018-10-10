@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!-- thymeleaf 提示功能 -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head lang="en">
+    <meta charset="UTF-8"></meta>
+    <title>登录</title>
+</head>
+<style type="text/css">
+    body {
+        padding: 10px
+    }
+</style>
+<body>
+<div>
+    <!-- 后面添加参数起到清除缓存作用 -->
+    <img alt="验证码" id="imageCode" src="http://nzv8np.natappfree.cc/manage/verifyCode" />
+    <a href="javascript:reloadCode();">看不清楚,换一张</a>
+</div>
+<form action="http://nzv8np.natappfree.cc/manage/login" method="post" >
+    用户名:<input type="text" name="name" /><br>
+    密码:<input type="text" name="password" /><br>
+    验证码:<input type="text" name="code" /><br>
+    <input type="submit" value="提交" />
+</form>
+</body>
+<script type="text/javascript">
+    function reloadCode() {
+        document.getElementById("imageCode").src="http://nzv8np.natappfree.cc/manage/verifyCode?d='+new Date()*1";
+    }
+</script>
+</html>

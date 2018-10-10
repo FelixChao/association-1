@@ -1,22 +1,21 @@
 package top.lvjp.association.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import top.lvjp.association.entity.User;
 
 import java.util.List;
 
-@Mapper
 public interface UserMapper {
 
-    User selectUserByName(String name);
+    User selectByNameAndPassword(@Param("name") String name, @Param("password") String password);
 
-    User selectUserById(Integer id);
+    User selectById(Integer id);
 
-    List<User> selectUser();
+    List<User> selectAll();
 
-    int insertUser(User user);
+    int insert(User user);
 
-    int updateUser(User user);
+    int update(User user);
 
-    int deleteUserById(Integer id);
+    int deleteById(Integer id);
 }

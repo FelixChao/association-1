@@ -1,20 +1,16 @@
 package top.lvjp.association.mapper;
 
-import org.apache.ibatis.annotations.Mapper;
-import top.lvjp.association.dto.AssociationInfo;
+import top.lvjp.association.VO.AssociationInfo;
 
 import java.util.List;
 
-@Mapper
 public interface AssociationMapper {
 
-//    AssociationInfo selectAssociationById(Integer id);
+    AssociationInfo selectById(Integer id);
 
-    AssociationInfo selectAssociationById(Integer id);
+    List<AssociationInfo> selectPop(Integer count);
 
-    List<AssociationInfo> selectPopAssociation();
-
-    List<AssociationInfo> selectAssociationByCategory(String category);
+    List<AssociationInfo> selectByCategory(String category);
 
 
 }

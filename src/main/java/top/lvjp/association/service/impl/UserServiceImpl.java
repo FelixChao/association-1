@@ -1,47 +1,51 @@
 package top.lvjp.association.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import top.lvjp.association.enums.ResultEnum;
-import top.lvjp.association.exception.AssociationException;
+import org.springframework.stereotype.Service;
 import top.lvjp.association.mapper.UserMapper;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.service.UserService;
 
-import javax.validation.Valid;
 import java.util.List;
 
+@Service
 public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
 
     @Override
-    public User selectUserByName(String name) {
-        return userMapper.selectUserByName(name);
+    public User selectByNameAndPassword(String name, String password) {
+        return userMapper.selectByNameAndPassword(name,password);
     }
 
     @Override
-    public User selectUserById(Integer id) {
-        return userMapper.selectUserById(id);
+    public User selectById(Integer id) {
+        return userMapper.selectById(id);
     }
 
     @Override
-    public List<User> selectUser() {
-        return userMapper.selectUser();
+    public PageInfo<User> selectAll(Integer pageNum, Integer pageSize) {
+        PageHelper.startPage(pageNum,pageSize);
+        List<User> users = userMapper.selectAll();
+        PageInfo<User> pageInfo = new PageInfo<User>(users);
+        return pageInfo;
     }
 
     @Override
-    public int insertUser(User user) {
-        return userMapper.insertUser(user);
+    public int insert(User user) {
+        return userMapper.insert(user);
     }
 
     @Override
-    public int updateUser( User user) {
-        return userMapper.updateUser(user);
+    public int update(User user) {
+        return userMapper.update(user);
     }
 
     @Override
-    public int deleteUserById(Integer id) {
-        return userMapper.deleteUserById(id);
+    public int deleteById(Integer id) {
+        return userMapper.deleteById(id);
     }
 }

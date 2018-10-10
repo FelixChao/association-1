@@ -1,63 +1,70 @@
-package top.lvjp.association.entity;
+package top.lvjp.association.VO;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
-public class Activity {
+public class ActivityInfo {
 
     /**
      * 活动编号
      */
+    @JsonProperty("id")
     private Integer activityId;
 
     /**
-     * 所属社团编号
+     * 所属社团
      */
-    private Integer associationId;
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("name")
+    private String associationName;
 
     /**
      * 活动标题
      */
+    @JsonProperty("title")
     private String activityTitle;
 
     /**
      * 活动开始时间
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("start")
     private Date startTime;
 
     /**
      * 活动结束时间
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("end")
     private Date endTime;
 
     /**
      * 活动内容更新时间
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("update")
     private Date updateTime;
 
     /**
      * 活动内容
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("text")
     private String activityText;
 
     /**
      * 活动图片
      */
+    @JsonProperty("image")
     private String activityImage;
 
     /**
      * 活动标签
      */
+    @JsonProperty("label")
     private String activityLabel;
-
-    /**
-     * 活动状态,0未开始,1正在进行,2已经结束
-     */
-    private Integer activityStatus;
-
-    /**
-     * 文章状态,0未发布,1已发布
-     */
-    private Integer textStatus;
 
     public Integer getActivityId() {
         return activityId;
@@ -67,12 +74,12 @@ public class Activity {
         this.activityId = activityId;
     }
 
-    public Integer getAssociationId() {
-        return associationId;
+    public String getAssociationName() {
+        return associationName;
     }
 
-    public void setAssociationId(Integer associationId) {
-        this.associationId = associationId;
+    public void setAssociationName(String associationName) {
+        this.associationName = associationName;
     }
 
     public String getActivityTitle() {
@@ -129,21 +136,5 @@ public class Activity {
 
     public void setActivityLabel(String activityLabel) {
         this.activityLabel = activityLabel;
-    }
-
-    public Integer getActivityStatus() {
-        return activityStatus;
-    }
-
-    public void setActivityStatus(Integer activityStatus) {
-        this.activityStatus = activityStatus;
-    }
-
-    public Integer getTextStatus() {
-        return textStatus;
-    }
-
-    public void setTextStatus(Integer textStatus) {
-        this.textStatus = textStatus;
     }
 }

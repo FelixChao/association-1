@@ -2,10 +2,23 @@
 <!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatsi.org/dtd/mybatis-3-config.dtd">
 <configuration>
     <settings>
-        <setting name="useGenerateKeys" value="true"/>
+        <setting name="useGeneratedKeys" value="true"/>
 
         <setting name="useColumnLabel" value="true" />
-        
+
         <setting name="mapUnderscoreToCamelCase" value="true" />
     </settings>
+    
+    <typeAliases>
+        <package name="top.lvjp.association.entity" />
+        <package name="top.lvjp.association.VO" />
+    </typeAliases>
+    
+    <!--<plugins>-->
+        <!--&lt;!&ndash; 配置mybatis的分页插件PageHelper&ndash;&gt;-->
+        <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->
+            <!--&lt;!&ndash; 设置数据库类型 &ndash;&gt;-->
+            <!--<property name="dialect" value="mysql" />-->
+        <!--</plugin>-->
+    <!--</plugins>-->
 </configuration>

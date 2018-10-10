@@ -1,41 +1,34 @@
-package top.lvjp.association.entity;
+package top.lvjp.association.VO;
 
-public class Association {
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+public class AssociationInfo {
 
     /**
      * 社团编号
      */
+    @JsonProperty("id")
     private Integer associationId;
 
     /**
      * 社团名称
      */
+    @JsonProperty("name")
     private String associationName;
 
     /**
-     * 社团描述
+     * 社团简介
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("description")
     private String associationDescription;
-
-    /**
-     * 社团类别
-     */
-    private String associationCategory;
 
     /**
      * 社团logo
      */
+    @JsonProperty("icon")
     private String associationIcon;
-
-    /**
-     * 申请人数
-     */
-    private Integer applyNumber;
-
-    /**
-     * 社团级别,1校级,0院级
-     */
-    private Integer associationGrade;
 
     public Integer getAssociationId() {
         return associationId;
@@ -61,35 +54,11 @@ public class Association {
         this.associationDescription = associationDescription;
     }
 
-    public String getAssociationCategory() {
-        return associationCategory;
-    }
-
-    public void setAssociationCategory(String associationCategory) {
-        this.associationCategory = associationCategory;
-    }
-
     public String getAssociationIcon() {
         return associationIcon;
     }
 
     public void setAssociationIcon(String associationIcon) {
         this.associationIcon = associationIcon;
-    }
-
-    public Integer getApplyNumber() {
-        return applyNumber;
-    }
-
-    public void setApplyNumber(Integer applyNumber) {
-        this.applyNumber = applyNumber;
-    }
-
-    public Integer getAssociationGrade() {
-        return associationGrade;
-    }
-
-    public void setAssociationGrade(Integer associationGrade) {
-        this.associationGrade = associationGrade;
     }
 }

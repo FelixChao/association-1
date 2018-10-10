@@ -4,10 +4,28 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/association_ms?useSSL=false&userUnicode=true&characterEncoding=utf8
     username: root
     password: mysql_lv
+  thymeleaf:
+    mode: html5
+    prefix: classpath:templates/
+    encoding: UTF-8
+    suffix: .html
+    cache: false
+    servlet:
+      content-type: text/html
+
 mybatis:
   type-aliases-package: top.lvjp.assoication.entity
   mapper-locations: classpath:mapper/*.xml
+#  configuration:
+#    map-underscore-to-camel-case: true
+  config-location: classpath:mybatis-config.xml
 
+#mapper:
+#  mapper: top.lvjp.assoication.mapper
+#pagehelper:
+#  helperDialect: mysql
+#  reasonable: true
+#  supportMethodsArguments: true
 logging:
   level:
     top.lvjp.association.dao: trace

@@ -1,41 +1,46 @@
-package top.lvjp.association.entity;
+package top.lvjp.association.VO;
 
-public class Association {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import top.lvjp.association.dto.ActivitiesDTO;
+
+import java.util.List;
+
+public class AssociationVO {
 
     /**
      * 社团编号
      */
+    @JsonProperty("id")
     private Integer associationId;
 
     /**
      * 社团名称
      */
+    @JsonProperty("name")
     private String associationName;
 
     /**
-     * 社团描述
+     * 社团简介
      */
+    @JsonProperty("description")
     private String associationDescription;
-
-    /**
-     * 社团类别
-     */
-    private String associationCategory;
 
     /**
      * 社团logo
      */
+    @JsonProperty("icon")
     private String associationIcon;
 
     /**
-     * 申请人数
+     * 社团新闻
      */
-    private Integer applyNumber;
+    @JsonProperty("news")
+    private List<NewsInfo> newsInfos;
 
     /**
-     * 社团级别,1校级,0院级
+     * 社团相关的活动活动
      */
-    private Integer associationGrade;
+    private ActivitiesDTO activities;
 
     public Integer getAssociationId() {
         return associationId;
@@ -61,14 +66,6 @@ public class Association {
         this.associationDescription = associationDescription;
     }
 
-    public String getAssociationCategory() {
-        return associationCategory;
-    }
-
-    public void setAssociationCategory(String associationCategory) {
-        this.associationCategory = associationCategory;
-    }
-
     public String getAssociationIcon() {
         return associationIcon;
     }
@@ -77,19 +74,19 @@ public class Association {
         this.associationIcon = associationIcon;
     }
 
-    public Integer getApplyNumber() {
-        return applyNumber;
+    public List<NewsInfo> getNewsInfos() {
+        return newsInfos;
     }
 
-    public void setApplyNumber(Integer applyNumber) {
-        this.applyNumber = applyNumber;
+    public void setNewsInfos(List<NewsInfo> newsInfos) {
+        this.newsInfos = newsInfos;
     }
 
-    public Integer getAssociationGrade() {
-        return associationGrade;
+    public ActivitiesDTO getActivities() {
+        return activities;
     }
 
-    public void setAssociationGrade(Integer associationGrade) {
-        this.associationGrade = associationGrade;
+    public void setActivities(ActivitiesDTO activities) {
+        this.activities = activities;
     }
 }

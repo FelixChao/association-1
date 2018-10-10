@@ -1,49 +1,49 @@
 package top.lvjp.association.service;
 
+import com.github.pagehelper.PageInfo;
 import top.lvjp.association.entity.User;
-
-import java.util.List;
 
 public interface UserService {
 
     /**
      * 通过名字查询用户
      * @param name
+     * @param password
      * @return user
      */
-    User selectUserByName(String name);
+    User selectByNameAndPassword(String name, String password);
 
     /**
      * 通过id查询用户
      * @param id
      * @return user
      */
-    User selectUserById(Integer id);
+    User selectById(Integer id);
 
     /**
      * 查询所有用户
-     * @return List<User>
+     * @return List &lt User &gt
      */
-    List<User> selectUser();
+    PageInfo<User> selectAll(Integer pageNum, Integer pageSize);
 
     /**
      * 添加一个用户
      * @param user
      * @return 成功返回1,失败返回0
      */
-    int insertUser(User user);
+    int insert(User user);
 
     /**
      * 更新一个用户
      * @param user
      * @return 成功返回1,失败返回0
      */
-    int updateUser(User user);
+    int update(User user);
 
     /**
      * 删除一个用户
      * @param id
      * @return 成功返回1,失败返回0
      */
-    int deleteUserById(Integer id);
+    int deleteById(Integer id);
 }

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.lvjp.association.mapper.NewsMapper">
+
+    <select id="selectLatest" parameterType="Integer" resultType="newsInfo">
+        select news_id,news_title,news_digest,publish_time
+        from news
+        where news_status = 1
+        order by publish_time DESC limit #{count}
+    </select>
+
+    <select id="selectById" parameterType="Integer" resultType="newsInfo">
+        select news_id,association_name,news_title,news_author,news_text,news_digest,publish_time
+        from news as n join association as a on a.association_id = n.association_id
+        where news_id = #{id} and news_status = 1
+    </select>
+
+    <select id="selectByAssociation" parameterType="Integer" resultType="newsInfo">
+        select news_id,news_title,news_digest,publish_time
+        from news
+        where association_id = #{id} and news_status = 1
+        order by publish_time DESC limit 3
+    </select>
+
+</mapper>

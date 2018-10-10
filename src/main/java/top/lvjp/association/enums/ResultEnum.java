@@ -2,9 +2,11 @@ package top.lvjp.association.enums;
 
 public enum ResultEnum {
 
-    SUCCESS(0,"成功"),
-    USER_UPDATE_FAIL(1,"用户更新失败"),
-    USER_NOT_EXIST(1,"用户不存在"),
+    UNKNOW_ERROR(-1,"未知异常"),
+    SUCCESS(1,"成功"),
+    LOGIN_INFO_ERROR(0,"登录失败,用户名或密码错误"),
+    VALIDATE_CODE_ERROR(0,"验证码错误"),
+    RESULT_IS_NULL(0,"查询结果不存在"),
     ;
 
     private Integer code;
