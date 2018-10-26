@@ -1,9 +1,11 @@
 package top.lvjp.association.entity;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class News {
-
 
     /**
      * 新闻编号
@@ -55,83 +57,4 @@ public class News {
      */
     private String newsImage;
 
-    public Integer getNewsId() {
-        return newsId;
-    }
-
-    public void setNewsId(Integer newsId) {
-        this.newsId = newsId;
-    }
-
-    public Integer getAssociationId() {
-        return associationId;
-    }
-
-    public void setAssociationId(Integer associationId) {
-        this.associationId = associationId;
-    }
-
-    public String getNewsTitle() {
-        return newsTitle;
-    }
-
-    public void setNewsTitle(String newsTitle) {
-        this.newsTitle = newsTitle;
-    }
-
-    public String getNewsDigest() {
-        return newsDigest;
-    }
-
-    public void setNewsDigest(String newsDigest) {
-        this.newsDigest = newsDigest;
-    }
-
-    public String getNewsAuthor() {
-        return newsAuthor;
-    }
-
-    public void setNewsAuthor(String newsAuthor) {
-        this.newsAuthor = newsAuthor;
-    }
-
-    public String getNewsStatus() {
-        return newsStatus;
-    }
-
-    public void setNewsStatus(String newsStatus) {
-        this.newsStatus = newsStatus;
-    }
-
-    public String getNewsText() {
-        return newsText;
-    }
-
-    public void setNewsText(String newsText) {
-        this.newsText = newsText;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getNewsImage() {
-        return newsImage;
-    }
-
-    public void setNewsImage(String newsImage) {
-        this.newsImage = newsImage;
-    }
-
-    public Date getPublishTime() {
-        return publishTime;
-    }
-
-    public void setPublishTime(Date publishTime) {
-        this.publishTime = publishTime;
-    }
 }

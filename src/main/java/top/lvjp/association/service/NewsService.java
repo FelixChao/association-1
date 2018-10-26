@@ -18,7 +18,7 @@ public interface NewsService {
      * @param id
      * @return NewsInfo
      */
-    NewsInfo selectById(Integer id);
+    NewsInfo getInfoById(Integer id);
 
     /**
      * 查询某一社团最近的新闻

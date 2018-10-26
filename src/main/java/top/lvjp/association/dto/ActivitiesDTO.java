@@ -1,9 +1,11 @@
 package top.lvjp.association.dto;
 
+import lombok.Data;
 import top.lvjp.association.VO.ActivityInfo;
 
 import java.util.List;
 
+@Data
 public class ActivitiesDTO {
 
     /**
@@ -30,27 +32,4 @@ public class ActivitiesDTO {
         this.past = past;
     }
 
-    public List<ActivityInfo> getCurrent() {
-        return current;
-    }
-
-    public void setCurrent(List<ActivityInfo> current) {
-        this.current = current;
-    }
-
-    public List<ActivityInfo> getFuture() {
-        return future;
-    }
-
-    public void setFuture(List<ActivityInfo> future) {
-        this.future = future;
-    }
-
-    public List<ActivityInfo> getPast() {
-        return past;
-    }
-
-    public void setPast(List<ActivityInfo> past) {
-        this.past = past;
-    }
 }

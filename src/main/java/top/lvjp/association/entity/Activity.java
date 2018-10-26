@@ -1,7 +1,10 @@
 package top.lvjp.association.entity;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class Activity {
 
     /**
@@ -50,6 +53,16 @@ public class Activity {
     private String activityLabel;
 
     /**
+     * 最大报名人数
+     */
+    private Integer maxApply;
+
+    /**
+     * 已报名人数
+     */
+    private Integer applyNumber;
+
+    /**
      * 活动状态,0未开始,1正在进行,2已经结束
      */
     private Integer activityStatus;
@@ -59,91 +72,4 @@ public class Activity {
      */
     private Integer textStatus;
 
-    public Integer getActivityId() {
-        return activityId;
-    }
-
-    public void setActivityId(Integer activityId) {
-        this.activityId = activityId;
-    }
-
-    public Integer getAssociationId() {
-        return associationId;
-    }
-
-    public void setAssociationId(Integer associationId) {
-        this.associationId = associationId;
-    }
-
-    public String getActivityTitle() {
-        return activityTitle;
-    }
-
-    public void setActivityTitle(String activityTitle) {
-        this.activityTitle = activityTitle;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getActivityText() {
-        return activityText;
-    }
-
-    public void setActivityText(String activityText) {
-        this.activityText = activityText;
-    }
-
-    public String getActivityImage() {
-        return activityImage;
-    }
-
-    public void setActivityImage(String activityImage) {
-        this.activityImage = activityImage;
-    }
-
-    public String getActivityLabel() {
-        return activityLabel;
-    }
-
-    public void setActivityLabel(String activityLabel) {
-        this.activityLabel = activityLabel;
-    }
-
-    public Integer getActivityStatus() {
-        return activityStatus;
-    }
-
-    public void setActivityStatus(Integer activityStatus) {
-        this.activityStatus = activityStatus;
-    }
-
-    public Integer getTextStatus() {
-        return textStatus;
-    }
-
-    public void setTextStatus(Integer textStatus) {
-        this.textStatus = textStatus;
-    }
 }

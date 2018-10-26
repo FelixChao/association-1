@@ -13,21 +13,21 @@ import top.lvjp.association.util.ResultUtil;
 import java.util.List;
 
 @RestController
-@RequestMapping("news")
+@RequestMapping("/news")
 public class NewsController {
 
     @Autowired
     private NewsService newsService;
 
     @GetMapping("/latest")
-    public Result selectLatest(@RequestParam("count") Integer count){
+    public Result getLatest(@RequestParam("count") Integer count){
         List<NewsInfo> newsInfo = newsService.selectLatest(count);
         return ResultUtil.success(newsInfo);
     }
 
     @GetMapping("/detail")
-    public Result selectById(@RequestParam("id") Integer id){
-        NewsInfo newsInfo = newsService.selectById(id);
+    public Result getDetail(@RequestParam("id") Integer id){
+        NewsInfo newsInfo = newsService.getInfoById(id);
         return ResultUtil.success(newsInfo);
     }
 

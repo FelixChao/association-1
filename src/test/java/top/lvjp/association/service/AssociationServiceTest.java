@@ -22,7 +22,7 @@ public class AssociationServiceTest {
 
     @Test
     public void selectAssociationById() {
-        AssociationVO association = associationService.selectById(1);
+        AssociationVO association = associationService.getVOById(1);
         Assert.assertEquals("羽毛球协会",association.getAssociationName());
     }
 

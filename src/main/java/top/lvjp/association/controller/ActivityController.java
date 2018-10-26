@@ -25,8 +25,8 @@ public class ActivityController {
      * @return
      */
     @GetMapping("/latest")
-    public Result selectLatest(){
-        List<ActivityInfo> activityInfos = activityService.selectLatest(10);
+    public Result selectLatest(@RequestParam("count") Integer count){
+        List<ActivityInfo> activityInfos = activityService.selectLatest(count);
         return ResultUtil.success(activityInfos);
     }
 
@@ -75,7 +75,7 @@ public class ActivityController {
 
     @GetMapping("/detail")
     public Result selectById(@RequestParam("id") Integer id){
-        ActivityInfo activityInfo = activityService.selectById(id);
+        ActivityInfo activityInfo = activityService.getInfoById(id);
         return ResultUtil.success(activityInfo);
     }
 

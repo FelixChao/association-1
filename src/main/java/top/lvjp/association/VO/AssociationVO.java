@@ -1,10 +1,12 @@
 package top.lvjp.association.VO;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 import top.lvjp.association.dto.ActivitiesDTO;
 
 import java.util.List;
 
+@Data
 public class AssociationVO {
 
     /**
@@ -42,51 +44,4 @@ public class AssociationVO {
      */
     private ActivitiesDTO activities;
 
-    public Integer getAssociationId() {
-        return associationId;
-    }
-
-    public void setAssociationId(Integer associationId) {
-        this.associationId = associationId;
-    }
-
-    public String getAssociationName() {
-        return associationName;
-    }
-
-    public void setAssociationName(String associationName) {
-        this.associationName = associationName;
-    }
-
-    public String getAssociationDescription() {
-        return associationDescription;
-    }
-
-    public void setAssociationDescription(String associationDescription) {
-        this.associationDescription = associationDescription;
-    }
-
-    public String getAssociationIcon() {
-        return associationIcon;
-    }
-
-    public void setAssociationIcon(String associationIcon) {
-        this.associationIcon = associationIcon;
-    }
-
-    public List<NewsInfo> getNewsInfos() {
-        return newsInfos;
-    }
-
-    public void setNewsInfos(List<NewsInfo> newsInfos) {
-        this.newsInfos = newsInfos;
-    }
-
-    public ActivitiesDTO getActivities() {
-        return activities;
-    }
-
-    public void setActivities(ActivitiesDTO activities) {
-        this.activities = activities;
-    }
 }

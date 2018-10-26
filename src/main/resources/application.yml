@@ -20,12 +20,10 @@ mybatis:
 #    map-underscore-to-camel-case: true
   config-location: classpath:mybatis-config.xml
 
-#mapper:
-#  mapper: top.lvjp.assoication.mapper
 #pagehelper:
 #  helperDialect: mysql
 #  reasonable: true
 #  supportMethodsArguments: true
 logging:
   level:
-    top.lvjp.association.dao: trace
+    top.lvjp.association.mapper: trace

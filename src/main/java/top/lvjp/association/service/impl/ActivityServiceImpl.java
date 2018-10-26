@@ -1,8 +1,10 @@
 package top.lvjp.association.service.impl;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import top.lvjp.association.VO.ActivityInfo;
+import top.lvjp.association.entity.Activity;
 import top.lvjp.association.mapper.ActivityMapper;
 import top.lvjp.association.service.ActivityService;
 
@@ -16,6 +18,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public List<ActivityInfo> selectLatest(Integer count) {
+        if (count == null || count <0) {
+            count = 10;
+        }
         return activityMapper.selectLatest(count);
     }
 
@@ -50,8 +55,11 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public ActivityInfo selectById(Integer id) {
-        return activityMapper.selectById(id);
+    public ActivityInfo getInfoById(Integer id) {
+        Activity activity = activityMapper.selectById(id);
+        ActivityInfo activityInfo = new ActivityInfo();
+        BeanUtils.copyProperties(activity,activityInfo);
+        return activityInfo;
     }
 
 }

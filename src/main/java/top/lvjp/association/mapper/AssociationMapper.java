@@ -1,16 +1,18 @@
 package top.lvjp.association.mapper;
 
 import top.lvjp.association.VO.AssociationInfo;
+import top.lvjp.association.entity.Association;
 
 import java.util.List;
 
 public interface AssociationMapper {
 
-    AssociationInfo selectById(Integer id);
+    Association selectById(Integer id);
 
     List<AssociationInfo> selectPop(Integer count);
 
     List<AssociationInfo> selectByCategory(String category);
 
+    int addApply(Integer id);
 
 }

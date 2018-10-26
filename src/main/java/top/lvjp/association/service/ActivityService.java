@@ -54,6 +54,6 @@ public interface ActivityService {
      * @param id
      * @return
      */
-    ActivityInfo selectById(Integer id);
+    ActivityInfo getInfoById(Integer id);
 
 }

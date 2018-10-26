@@ -1,5 +1,8 @@
 package top.lvjp.association.entity;
 
+import lombok.Data;
+
+@Data
 public class Association {
 
     /**
@@ -33,63 +36,13 @@ public class Association {
     private Integer applyNumber;
 
     /**
+     * 报名状态, 0 不可报名, 1 可以报名
+     */
+    private Integer applyState;
+
+    /**
      * 社团级别,1校级,0院级
      */
     private Integer associationGrade;
 
-    public Integer getAssociationId() {
-        return associationId;
-    }
-
-    public void setAssociationId(Integer associationId) {
-        this.associationId = associationId;
-    }
-
-    public String getAssociationName() {
-        return associationName;
-    }
-
-    public void setAssociationName(String associationName) {
-        this.associationName = associationName;
-    }
-
-    public String getAssociationDescription() {
-        return associationDescription;
-    }
-
-    public void setAssociationDescription(String associationDescription) {
-        this.associationDescription = associationDescription;
-    }
-
-    public String getAssociationCategory() {
-        return associationCategory;
-    }
-
-    public void setAssociationCategory(String associationCategory) {
-        this.associationCategory = associationCategory;
-    }
-
-    public String getAssociationIcon() {
-        return associationIcon;
-    }
-
-    public void setAssociationIcon(String associationIcon) {
-        this.associationIcon = associationIcon;
-    }
-
-    public Integer getApplyNumber() {
-        return applyNumber;
-    }
-
-    public void setApplyNumber(Integer applyNumber) {
-        this.applyNumber = applyNumber;
-    }
-
-    public Integer getAssociationGrade() {
-        return associationGrade;
-    }
-
-    public void setAssociationGrade(Integer associationGrade) {
-        this.associationGrade = associationGrade;
-    }
 }

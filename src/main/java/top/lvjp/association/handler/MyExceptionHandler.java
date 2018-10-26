@@ -1,4 +1,4 @@
-package top.lvjp.association.handle;
+package top.lvjp.association.handler;
 
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -8,7 +8,7 @@ import top.lvjp.association.exception.MyException;
 import top.lvjp.association.util.ResultUtil;
 
 @ControllerAdvice
-public class ExceptionHandle {
+public class MyExceptionHandler {
 
     @ExceptionHandler(value = Exception.class)
     @ResponseBody

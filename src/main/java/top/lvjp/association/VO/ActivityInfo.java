@@ -1,10 +1,13 @@
 package top.lvjp.association.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.util.Date;
 
+@Data
 public class ActivityInfo {
 
     /**
@@ -31,6 +34,7 @@ public class ActivityInfo {
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("start")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
 
     /**
@@ -38,6 +42,7 @@ public class ActivityInfo {
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("end")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
 
     /**
@@ -45,6 +50,7 @@ public class ActivityInfo {
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("update")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
     /**
@@ -66,75 +72,18 @@ public class ActivityInfo {
     @JsonProperty("label")
     private String activityLabel;
 
-    public Integer getActivityId() {
-        return activityId;
-    }
+    /**
+     * 最大报名人数
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("max")
+    private Integer maxApply;
 
-    public void setActivityId(Integer activityId) {
-        this.activityId = activityId;
-    }
+    /**
+     * 已报名人数
+     */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("apply")
+    private Integer applyNumber;
 
-    public String getAssociationName() {
-        return associationName;
-    }
-
-    public void setAssociationName(String associationName) {
-        this.associationName = associationName;
-    }
-
-    public String getActivityTitle() {
-        return activityTitle;
-    }
-
-    public void setActivityTitle(String activityTitle) {
-        this.activityTitle = activityTitle;
-    }
-
-    public Date getStartTime() {
-        return startTime;
-    }
-
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public String getActivityText() {
-        return activityText;
-    }
-
-    public void setActivityText(String activityText) {
-        this.activityText = activityText;
-    }
-
-    public String getActivityImage() {
-        return activityImage;
-    }
-
-    public void setActivityImage(String activityImage) {
-        this.activityImage = activityImage;
-    }
-
-    public String getActivityLabel() {
-        return activityLabel;
-    }
-
-    public void setActivityLabel(String activityLabel) {
-        this.activityLabel = activityLabel;
-    }
 }

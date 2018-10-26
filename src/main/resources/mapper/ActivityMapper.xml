@@ -30,34 +30,39 @@
     </select>
 
     <select id="selectCurrentByAssociation" parameterType="Integer" resultType="activityInfo">
-        select activity_id,activity_title,activity_image,activity_label,end_time
+        select activity_id,activity_title,activity_image,activity_label,start_time,end_time
         from activity
         where association_id = #{id} and start_time &lt; now() and end_time &gt; now()
         order by start_time desc
     </select>
 
     <select id="selectFutureByAssociation" parameterType="Integer" resultType="activityInfo">
-        select activity_id,activity_title,activity_image,activity_label,end_time
+        select activity_id,activity_title,activity_image,activity_label,start_time,end_time
         from activity
         where association_id = #{id} and start_time &gt; now()
         order by start_time desc
     </select>
 
     <select id="selectPastByAssociation" parameterType="Integer" resultType="activityInfo">
-        select activity_id,activity_title,activity_image,activity_label,end_time
+        select activity_id,activity_title,activity_image,activity_label,start_time,end_time
         from activity
         where association_id = #{id} and end_time &lt; now()
         order by start_time desc
     </select>
 
-    <select id="selectById" resultType="activityInfo" parameterType="Integer">
-        select activity_id,association_name,activity_title,start_time,end_time,
-                update_time,activity_text,activity_image,activity_label
+    <select id="selectById" resultType="activity" parameterType="Integer">
+        select *
         from activity as c join association as s on c.association_id = s.association_id
         where activity_id = #{id}
     </select>
 
-    <update id="update" parameterType="top.lvjp.association.entity.Activity">
+    <update id="addApply" parameterType="integer" >
+        update activity
+        set apply_number = apply_number + 1
+        where activity_id = #{id}
+    </update>
+
+    <update id="update" parameterType="activity">
         update activity
         set association_id = #{associationId},activity_title = #{activityTitle},
             start_time = #{startTime},end_time = #{endTime},activity_text = #{activityText},

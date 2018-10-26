@@ -3,12 +3,13 @@ package top.lvjp.association.controller;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import top.lvjp.association.VO.Result;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.service.impl.UserServiceImpl;
-import top.lvjp.association.VO.Result;
 import top.lvjp.association.util.ResultUtil;
 
 import javax.imageio.ImageIO;
@@ -20,7 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 
-@RestController
+@Controller
 @RequestMapping(value = "/manage")
 public class LoginController {
 
@@ -64,10 +65,12 @@ public class LoginController {
             servletOutputStream.flush();
             servletOutputStream.close();
         } catch (IOException e) {
+            //TODO 处理验证码失败
             System.out.println("验证码图片返回失败");
         }
     }
 
+    @ResponseBody
     @PostMapping(value = "/login")
     public Result login(@RequestParam("name") String name,
                              @RequestParam("password") String password,

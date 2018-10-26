@@ -9,6 +9,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import top.lvjp.association.VO.AssociationInfo;
 import top.lvjp.association.VO.AssociationVO;
 import top.lvjp.association.VO.NewsInfo;
+import top.lvjp.association.entity.Association;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class AssociationMapperTest {
 
     @Test
     public void getAssociationById() {
-        AssociationInfo association  = associationMapper.selectById(1);
+        Association association  = associationMapper.selectById(1);
         Assert.assertEquals(new Integer(1),association.getAssociationId());
 
     }

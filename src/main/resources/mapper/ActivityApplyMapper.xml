@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.lvjp.association.mapper.ActivityApplyMapper">
+
+    <insert id="insertApply" parameterType="activityApplyForm">
+        insert activity_apply
+            (activity_id,student_name,student_number,sex,phone,qq,academy)
+        values
+            ( #{activityId},#{studentName},#{studentNumber},#{sex},#{phone},#{qq},#{academy} )
+    </insert>
+
+    <select id="selectByActivity" parameterType="integer" resultType="activityApply">
+        select *
+        from activity_apply
+        where activity_id = #{id}
+    </select>
+</mapper>

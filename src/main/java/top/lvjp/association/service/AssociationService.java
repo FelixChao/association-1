@@ -12,7 +12,7 @@ public interface AssociationService {
      * @param id
      * @return 返回社团信息,AssociationInfo
      */
-    AssociationVO selectById(Integer id);
+    AssociationVO getVOById(Integer id);
 
     /**
      * 查询热门社团

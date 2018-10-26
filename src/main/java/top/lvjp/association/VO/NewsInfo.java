@@ -1,10 +1,13 @@
 package top.lvjp.association.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
 import java.util.Date;
 
+@Data
 public class NewsInfo {
 
     /**
@@ -50,38 +53,8 @@ public class NewsInfo {
     /**
      * 新闻发布时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     @JsonProperty("time")
     private Date publishTime;
 
-    public Integer getNewsId() {
-        return newsId;
-    }
-
-    public void setNewsId(Integer newsId) {
-        this.newsId = newsId;
-    }
-
-    public String getNewsTitle() {
-        return newsTitle;
-    }
-
-    public void setNewsTitle(String newsTitle) {
-        this.newsTitle = newsTitle;
-    }
-
-    public String getNewsDigest() {
-        return newsDigest;
-    }
-
-    public void setNewsDigest(String newsDigest) {
-        this.newsDigest = newsDigest;
-    }
-
-    public Date getPublishTime() {
-        return publishTime;
-    }
-
-    public void setPublishTime(Date publishTime) {
-        this.publishTime = publishTime;
-    }
 }

@@ -2,7 +2,9 @@ package top.lvjp.association.VO;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Data;
 
+@Data
 public class AssociationInfo {
 
     /**
@@ -30,35 +32,4 @@ public class AssociationInfo {
     @JsonProperty("icon")
     private String associationIcon;
 
-    public Integer getAssociationId() {
-        return associationId;
-    }
-
-    public void setAssociationId(Integer associationId) {
-        this.associationId = associationId;
-    }
-
-    public String getAssociationName() {
-        return associationName;
-    }
-
-    public void setAssociationName(String associationName) {
-        this.associationName = associationName;
-    }
-
-    public String getAssociationDescription() {
-        return associationDescription;
-    }
-
-    public void setAssociationDescription(String associationDescription) {
-        this.associationDescription = associationDescription;
-    }
-
-    public String getAssociationIcon() {
-        return associationIcon;
-    }
-
-    public void setAssociationIcon(String associationIcon) {
-        this.associationIcon = associationIcon;
-    }
 }

@@ -1,7 +1,10 @@
 package top.lvjp.association.entity;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class AssociationApply {
 
 
@@ -23,7 +26,7 @@ public class AssociationApply {
     /**
      * 学号
      */
-    private Integer studentNumbe;
+    private String studentNumber;
 
     /**
      * 性别
@@ -65,99 +68,4 @@ public class AssociationApply {
      */
     private String applyReason;
 
-    public Integer getApplyId() {
-        return applyId;
-    }
-
-    public void setApplyId(Integer applyId) {
-        this.applyId = applyId;
-    }
-
-    public Integer getAssociationId() {
-        return associationId;
-    }
-
-    public void setAssociationId(Integer associationId) {
-        this.associationId = associationId;
-    }
-
-    public String getStudentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
-
-    public Integer getStudentNumbe() {
-        return studentNumbe;
-    }
-
-    public void setStudentNumbe(Integer studentNumbe) {
-        this.studentNumbe = studentNumbe;
-    }
-
-    public Integer getSex() {
-        return sex;
-    }
-
-    public void setSex(Integer sex) {
-        this.sex = sex;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getQq() {
-        return qq;
-    }
-
-    public void setQq(String qq) {
-        this.qq = qq;
-    }
-
-    public Integer getCampus() {
-        return campus;
-    }
-
-    public void setCampus(Integer campus) {
-        this.campus = campus;
-    }
-
-    public String getAcademy() {
-        return academy;
-    }
-
-    public void setAcademy(String academy) {
-        this.academy = academy;
-    }
-
-    public String getSpeciality() {
-        return speciality;
-    }
-
-    public void setSpeciality(String speciality) {
-        this.speciality = speciality;
-    }
-
-    public Date getApplyTime() {
-        return applyTime;
-    }
-
-    public void setApplyTime(Date applyTime) {
-        this.applyTime = applyTime;
-    }
-
-    public String getApplyReason() {
-        return applyReason;
-    }
-
-    public void setApplyReason(String applyReason) {
-        this.applyReason = applyReason;
-    }
 }

@@ -2,16 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.AssociationMapper">
 
-    <select id="selectById" parameterType="Integer" resultType="associationInfo">
-        select association_id,association_name,association_description,association_icon from association where association_id = #{id}
+
+    <select id="selectById" parameterType="Integer" resultType="association">
+        select *
+        from association
+        where association_id = #{id}
     </select>
 
     <select id="selectPop" parameterType="Integer" resultType="associationInfo">
-        select association_id,association_name,association_icon from association order by apply_number limit #{count}
+        select association_id,association_name,association_icon
+        from association
+        order by apply_number limit #{count}
     </select>
 
     <select id="selectByCategory" parameterType="String" resultType="associationInfo">
-        select association_id,association_name,association_icon from association where association_category = #{category}
+        select association_id,association_name,association_icon
+        from association
+        where association_category = #{category}
     </select>
+
+    <update id="addApply" parameterType="integer"  >
+        update association
+        set apply_number = apply_number+1
+        where association_id = #{id}
+    </update>
 
 </mapper>

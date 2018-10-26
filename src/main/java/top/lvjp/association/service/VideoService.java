@@ -10,11 +10,11 @@ public interface VideoService {
      * 查询最新视频
      * @return
      */
-    List<VideoInfo> selectLatest();
+    List<VideoInfo> selectLatest(Integer count);
 
     /**
      * 查询某一视频
      * @return
      */
-    VideoInfo selectById(Integer id);
+    VideoInfo getInfoById(Integer id);
 }

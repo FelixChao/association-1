@@ -20,14 +20,14 @@ public class VideoController {
     private VideoService videoService;
 
     @GetMapping("/latest")
-    public Result selectLatest(){
-        List<VideoInfo> videoInfos = videoService.selectLatest();
+    public Result selectLatest(@RequestParam("count") Integer count){
+        List<VideoInfo> videoInfos = videoService.selectLatest(count);
         return ResultUtil.success(videoInfos);
     }
 
     @GetMapping("detail")
-    public Result selectById(@RequestParam("id") Integer id){
-        VideoInfo videoInfo = videoService.selectById(id);
+    public Result getDetail(@RequestParam("id") Integer id){
+        VideoInfo videoInfo = videoService.getInfoById(id);
         return ResultUtil.success(videoInfo);
     }
 }

@@ -1,5 +1,8 @@
 package top.lvjp.association.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum CategoryEnum {
 
     YIHSU(1,"艺术类"),
@@ -13,19 +16,6 @@ public enum CategoryEnum {
 
     CategoryEnum(Integer code, String category) {
         this.code = code;
-        this.category = category;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public String getCategory() {
-        return category;
-    }
-
-
-    public void setCategory(String category) {
         this.category = category;
     }
 }

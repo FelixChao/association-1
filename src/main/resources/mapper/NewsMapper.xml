@@ -9,8 +9,14 @@
         order by publish_time DESC limit #{count}
     </select>
 
+    <!--<select id="selectById" parameterType="Integer" resultType="newsInfo">-->
+        <!--select news_id,association_name,news_title,news_author,news_text,news_digest,publish_time-->
+        <!--from news as n join association as a on a.association_id = n.association_id-->
+        <!--where news_id = #{id} and news_status = 1-->
+    <!--</select>-->
+
     <select id="selectById" parameterType="Integer" resultType="newsInfo">
-        select news_id,association_name,news_title,news_author,news_text,news_digest,publish_time
+        select *
         from news as n join association as a on a.association_id = n.association_id
         where news_id = #{id} and news_status = 1
     </select>

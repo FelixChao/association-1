@@ -12,8 +12,11 @@
     <typeAliases>
         <package name="top.lvjp.association.entity" />
         <package name="top.lvjp.association.VO" />
+        <package name="top.lvjp.association.form" />
     </typeAliases>
-    
+
+    <!-- TODO 分页插件 -->
+
     <!--<plugins>-->
         <!--&lt;!&ndash; 配置mybatis的分页插件PageHelper&ndash;&gt;-->
         <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->

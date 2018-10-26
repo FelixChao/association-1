@@ -32,4 +32,12 @@ public class ResultUtil {
         result.setData(null);
         return result;
     }
+
+    public static Result validError(String message){
+        Result<Object> result = new Result<Object>();
+        result.setCode(ResultEnum.FORM_VALID_ERROR.getCode());
+        result.setMessage(message);
+        result.setData(null);
+        return result;
+    }
 }

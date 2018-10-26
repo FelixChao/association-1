@@ -21,7 +21,9 @@ public interface ActivityMapper {
 
     List<ActivityInfo> selectPastByAssociation(Integer id);
 
-    ActivityInfo selectById(Integer id);
+    Activity selectById(Integer id);
+
+    int addApply(Integer id);
 
     int update(Activity activity);
 }

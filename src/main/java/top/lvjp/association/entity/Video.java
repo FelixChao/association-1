@@ -1,7 +1,10 @@
 package top.lvjp.association.entity;
 
+import lombok.Data;
+
 import java.util.Date;
 
+@Data
 public class Video {
 
     /**
@@ -34,51 +37,4 @@ public class Video {
      */
     private Date createTime;
 
-    public Integer getVideoId() {
-        return videoId;
-    }
-
-    public void setVideoId(Integer videoId) {
-        this.videoId = videoId;
-    }
-
-    public String getVideoTitle() {
-        return videoTitle;
-    }
-
-    public void setVideoTitle(String videoTitle) {
-        this.videoTitle = videoTitle;
-    }
-
-    public String getVideoPath() {
-        return videoPath;
-    }
-
-    public void setVideoPath(String videoPath) {
-        this.videoPath = videoPath;
-    }
-
-    public Integer getAssociationId() {
-        return associationId;
-    }
-
-    public void setAssociationId(Integer associationId) {
-        this.associationId = associationId;
-    }
-
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
 }

@@ -1,12 +1,13 @@
 package top.lvjp.association.mapper;
 
 import top.lvjp.association.VO.VideoInfo;
+import top.lvjp.association.entity.Video;
 
 import java.util.List;
 
 public interface VideoMapper {
 
-    List<VideoInfo> selectLatest();
+    List<VideoInfo> selectLatest(Integer count);
 
-    VideoInfo selectById(Integer id);
+    Video selectById(Integer id);
 }
