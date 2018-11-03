@@ -19,12 +19,22 @@ public class VideoController {
     @Autowired
     private VideoService videoService;
 
+    /**
+     * 最近的视频
+     * @param count
+     * @return
+     */
     @GetMapping("/latest")
     public Result selectLatest(@RequestParam("count") Integer count){
         List<VideoInfo> videoInfos = videoService.selectLatest(count);
         return ResultUtil.success(videoInfos);
     }
 
+    /**
+     * 视频详情
+     * @param id
+     * @return
+     */
     @GetMapping("detail")
     public Result getDetail(@RequestParam("id") Integer id){
         VideoInfo videoInfo = videoService.getInfoById(id);

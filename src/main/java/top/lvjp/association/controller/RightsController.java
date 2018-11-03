@@ -17,6 +17,12 @@ public class RightsController {
     @Autowired
     private RightsService rightsService;
 
+    /**
+     * 申请维权
+     * @param rightsForm 维权信息
+     * @param bindingResult
+     * @return
+     */
     @PostMapping("/rights/apply")
     public Result applyRights(@Valid RightsForm rightsForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){

@@ -18,11 +18,6 @@ public class AssociationController {
     @Autowired
     private AssociationService associationService;
 
-    @GetMapping("/index")
-    public String say(){
-        return "hello";
-    }
-
     @GetMapping("/detail")
     public Result getDetail(@RequestParam("id") Integer id){
         AssociationVO associationVO = associationService.getVOById(id);

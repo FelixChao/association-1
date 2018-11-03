@@ -2,6 +2,7 @@ package top.lvjp.association.service;
 
 import com.github.pagehelper.PageInfo;
 import top.lvjp.association.entity.User;
+import top.lvjp.association.form.UserForm;
 
 public interface UserService {
 
@@ -31,7 +32,7 @@ public interface UserService {
      * @param user
      * @return 成功返回1,失败返回0
      */
-    int insert(User user);
+    int insert(UserForm user);
 
     /**
      * 更新一个用户

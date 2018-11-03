@@ -1,5 +1,6 @@
 package top.lvjp.association.entity;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 @Data
@@ -18,6 +19,7 @@ public class User {
     /**
      * 用户密码
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String userPassword;
 
     /**

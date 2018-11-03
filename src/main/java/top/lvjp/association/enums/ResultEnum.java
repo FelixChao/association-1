@@ -16,6 +16,10 @@ public enum ResultEnum {
     APPLY_IS_FULL(7,"报名人数已满！"),
     APPLY_IS_FINISHED(8,"报名已结束！"),
     NOW_NOT_APPLY(9,"当前不能报名"),
+    USER_NOT_EXISTS(10,"用户不存在"),
+    USER_IS_EXISTS(11,"用户名已存在"),
+    OPERATE_IS_FAIL(12,"操作失败"),
+    APPLY_ALREADY_EXISTS(13,"报名信息已存在"),
     ;
 
     private Integer code;

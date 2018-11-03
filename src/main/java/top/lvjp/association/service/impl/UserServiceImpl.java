@@ -4,6 +4,9 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.lvjp.association.enums.ResultEnum;
+import top.lvjp.association.exception.MyException;
+import top.lvjp.association.form.UserForm;
 import top.lvjp.association.mapper.UserMapper;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.service.UserService;
@@ -35,8 +38,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int insert(User user) {
-        return userMapper.insert(user);
+    public int insert(UserForm userForm) {
+        User user = userMapper.selectByName(userForm.getUserName());
+        if (user != null) {
+            throw new MyException(ResultEnum.USER_IS_EXISTS);
+        }
+        return userMapper.insert(userForm);
     }
 
     @Override

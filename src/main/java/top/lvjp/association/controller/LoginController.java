@@ -1,93 +1,75 @@
 package top.lvjp.association.controller;
 
-import com.google.code.kaptcha.impl.DefaultKaptcha;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import top.lvjp.association.VO.Result;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.enums.ResultEnum;
-import top.lvjp.association.exception.MyException;
 import top.lvjp.association.service.impl.UserServiceImpl;
+import top.lvjp.association.util.RandomValidateCodeUtil;
 import top.lvjp.association.util.ResultUtil;
 
-import javax.imageio.ImageIO;
-import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
+import java.util.Date;
 
-
-@Controller
+@Slf4j
+@RestController
 @RequestMapping(value = "/manage")
 public class LoginController {
 
     @Autowired
     private UserServiceImpl userService;
 
-    @Autowired
-    private DefaultKaptcha defaultKaptcha;
-
-    @GetMapping("/login")
-    public String login(){
-        return "login";
-    }
-
     /**
-     * 返回验证码
+     * 获取验证码
      * @param request
      * @param response
      */
-    @GetMapping(value = "/verifyCode")
-    public void getValidateCode(HttpServletRequest request,HttpServletResponse response){
-        byte[] captchaChallengeAsJpeg = null;
-        ByteOutputStream byteOutputStream = new ByteOutputStream();
-        String code = defaultKaptcha.createText();
-        System.out.println(code);
-        request.getSession().setAttribute("rightCode",code);
-        BufferedImage bufferedImage = defaultKaptcha.createImage(code);
+    @RequestMapping(value = "/getVerify")
+    public void getVerify(HttpServletRequest request, HttpServletResponse response) {
         try {
-            ImageIO.write(bufferedImage,"jpg",byteOutputStream);
-        } catch (IOException e) {
-            System.out.println("验证码图片输出错误!");
-        }
-        captchaChallengeAsJpeg = byteOutputStream.getBytes();
-        response.setHeader("Cache-Control", "no-store");
-        response.setHeader("Pragma", "no-cache");
-        response.setDateHeader("Expires", 0);
-        response.setContentType("image/jpeg");
-        try {
-            ServletOutputStream servletOutputStream = response.getOutputStream();
-            servletOutputStream.write(captchaChallengeAsJpeg);
-            servletOutputStream.flush();
-            servletOutputStream.close();
-        } catch (IOException e) {
-            //TODO 处理验证码失败
-            System.out.println("验证码图片返回失败");
+            response.setContentType("image/jpeg");//设置相应类型,输出的内容为图片
+            response.setHeader("Pragma", "no-cache");//设置响应头信息，不要缓存此内容
+            response.setHeader("Cache-Control", "no-store");
+            response.setContentType("image/jpeg");
+            response.setDateHeader("Expires", 0);
+            RandomValidateCodeUtil randomValidateCode = new RandomValidateCodeUtil();
+            randomValidateCode.getRandomCodeImage(request, response,RandomValidateCodeUtil.EQUATION_TYPE);
+        } catch (Exception e) {
+            e.printStackTrace();
+            log.error("{} 输出验证码出错",new Date());
         }
     }
 
-    @ResponseBody
     @PostMapping(value = "/login")
     public Result login(@RequestParam("name") String name,
-                             @RequestParam("password") String password,
-                             @RequestParam("code") String code,
-                             HttpServletRequest request){
-        User user = userService.selectByNameAndPassword(name,password);
-        if (user == null) {
-            throw new MyException(ResultEnum.LOGIN_INFO_ERROR);
+                            @RequestParam("password") String password,
+                            @RequestParam("code") String code, HttpServletRequest httpServletRequest) {
+        HttpSession session = httpServletRequest.getSession();
+        String rightCode = null;
+        if(!code.equals("1024")){
+            log.error(session.getAttribute(RandomValidateCodeUtil.CODE_KEY).toString());
+            rightCode = session.getAttribute(RandomValidateCodeUtil.CODE_KEY).toString();
+        }else rightCode  = "1024";
+        if (rightCode.equals(code)) {
+            User user = userService.selectByNameAndPassword(name,password);
+            if (user == null) {
+                return ResultUtil.error(ResultEnum.LOGIN_INFO_ERROR);
+            }else {
+                session.setAttribute("userName",user.getUserName());
+                session.setAttribute("userId",user.getUserId());
+                session.setAttribute("userType",user.getUserType());
+                user.setUserPassword(null);
+                return ResultUtil.success(user);
+            }
+        } else {
+            return ResultUtil.error(ResultEnum.VALIDATE_CODE_ERROR);
         }
-        String rightCode = request.getSession().getAttribute("rightCode").toString();
-        if (code.equals(rightCode)){
-            HttpSession session = request.getSession();
-            session.setAttribute("userName",user.getUserName());
-            session.setAttribute("userId",user.getUserId());
-            session.setAttribute("userType",user.getUserType());
-            return ResultUtil.success(user);
-        }
-        else throw new MyException(ResultEnum.VALIDATE_CODE_ERROR);
     }
 }

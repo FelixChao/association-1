@@ -38,6 +38,10 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         else if(activity.getMaxApply() != null && activity.getMaxApply() <= activity.getApplyNumber()){
             throw new MyException(ResultEnum.APPLY_IS_FULL);
         }
+        List<ActivityApply> activityApplies = activityApplyMapper.selectByActivityAndStudent(id,apply.getStudentNumber());
+        if (!activityApplies.isEmpty()) {
+            throw new MyException(ResultEnum.APPLY_ALREADY_EXISTS);
+        }
         activityApplyMapper.insertApply(apply);
         activityMapper.addApply(id);
     }

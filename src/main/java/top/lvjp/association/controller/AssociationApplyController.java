@@ -17,6 +17,12 @@ public class AssociationApplyController {
     @Autowired
     private AssociationApplyService associationApplyService;
 
+    /**
+     * 社团报名
+     * @param applyForm 报名信息
+     * @param bindingResult
+     * @return
+     */
     @PostMapping("/association/apply")
     public Result applyAssociation(@Valid AssociationApplyForm applyForm,BindingResult bindingResult){
         if(bindingResult.hasErrors()){

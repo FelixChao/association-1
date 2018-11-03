@@ -59,6 +59,11 @@ public class AssociationApply {
     private String speciality;
 
     /**
+     * 申请部门
+     */
+    private String department;
+
+    /**
      * 申请时间
      */
     private Date applyTime;
@@ -66,6 +71,6 @@ public class AssociationApply {
     /**
      * 申请理由
      */
-    private String applyReason;
+    private String reason;
 
 }

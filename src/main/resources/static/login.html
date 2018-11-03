@@ -13,10 +13,10 @@
 <body>
 <div>
     <!-- 后面添加参数起到清除缓存作用 -->
-    <img alt="验证码" id="imageCode" src="http://rab86h.natappfree.cc/manage/verifyCode" />
+    <img alt="验证码" id="imageCode" src="http://lvjp.top:8080/manage/getVerify" />
     <a href="javascript:reloadCode();">看不清楚,换一张</a>
 </div>
-<form action="http://rab86h.natappfree.cc/manage/login" method="post" >
+<form action="http://lvjp.top:8080/manage/login" method="post" >
     用户名:<input type="text" name="name" /><br>
     密码:<input type="text" name="password" /><br>
     验证码:<input type="text" name="code" /><br>
@@ -25,7 +25,7 @@
 </body>
 <script type="text/javascript">
     function reloadCode() {
-        document.getElementById("imageCode").src="http://rab86h.natappfree.cc/manage/verifyCode?d='+new Date()*1";
+        document.getElementById("imageCode").src="http://lvjp.top:8080/manage/getVerify?d='+new Date()*1";
     }
 </script>
 </html>

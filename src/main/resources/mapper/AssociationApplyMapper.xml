@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.AssociationApplyMapper">
-    <insert id="insertApply" parameterType="top.lvjp.association.form.AssociationApplyForm">
+    <insert id="insertApply" parameterType="AssociationApplyForm">
         insert into association_apply
-          (association_id,student_name,student_number,sex,phone,qq,campus,academy,speciality)
+          (association_id,student_name,student_number,sex,phone,qq,campus,academy,speciality,department,reason)
         values
           (#{associationId},#{studentName},#{studentNumber},#{sex},#{phone},#{qq},
-              #{campus},#{academy},#{speciality})
+              #{campus},#{academy},#{speciality},#{department},#{reason})
     </insert>
 
+    <select id="selectByAssociationAndStudent" resultType="associationApply">
+         select applyId,association_id,student_name,student_number,sex,phone,qq,campus,
+                academy,speciality,apply_time,reason
+        from association_apply
+        where association_id = #{associationId} and student_number =  #{studentNumber}
+    </select>
     <select id="selectByAssociation" resultType="associationApply" parameterType="integer" >
         select applyId,association_id,student_name,student_number,sex,phone,qq,campus,
-                academy,speciality,apply_time,apply_reason
+                academy,speciality,apply_time,reason
         from association_apply
         where association_id = #{id}
     </select>

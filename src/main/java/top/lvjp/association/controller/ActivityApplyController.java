@@ -17,6 +17,12 @@ public class ActivityApplyController {
     @Autowired
     private ActivityApplyService activityApplyService;
 
+    /**
+     * 活动报名
+     * @param applyForm 报名表单
+     * @param bindingResult
+     * @return
+     */
     @PostMapping("/activity/apply")
     public Result applyActivity(@Valid ActivityApplyForm applyForm, BindingResult bindingResult){
         if(bindingResult.hasErrors()){

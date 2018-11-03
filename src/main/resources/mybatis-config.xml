@@ -15,13 +15,4 @@
         <package name="top.lvjp.association.form" />
     </typeAliases>
 
-    <!-- TODO 分页插件 -->
-
-    <!--<plugins>-->
-        <!--&lt;!&ndash; 配置mybatis的分页插件PageHelper&ndash;&gt;-->
-        <!--<plugin interceptor="com.github.pagehelper.PageHelper">-->
-            <!--&lt;!&ndash; 设置数据库类型 &ndash;&gt;-->
-            <!--<property name="dialect" value="mysql" />-->
-        <!--</plugin>-->
-    <!--</plugins>-->
 </configuration>

@@ -34,6 +34,10 @@ public class AssociationApplyServiceImpl implements AssociationApplyService {
         else if(association.getApplyState() == 0){
             throw new MyException(ResultEnum.NOW_NOT_APPLY);
         }
+        List<AssociationApply> associationApplies = associationApplyMapper.selectByAssociationAndStudent(id,apply.getStudentNumber());
+        if (!associationApplies.isEmpty()) {
+            throw new MyException(ResultEnum.APPLY_ALREADY_EXISTS);
+        }
         associationApplyMapper.insertApply(apply);
         associationMapper.addApply(id);
     }

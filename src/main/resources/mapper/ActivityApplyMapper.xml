@@ -9,9 +9,15 @@
             ( #{activityId},#{studentName},#{studentNumber},#{sex},#{phone},#{qq},#{academy} )
     </insert>
 
+    <select id="selectByActivityAndStudent" resultType="activityApply">
+        select *
+        from activity_apply
+        where activity_id = #{activityId} and student_number = #{studentNumber}
+    </select>
+
     <select id="selectByActivity" parameterType="integer" resultType="activityApply">
         select *
         from activity_apply
-        where activity_id = #{id}
+        where activity_id = #{activityId}
     </select>
 </mapper>

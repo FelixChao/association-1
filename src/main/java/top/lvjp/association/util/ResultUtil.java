@@ -7,7 +7,7 @@ public class ResultUtil {
 
     public static Result success(Object object){
         Result<Object> result = new Result<Object>();
-        result.setCode(1);
+        result.setCode(0);
         result.setMessage("成功");
         result.setData(object);
         return result;

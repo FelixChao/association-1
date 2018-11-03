@@ -62,8 +62,13 @@ public class AssociationApplyForm {
     private String speciality;
 
     /**
+     * 申请部门
+     */
+    private String department;
+
+    /**
      * 申请理由
      */
-    private String applyReason;
+    private String reason;
 
 }
