@@ -8,4 +8,6 @@ public class RegexpUtil {
 
     public final static String QQ = "\\d{5,12}";
 
+    public final static String LABEL = "^(?:[\\u4e00-\\u9fa5]+[,，])*[\\u4e00-\\u9fa5]+$";
+
 }

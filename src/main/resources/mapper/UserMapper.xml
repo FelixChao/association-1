@@ -10,36 +10,36 @@
     <!--</resultMap>-->
 
     <select id="selectByNameAndPassword" resultType="user">
-        select user_id,user_name,user_password,user_type
+        select user_id,user_name,user_password,user_type,association_id
         from user
         where user_name = #{name} and user_password = #{password}
     </select>
 
     <select id="selectById" parameterType="integer" resultType="user">
-        select user_id,user_name,user_type
+        select user_id,user_name,user_type,association_id
         from user
         where user_id = #{id}
     </select>
 
     <select id="selectAll" resultType="user" >
-        select user_id,user_name,user_type
+        select user_id,user_name,user_type,association_id
         from user
     </select>
 
     <select id="selectByName" parameterType="String" resultType="user">
-        select  user_id,user_name,user_password,user_type
+        select  user_id,user_name,user_password,user_type,association_id
         from user
         where user_name = #{name}
     </select>
 
     <insert id="insert" parameterType="userForm">
-        insert user (user_name,user_password,user_type)
-        values (#{userName},#{userPassword},#{userType})
+        insert user (user_name,user_password,user_type,association_id)
+        values (#{userName},#{userPassword},#{userType},#{associationId})
     </insert>
 
     <update id="update" parameterType="top.lvjp.association.entity.User" >
         update user
-        set user_name = #{userName},user_password = #{userPassword},user_type = #{userType}
+        set user_name = #{userName},user_password = #{userPassword},user_type = #{userType},association_id = #{associationId})
         where user_id = #{userId}
     </update>
 

@@ -2,13 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.ActivityMapper">
 
+    <sql id="testRight" >
+        <if test="associationId != 0">
+            and association_id = #{associationId}
+        </if>
+    </sql>
+
     <select id="selectLatest" parameterType="Integer" resultType="activityInfo" >
         select activity_id,activity_title,activity_image,activity_label
         from activity
         order by start_time desc limit #{count}
     </select>
 
-    <select id="selectCurrent" resultType="activityInfo" >
+    <select id="selectCurrent" resultType="activityInfo" parameterType="integer">
         select activity_id,activity_title,activity_image,activity_label
         from activity
         where start_time &lt; now() and end_time &gt; now()
@@ -50,6 +56,30 @@
         order by start_time desc
     </select>
 
+    <select id="selectCurrnetByStatus" resultType="activityInfo">
+        select activity_id,activity_title,activity_image,activity_label,update_time
+        from activity
+        where text_status = #{status} and start_time &lt; now() and end_time &gt; now()
+        <include refid="testRight" />
+        order by start_time desc
+    </select>
+
+    <select id="selectFutureByStatus" resultType="activityInfo">
+        select activity_id,activity_title,activity_image,activity_label,update_time
+        from activity
+        where text_status = #{status} and start_time &gt; now()
+        <include refid="testRight" />
+        order by start_time desc
+    </select>
+
+    <select id="selectPastByStatus" resultType="activityInfo">
+        select activity_id,activity_title,activity_image,activity_label,update_time
+        from activity
+        where text_status = #{status} and end_time &lt; now()
+        <include refid="testRight" />
+        order by start_time desc
+    </select>
+
     <select id="selectById" resultType="activity" parameterType="Integer">
         select *
         from activity as c join association as s on c.association_id = s.association_id
@@ -62,13 +92,34 @@
         where activity_id = #{id}
     </update>
 
-    <update id="update" parameterType="activity">
+    <update id="publish">
+        update activity
+        set text_status = #{publish}
+        where activity_id = #{id}
+    </update>
+
+    <update id="update" parameterType="activityForm">
         update activity
         set association_id = #{associationId},activity_title = #{activityTitle},
             start_time = #{startTime},end_time = #{endTime},activity_text = #{activityText},
             activity_image = #{activityImage},activity_label = #{activityLabel},
-            acstatus_status = #{acstatusStatus},text_status = #{textStatus}
+            max_apply = #{maxApply},text_status = #{textStatus}
         where activity_id = #{activityId}
     </update>
 
+    <insert id="insert" parameterType="activityForm" >
+        insert activity   (
+            association_id,activity_title,start_time,end_time,activity_text,
+            activity_image,activity_label,max_apply,text_status
+        )
+        values (
+            #{associationId},#{activityTitle},#{startTime},#{endTime},#{activityText},
+            #{activityImage},#{activityLabel},#{maxApply},#{textStatus}
+        )
+    </insert>
+
+    <delete id="delete" parameterType="integer">
+        delete from activity
+        where activity_id =#{id}
+    </delete>
 </mapper>

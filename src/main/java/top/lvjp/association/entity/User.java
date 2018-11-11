@@ -27,4 +27,8 @@ public class User {
      */
     private Integer userType;
 
+    /**
+     * 用户所属社团
+     */
+    private Integer associationId;
 }

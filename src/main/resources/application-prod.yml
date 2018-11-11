@@ -1,0 +1,51 @@
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/association_ms?useSSL=false&userUnicode=true&characterEncoding=utf8
+    username: root
+    password: Sql?alc7
+      # druid 数据连接池配置
+    type: com.alibaba.druid.pool.DruidDataSource
+    druid:
+      initial-size: 1
+      max-active: 20
+      min-idle: 1
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 'X'
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-preared-statements: false
+      filters: stat,wall
+      # druid 监控视图配置
+      stat-view-servlet:
+        enabled: true             # 是否启用监控视图
+        url-pattern: /druid/*     # 监控视图对应的地址
+        reset-enable: fales       # 是否可以清空数据
+        login-username: root      # 设置登录用户名
+        login-password: 654321    # 设置密码
+#        allow: 0.0.0.0             # 允许通过的ip,默认全部
+#        deny:                      # 禁止黑名单, 优先级比allow高
+  thymeleaf:
+    mode: HTML
+    prefix: classpath:templates/
+    encoding: UTF-8
+    suffix: .html
+    cache: false
+    servlet:
+      content-type: text/html
+
+mybatis:
+  type-aliases-package: top.lvjp.assoication.entity
+  mapper-locations: classpath:mapper/*.xml
+  config-location: classpath:mybatis-config.xml
+# 分页插件
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+logging:
+  level:
+    top.lvjp.association.mapper: trace

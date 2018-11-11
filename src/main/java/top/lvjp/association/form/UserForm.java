@@ -24,4 +24,5 @@ public class UserForm {
      * 用户权限等级
      */
     private Integer userType;
+
 }
