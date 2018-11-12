@@ -1,16 +1,23 @@
 package top.lvjp.association.service.impl;
 
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.lvjp.association.VO.ActivityInfo;
+import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.entity.Activity;
+import top.lvjp.association.entity.Association;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.enums.TextStatusEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.form.ActivityForm;
 import top.lvjp.association.mapper.ActivityMapper;
+import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.service.ActivityService;
+import top.lvjp.association.service.AssociationService;
 
 import java.util.List;
 
@@ -20,11 +27,11 @@ public class ActivityServiceImpl implements ActivityService {
     @Autowired
     private ActivityMapper activityMapper;
 
+    @Autowired
+    private AssociationMapper associationMapper;
+
     @Override
     public List<ActivityInfo> selectLatest(Integer count) {
-        if (count == null || count <0) {
-            count = 10;
-        }
         return activityMapper.selectLatest(count);
     }
 
@@ -59,18 +66,27 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public List<ActivityInfo> selectCurrnetByStatus(Integer status, Integer associationId) {
-        return activityMapper.selectCurrnetByStatus(status,associationId);
+    public PageVO<ActivityInfo> selectCurrentByStatus(Integer status, Integer associationId,Integer pageNum,Integer size) {
+        PageHelper.startPage(pageNum,size);
+        List<ActivityInfo> activityInfo = activityMapper.selectCurrnetByStatus(status,associationId);
+        PageInfo<ActivityInfo> pageInfo = new PageInfo<>(activityInfo);
+        return new PageVO<ActivityInfo>(pageInfo);
     }
 
     @Override
-    public List<ActivityInfo> selectFutureByStatus(Integer status, Integer associationId) {
-        return activityMapper.selectFutureByStatus(status,associationId);
+    public PageVO<ActivityInfo> selectFutureByStatus(Integer status, Integer associationId,Integer pageNum,Integer size) {
+        PageHelper.startPage(pageNum,size);
+        List<ActivityInfo> activityInfos = activityMapper.selectFutureByStatus(status,associationId);
+        PageInfo<ActivityInfo> pageInfo = new PageInfo<ActivityInfo>(activityInfos);
+        return new PageVO<ActivityInfo>(pageInfo);
     }
 
     @Override
-    public List<ActivityInfo> selectPastByStatus(Integer status, Integer associationId) {
-        return activityMapper.selectPastByStatus(status,associationId);
+    public PageVO<ActivityInfo> selectPastByStatus(Integer status, Integer associationId,Integer pageNum,Integer size) {
+        PageHelper.startPage(pageNum,size);
+        List<ActivityInfo> activityInfos = activityMapper.selectPastByStatus(status,associationId);
+        PageInfo<ActivityInfo> pageInfo = new PageInfo<>(activityInfos);
+        return new PageVO<ActivityInfo>(pageInfo);
     }
 
     @Override
@@ -85,13 +101,22 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public int publish(Integer id, TextStatusEnum status) {
-        return activityMapper.publish(id,status.getStatus());
+    public PageVO<ActivityInfo> queryByKey(String key,Integer associationId,Integer pageNum,Integer size) {
+        key = "%"+key+"%";
+        PageHelper.startPage(pageNum,size);
+        List<ActivityInfo> activityInfos = activityMapper.queryByKey(key,associationId);
+        PageInfo<ActivityInfo> pageInfo = new PageInfo<>(activityInfos);
+        return new PageVO<ActivityInfo>(pageInfo);
     }
 
     @Override
-    public int delete(Integer id) {
-        return activityMapper.delete(id);
+    public int publish(Integer id, TextStatusEnum status,Integer associationId) {
+        return activityMapper.publish(id,status.getStatus(),associationId);
+    }
+
+    @Override
+    public int delete(Integer id,Integer associationId) {
+        return activityMapper.delete(id,associationId);
     }
 
     @Override
@@ -107,11 +132,19 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     public int update(ActivityForm activityForm) {
+        Association association = associationMapper.selectById(activityForm.getAssociationId());
+        if (association == null) {
+            throw new MyException(ResultEnum.ASSOCIATION_NOT_EXISTS);
+        }
         return activityMapper.update(activityForm);
     }
 
     @Override
     public int insert(ActivityForm activityForm) {
+        Association association = associationMapper.selectById(activityForm.getAssociationId());
+        if (association == null) {
+            throw new MyException(ResultEnum.ASSOCIATION_NOT_EXISTS);
+        }
         return activityMapper.insert(activityForm);
     }
 }

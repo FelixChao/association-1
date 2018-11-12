@@ -21,6 +21,11 @@
         where association_category = #{category}
     </select>
 
+    <select id="getAssociationNames" resultType="associationInfo">
+        select association_id,association_name
+        from association
+    </select>
+
     <update id="addApply" parameterType="integer"  >
         update association
         set apply_number = apply_number+1

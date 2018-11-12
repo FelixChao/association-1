@@ -3,10 +3,7 @@ package top.lvjp.association.service.impl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import top.lvjp.association.VO.ActivityInfo;
-import top.lvjp.association.VO.AssociationInfo;
-import top.lvjp.association.VO.AssociationVO;
-import top.lvjp.association.VO.NewsInfo;
+import top.lvjp.association.VO.*;
 import top.lvjp.association.dto.ActivitiesDTO;
 import top.lvjp.association.entity.Association;
 import top.lvjp.association.mapper.ActivityMapper;
@@ -54,4 +51,8 @@ public class AssociationServiceImpl implements AssociationService {
         return associationMapper.selectByCategory(category);
     }
 
+    @Override
+    public List<AssociationInfo> getAssociationNames() {
+        return associationMapper.getAssociationNames();
+    }
 }

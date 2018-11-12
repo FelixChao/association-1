@@ -65,6 +65,7 @@ public class LoginController {
                 session.setAttribute("userName",user.getUserName());
                 session.setAttribute("userId",user.getUserId());
                 session.setAttribute("userType",user.getUserType());
+                session.setAttribute("associationId",user.getAssociationId());
                 user.setUserPassword(null);
                 return ResultUtil.success(user);
             }

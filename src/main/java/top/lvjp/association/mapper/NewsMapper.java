@@ -13,4 +13,9 @@ public interface NewsMapper {
 
     List<NewsInfo> selectByAssociation(Integer id);
 
+    List<NewsInfo> selectByStatus(Integer status,Integer id);
+
+    //todo
+
+
 }

@@ -29,6 +29,7 @@ public class AssociationInfo {
     /**
      * 社团logo
      */
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("icon")
     private String associationIcon;
 

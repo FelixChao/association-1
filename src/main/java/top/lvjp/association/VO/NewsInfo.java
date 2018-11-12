@@ -54,7 +54,15 @@ public class NewsInfo {
      * 新闻发布时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    @JsonProperty("time")
+    @JsonProperty("publish")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date publishTime;
 
+    /**
+     * 新闻更新时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("update")
+    private Date updateTime;
 }

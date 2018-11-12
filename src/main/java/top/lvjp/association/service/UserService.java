@@ -1,6 +1,6 @@
 package top.lvjp.association.service;
 
-import com.github.pagehelper.PageInfo;
+import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.form.UserForm;
 
@@ -25,7 +25,7 @@ public interface UserService {
      * 查询所有用户
      * @return List &lt User &gt
      */
-    PageInfo<User> selectAll(Integer pageNum, Integer pageSize);
+    PageVO<User> selectAll(Integer pageNum, Integer pageSize);
 
     /**
      * 添加一个用户

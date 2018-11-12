@@ -31,9 +31,11 @@ public interface ActivityMapper {
 
     Activity selectById(Integer id);
 
-    int publish(@Param("id") Integer id,@Param("publish") Integer publish);
+    List<ActivityInfo> queryByKey(@Param("key") String key,@Param("associationId") Integer associationId);
 
-    int delete(Integer id);
+    int publish(@Param("id") Integer id,@Param("publish") Integer publish,@Param("associationId") Integer associationId);
+
+    int delete(@Param("id") Integer id,@Param("associationId") Integer associationId);
 
     int update(ActivityForm activityForm);
 

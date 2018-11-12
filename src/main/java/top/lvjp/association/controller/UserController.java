@@ -1,11 +1,11 @@
 package top.lvjp.association.controller;
 
-import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.enums.ResultEnum;
@@ -14,7 +14,6 @@ import top.lvjp.association.service.UserService;
 import top.lvjp.association.util.ResultUtil;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/manage/user")
@@ -30,9 +29,8 @@ public class UserController {
      */
     @GetMapping("/all")
     public Result getAll(@RequestParam("page") int page){
-        PageInfo<User> usersPage = userService.selectAll(page,10);
-        List<User> users = usersPage.getList();
-        return ResultUtil.success(users);
+        PageVO<User> usersPage = userService.selectAll(page,5);
+        return ResultUtil.success(usersPage);
     }
 
     /**

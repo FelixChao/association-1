@@ -1,11 +1,12 @@
-package top.lvjp.association.entity;
+package top.lvjp.association.form;
 
-import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Date;
 
-@Data
-public class News {
+public class NewsForm {
 
     /**
      * 新闻编号
@@ -15,16 +16,19 @@ public class News {
     /**
      * 所属社团编号
      */
+    @NotNull
     private Integer associationId;
 
     /**
      * 新闻标题
      */
+    @Size(min = 1)
     private String newsTitle;
 
     /**
      * 新闻摘要
      */
+    @Size(max = 255)
     private String newsDigest;
 
     /**
@@ -45,16 +49,11 @@ public class News {
     /**
      * 新闻更新时间
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date updateTime;
-
-    /**
-     * 新闻发布时间
-     */
-    private Date publishTime;
 
     /**
      * 新闻图片
      */
     private String newsImage;
-
 }

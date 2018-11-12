@@ -4,6 +4,7 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.form.UserForm;
@@ -30,11 +31,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public PageInfo<User> selectAll(Integer pageNum, Integer pageSize) {
+    public PageVO<User> selectAll(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum,pageSize);
         List<User> users = userMapper.selectAll();
         PageInfo<User> pageInfo = new PageInfo<User>(users);
-        return pageInfo;
+        return new PageVO<User>(pageInfo);
     }
 
     @Override

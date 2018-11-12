@@ -13,6 +13,8 @@ public interface AssociationMapper {
 
     List<AssociationInfo> selectByCategory(String category);
 
+    List<AssociationInfo> getAssociationNames();
+
     int addApply(Integer id);
 
 }

@@ -11,48 +11,49 @@
     <select id="selectLatest" parameterType="Integer" resultType="activityInfo" >
         select activity_id,activity_title,activity_image,activity_label
         from activity
+        where text_status = 1
         order by start_time desc limit #{count}
     </select>
 
     <select id="selectCurrent" resultType="activityInfo" parameterType="integer">
         select activity_id,activity_title,activity_image,activity_label
         from activity
-        where start_time &lt; now() and end_time &gt; now()
+        where text_status = 1 and start_time &lt; now() and end_time &gt; now()
         order by start_time desc
     </select>
 
     <select id="selectFuture" resultType="activityInfo" >
         select activity_id,activity_title,activity_image,activity_label
         from activity
-        where start_time &gt; now()
+        where text_status = 1 and start_time &gt; now()
         order by start_time desc
     </select>
 
     <select id="selectPast" resultType="activityInfo" >
         select activity_id,activity_title,activity_image,activity_label
         from activity
-        where end_time &lt; now()
+        where text_status = 1 and end_time &lt; now()
         order by start_time desc
     </select>
 
     <select id="selectCurrentByAssociation" parameterType="Integer" resultType="activityInfo">
         select activity_id,activity_title,activity_image,activity_label,start_time,end_time
         from activity
-        where association_id = #{id} and start_time &lt; now() and end_time &gt; now()
+        where text_status = 1 and association_id = #{id} and start_time &lt; now() and end_time &gt; now()
         order by start_time desc
     </select>
 
     <select id="selectFutureByAssociation" parameterType="Integer" resultType="activityInfo">
         select activity_id,activity_title,activity_image,activity_label,start_time,end_time
         from activity
-        where association_id = #{id} and start_time &gt; now()
+        where text_status = 1 and association_id = #{id} and start_time &gt; now()
         order by start_time desc
     </select>
 
     <select id="selectPastByAssociation" parameterType="Integer" resultType="activityInfo">
         select activity_id,activity_title,activity_image,activity_label,start_time,end_time
         from activity
-        where association_id = #{id} and end_time &lt; now()
+        where text_status = 1 and association_id = #{id} and end_time &lt; now()
         order by start_time desc
     </select>
 
@@ -86,6 +87,14 @@
         where activity_id = #{id}
     </select>
 
+    <select id="queryByKey" parameterType="String" resultType="activityInfo">
+        select  activity_id,activity_title,activity_image,activity_label,update_time
+        from activity
+        where text_status = 1
+          and (activity_title like #{key} or activity_label like #{key} or activity_text like #{key})
+        <include refid="testRight" />
+    </select>
+
     <update id="addApply" parameterType="integer" >
         update activity
         set apply_number = apply_number + 1
@@ -96,15 +105,17 @@
         update activity
         set text_status = #{publish}
         where activity_id = #{id}
+        <include refid="testRight" />
     </update>
 
     <update id="update" parameterType="activityForm">
         update activity
-        set association_id = #{associationId},activity_title = #{activityTitle},
+        set activity_title = #{activityTitle},
             start_time = #{startTime},end_time = #{endTime},activity_text = #{activityText},
             activity_image = #{activityImage},activity_label = #{activityLabel},
             max_apply = #{maxApply},text_status = #{textStatus}
         where activity_id = #{activityId}
+        <include refid="testRight" />
     </update>
 
     <insert id="insert" parameterType="activityForm" >
@@ -121,5 +132,6 @@
     <delete id="delete" parameterType="integer">
         delete from activity
         where activity_id =#{id}
+        <include refid="testRight" />
     </delete>
 </mapper>

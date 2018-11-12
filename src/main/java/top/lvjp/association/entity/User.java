@@ -1,6 +1,7 @@
 package top.lvjp.association.entity;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 @Data
@@ -9,11 +10,13 @@ public class User {
     /**
      * 用户编号
      */
+    @JsonProperty("id")
     private Integer userId;
 
     /**
      * 用户名
      */
+    @JsonProperty("name")
     private String userName;
 
     /**
@@ -25,10 +28,12 @@ public class User {
     /**
      * 用户权限等级
      */
+    @JsonProperty("type")
     private Integer userType;
 
     /**
      * 用户所属社团
      */
+    @JsonProperty("association")
     private Integer associationId;
 }

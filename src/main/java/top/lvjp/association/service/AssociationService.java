@@ -27,4 +27,10 @@ public interface AssociationService {
      * @return List<AssociationInfo>
      */
     List<AssociationInfo> selectByCategory(String category);
+
+    /**
+     * 获取所有社团的名字
+     * @return
+     */
+    List<AssociationInfo> getAssociationNames();
 }
