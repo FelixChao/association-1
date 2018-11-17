@@ -5,19 +5,16 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import top.lvjp.association.VO.ActivityInfo;
 import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.entity.Activity;
 import top.lvjp.association.entity.Association;
 import top.lvjp.association.enums.ResultEnum;
-import top.lvjp.association.enums.TextStatusEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.form.ActivityForm;
 import top.lvjp.association.mapper.ActivityMapper;
 import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.service.ActivityService;
-import top.lvjp.association.service.AssociationService;
 
 import java.util.List;
 
@@ -110,8 +107,8 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public int publish(Integer id, TextStatusEnum status,Integer associationId) {
-        return activityMapper.publish(id,status.getStatus(),associationId);
+    public int publish(Integer id,Integer associationId) {
+        return activityMapper.publish(id,associationId);
     }
 
     @Override

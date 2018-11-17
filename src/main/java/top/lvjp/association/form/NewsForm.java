@@ -1,11 +1,13 @@
 package top.lvjp.association.form;
 
+import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Date;
 
+@Data
 public class NewsForm {
 
     /**
@@ -16,19 +18,18 @@ public class NewsForm {
     /**
      * 所属社团编号
      */
-    @NotNull
     private Integer associationId;
 
     /**
      * 新闻标题
      */
-    @Size(min = 1)
+    @Size(min = 1,message = "请输入新闻标题")
     private String newsTitle;
 
     /**
      * 新闻摘要
      */
-    @Size(max = 255)
+    @Size(max = 228,message = "摘要不能超过114个字")
     private String newsDigest;
 
     /**
@@ -39,11 +40,13 @@ public class NewsForm {
     /**
      * 新闻发布状态,已发布为1,未发布为0
      */
+    @NotNull
     private Integer newsStatus;
 
     /**
      * 新闻正文内容
      */
+    @Size(min = 1,message = "请输入新闻内容")
     private String newsText;
 
     /**

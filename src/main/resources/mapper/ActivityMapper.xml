@@ -8,86 +8,86 @@
         </if>
     </sql>
 
-    <select id="selectLatest" parameterType="Integer" resultType="activityInfo" >
+    <select id="selectLatest" parameterType="integer" resultType="ActivityInfo" >
         select activity_id,activity_title,activity_image,activity_label
         from activity
         where text_status = 1
         order by start_time desc limit #{count}
     </select>
 
-    <select id="selectCurrent" resultType="activityInfo" parameterType="integer">
+    <select id="selectCurrent" resultType="ActivityInfo" parameterType="integer">
         select activity_id,activity_title,activity_image,activity_label
         from activity
         where text_status = 1 and start_time &lt; now() and end_time &gt; now()
         order by start_time desc
     </select>
 
-    <select id="selectFuture" resultType="activityInfo" >
+    <select id="selectFuture" resultType="ActivityInfo" >
         select activity_id,activity_title,activity_image,activity_label
         from activity
         where text_status = 1 and start_time &gt; now()
         order by start_time desc
     </select>
 
-    <select id="selectPast" resultType="activityInfo" >
+    <select id="selectPast" resultType="ActivityInfo" >
         select activity_id,activity_title,activity_image,activity_label
         from activity
         where text_status = 1 and end_time &lt; now()
         order by start_time desc
     </select>
 
-    <select id="selectCurrentByAssociation" parameterType="Integer" resultType="activityInfo">
+    <select id="selectCurrentByAssociation" parameterType="integer" resultType="ActivityInfo">
         select activity_id,activity_title,activity_image,activity_label,start_time,end_time
         from activity
         where text_status = 1 and association_id = #{id} and start_time &lt; now() and end_time &gt; now()
         order by start_time desc
     </select>
 
-    <select id="selectFutureByAssociation" parameterType="Integer" resultType="activityInfo">
+    <select id="selectFutureByAssociation" parameterType="integer" resultType="ActivityInfo">
         select activity_id,activity_title,activity_image,activity_label,start_time,end_time
         from activity
         where text_status = 1 and association_id = #{id} and start_time &gt; now()
         order by start_time desc
     </select>
 
-    <select id="selectPastByAssociation" parameterType="Integer" resultType="activityInfo">
+    <select id="selectPastByAssociation" parameterType="integer" resultType="ActivityInfo">
         select activity_id,activity_title,activity_image,activity_label,start_time,end_time
         from activity
         where text_status = 1 and association_id = #{id} and end_time &lt; now()
         order by start_time desc
     </select>
 
-    <select id="selectCurrnetByStatus" resultType="activityInfo">
+    <select id="selectCurrnetByStatus" resultType="ActivityInfo">
         select activity_id,activity_title,activity_image,activity_label,update_time
         from activity
         where text_status = #{status} and start_time &lt; now() and end_time &gt; now()
         <include refid="testRight" />
-        order by start_time desc
+        order by update_time desc
     </select>
 
-    <select id="selectFutureByStatus" resultType="activityInfo">
+    <select id="selectFutureByStatus" resultType="ActivityInfo">
         select activity_id,activity_title,activity_image,activity_label,update_time
         from activity
         where text_status = #{status} and start_time &gt; now()
         <include refid="testRight" />
-        order by start_time desc
+        order by update_time desc
     </select>
 
-    <select id="selectPastByStatus" resultType="activityInfo">
+    <select id="selectPastByStatus" resultType="ActivityInfo">
         select activity_id,activity_title,activity_image,activity_label,update_time
         from activity
         where text_status = #{status} and end_time &lt; now()
         <include refid="testRight" />
-        order by start_time desc
+        order by update_time desc
     </select>
 
-    <select id="selectById" resultType="activity" parameterType="Integer">
+    <select id="selectById" resultType="Activity" parameterType="integer">
         select *
         from activity as c join association as s on c.association_id = s.association_id
         where activity_id = #{id}
     </select>
 
-    <select id="queryByKey" parameterType="String" resultType="activityInfo">
+    <select id="queryByKey" parameterType="string" resultType="ActivityInfo">
         select  activity_id,activity_title,activity_image,activity_label,update_time
         from activity
         where text_status = 1
@@ -103,12 +103,12 @@
 
     <update id="publish">
         update activity
-        set text_status = #{publish}
+        set text_status = 1
         where activity_id = #{id}
         <include refid="testRight" />
     </update>
 
-    <update id="update" parameterType="activityForm">
+    <update id="update" parameterType="ActivityForm">
         update activity
         set activity_title = #{activityTitle},
             start_time = #{startTime},end_time = #{endTime},activity_text = #{activityText},
@@ -118,7 +118,7 @@
         <include refid="testRight" />
     </update>
 
-    <insert id="insert" parameterType="activityForm" >
+    <insert id="insert" parameterType="ActivityForm" >
         insert activity   (
             association_id,activity_title,start_time,end_time,activity_text,
             activity_image,activity_label,max_apply,text_status

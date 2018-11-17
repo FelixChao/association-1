@@ -2,7 +2,6 @@ package top.lvjp.association.service;
 
 import top.lvjp.association.VO.ActivityInfo;
 import top.lvjp.association.VO.PageVO;
-import top.lvjp.association.enums.TextStatusEnum;
 import top.lvjp.association.form.ActivityForm;
 
 import java.util.List;
@@ -94,10 +93,9 @@ public interface ActivityService {
     /**
      * 发布或者取消发布
      * @param id   相关活动编号
-     * @param status 发布状态
      * @return 成功返回1,否则0
      */
-    int publish(Integer id,TextStatusEnum status,Integer associationId);
+    int publish(Integer id,Integer associationId);
 
     /**
      * 删除活动,且只能删除所属部门的活动

@@ -33,7 +33,7 @@ public interface ActivityMapper {
 
     List<ActivityInfo> queryByKey(@Param("key") String key,@Param("associationId") Integer associationId);
 
-    int publish(@Param("id") Integer id,@Param("publish") Integer publish,@Param("associationId") Integer associationId);
+    int publish(@Param("id") Integer id,@Param("associationId") Integer associationId);
 
     int delete(@Param("id") Integer id,@Param("associationId") Integer associationId);
 
