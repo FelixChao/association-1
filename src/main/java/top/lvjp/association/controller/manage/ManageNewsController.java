@@ -123,7 +123,7 @@ public class ManageNewsController {
     public Result delete(@RequestParam("id") Integer id,HttpServletRequest request){
         Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         int success = newsService.delete(id,associationId);
-        if (success == 1) return ResultUtil.success();
+        if (success != 0) return ResultUtil.success();
         return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
     }
 

@@ -123,13 +123,13 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public boolean delete(Integer activityId,Integer associationId) {
+    public int delete(Integer activityId,Integer associationId) {
         if (activityMapper.selectByIdAndAssociation(activityId,associationId) != null){
             activityApplyMapper.deleteActivityApply(activityId);
-            activityMapper.delete(activityId,associationId);
-            return true;
+            int count = activityMapper.delete(activityId,associationId);
+            return count;
         }
-        return false;
+        return 0;
     }
 
     @Override
@@ -144,6 +144,7 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    @Transactional
     public int update(ActivityForm activityForm) {
         Association association = associationMapper.selectById(activityForm.getAssociationId());
         if (association == null) {

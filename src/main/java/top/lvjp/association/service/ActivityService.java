@@ -112,7 +112,7 @@ public interface ActivityService {
      * @param associationId 执行操作的用户所属社团
      * @return
      */
-    boolean delete(Integer activityId,Integer associationId);
+    int delete(Integer activityId,Integer associationId);
 
     /**
      * 获取活动的表单信息,用于修改

@@ -108,10 +108,10 @@ public class ManageActivityController {
      */
     @PostMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id,HttpServletRequest request){
-        boolean success;
+        int success;
         Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         success = activityService.delete(id,associationId);
-        if (success) return ResultUtil.success();
+        if (success != 0) return ResultUtil.success();
         return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
     }
 
