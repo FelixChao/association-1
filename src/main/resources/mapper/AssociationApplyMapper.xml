@@ -9,16 +9,55 @@
               #{campus},#{academy},#{speciality},#{department},#{reason})
     </insert>
 
-    <select id="selectByAssociationAndStudent" resultType="associationApply">
-         select applyId,association_id,student_name,student_number,sex,phone,qq,campus,
+    <select id="selectByAssociationAndStudent" resultType="AssociationApply">
+         select apply_id,association_id,student_name,student_number,sex,phone,qq,campus,
                 academy,speciality,apply_time,reason
         from association_apply
         where association_id = #{associationId} and student_number =  #{studentNumber}
     </select>
-    <select id="selectByAssociation" resultType="associationApply" parameterType="integer" >
-        select applyId,association_id,student_name,student_number,sex,phone,qq,campus,
+
+    <select id="listByAssociation" parameterType="integer" resultType="AssociationApply">
+        select apply_id,student_name,student_number,sex,phone,qq,campus,
                 academy,speciality,apply_time,reason
         from association_apply
-        where association_id = #{id}
+        where association_id = #{associationId}
+        order by apply_time desc
     </select>
+
+    <select id="query" resultType="AssociationApply">
+        select apply_id,student_name,student_number,sex,phone,qq,campus,
+                academy,speciality,apply_time,reason
+        from association_apply
+        <where>
+            <if test="query.studentName != null">
+                student_name like #{query.studentName}
+            </if>
+            <if test="query.studentNumber != null">
+                and student_number like #{query.studentNumber}
+            </if>
+            <if test="query.academy != null">
+                and academy like #{query.academy}
+            </if>
+            <if test="query.minTime != null">
+                and apply_time &gt; #{query.minTime}
+            </if>
+            <if test="query.maxTime != null">
+                and apply_time &lt; #{query.maxTime}
+            </if>
+            <if test="query.sex != null">
+                and sex = #{query.sex}
+            </if>
+            <if test="query.campus != null">
+                and campus = #{query.campus}
+            </if>
+            <if test="associationId != 0">
+                and association_id = #{associationId}
+            </if>
+        </where>
+    </select>
+
+    <delete id="delete">
+        delete from association_apply
+        where association_id = #{associationId}
+    </delete>
 </mapper>

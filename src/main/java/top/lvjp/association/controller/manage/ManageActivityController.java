@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import top.lvjp.association.VO.ActivityInfo;
 import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
+import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.form.ActivityForm;
 import top.lvjp.association.service.ActivityService;
@@ -32,7 +33,7 @@ public class ManageActivityController {
     public Result selectCurrentByStatus(@RequestParam("status") Integer status,
                                         @RequestParam("pageNum") Integer pageNum,
                                         @RequestParam("size") Integer size,HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         PageVO<ActivityInfo> pageInfo = activityService.selectCurrentByStatus(status,associationId,pageNum,size);
         return ResultUtil.success(pageInfo);
     }
@@ -48,7 +49,7 @@ public class ManageActivityController {
     public Result selectFutureByStatus(@RequestParam("status") Integer status,
                                        @RequestParam("pageNum") Integer pageNum,
                                        @RequestParam("size") Integer size,HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         PageVO<ActivityInfo> pageInfo = activityService.selectFutureByStatus(status,associationId,pageNum,size);
        return ResultUtil.success(pageInfo);
     }
@@ -64,7 +65,7 @@ public class ManageActivityController {
     public Result selectPastByStatus(@RequestParam("status") Integer status,
                                      @RequestParam("pageNum") Integer pageNum,
                                      @RequestParam("size") Integer size, HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         PageVO<ActivityInfo> pageInfo = activityService.selectPastByStatus(status,associationId,pageNum,size);
         return ResultUtil.success(pageInfo);
     }
@@ -80,7 +81,7 @@ public class ManageActivityController {
     public Result queryByKey(@RequestParam("key") String key,
                              @RequestParam("pageNum") Integer pageNum,
                              @RequestParam("size") Integer size, HttpServletRequest request){
-        Integer associationId = (Integer)request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer)request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         PageVO<ActivityInfo> pageInfo = activityService.queryByKey(key,associationId,pageNum,size);
         return ResultUtil.success(pageInfo);
     }
@@ -93,7 +94,7 @@ public class ManageActivityController {
     @PostMapping("/publish/{id}")
     public Result publish(@PathVariable Integer id,HttpServletRequest request){
         int success;
-        Integer associationId = (Integer)request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer)request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         success = activityService.publish(id,associationId);
         if (success == 1) return ResultUtil.success();
         return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
@@ -107,10 +108,10 @@ public class ManageActivityController {
      */
     @PostMapping("/delete/{id}")
     public Result delete(@PathVariable Integer id,HttpServletRequest request){
-        int success;
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        boolean success;
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         success = activityService.delete(id,associationId);
-        if (success == 1) return ResultUtil.success();
+        if (success) return ResultUtil.success();
         return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
     }
 
@@ -136,7 +137,7 @@ public class ManageActivityController {
         if(bindingResult.hasErrors()){
             return ResultUtil.validError(bindingResult.getFieldError().getDefaultMessage());
         }
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         if (associationId != 0){
             activityForm.setAssociationId(associationId);
         }
@@ -156,7 +157,7 @@ public class ManageActivityController {
         if(bindingResult.hasErrors()){
             return ResultUtil.validError(bindingResult.getFieldError().getDefaultMessage());
         }
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         if (associationId != 0){
             activityForm.setAssociationId(associationId);
         }

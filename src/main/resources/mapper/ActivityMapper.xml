@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.ActivityMapper">
 
-    <sql id="testRight" >
+    <sql id="testRights" >
         <if test="associationId != 0">
             and association_id = #{associationId}
         </if>
@@ -61,7 +61,7 @@
         select activity_id,activity_title,activity_image,activity_label,update_time
         from activity
         where text_status = #{status} and start_time &lt; now() and end_time &gt; now()
-        <include refid="testRight" />
+        <include refid="testRights" />
         order by update_time desc
     </select>
 
@@ -69,7 +69,7 @@
         select activity_id,activity_title,activity_image,activity_label,update_time
         from activity
         where text_status = #{status} and start_time &gt; now()
-        <include refid="testRight" />
+        <include refid="testRights" />
         order by update_time desc
     </select>
 
@@ -77,7 +77,7 @@
         select activity_id,activity_title,activity_image,activity_label,update_time
         from activity
         where text_status = #{status} and end_time &lt; now()
-        <include refid="testRight" />
+        <include refid="testRights" />
         order by update_time desc
     </select>
 
@@ -92,7 +92,14 @@
         from activity
         where text_status = 1
           and (activity_title like #{key} or activity_label like #{key} or activity_text like #{key})
-        <include refid="testRight" />
+        <include refid="testRights" />
+    </select>
+
+    <select id="selectAll" resultType="ActivityInfo">
+        select activity_id,activity_title
+        from activity
+        where text_stauts = #{status}
+        <include refid="testRights"/>
     </select>
 
     <update id="addApply" parameterType="integer" >
@@ -105,7 +112,7 @@
         update activity
         set text_status = 1
         where activity_id = #{id}
-        <include refid="testRight" />
+        <include refid="testRights" />
     </update>
 
     <update id="update" parameterType="ActivityForm">
@@ -115,7 +122,7 @@
             activity_image = #{activityImage},activity_label = #{activityLabel},
             max_apply = #{maxApply},text_status = #{textStatus}
         where activity_id = #{activityId}
-        <include refid="testRight" />
+        <include refid="testRights" />
     </update>
 
     <insert id="insert" parameterType="ActivityForm" >
@@ -132,6 +139,14 @@
     <delete id="delete" parameterType="integer">
         delete from activity
         where activity_id =#{id}
-        <include refid="testRight" />
+        <include refid="testRights" />
     </delete>
+    
+    <select id="selectByIdAndAssociation" resultType="ActivityInfo">
+        select activity_id,activity_title,activity_image,activity_label,update_time
+        from activity
+        where activity_id  = #{activityId} 
+        <include refid="testRights"/>
+    </select>
+    
 </mapper>

@@ -1,11 +1,9 @@
 package top.lvjp.association.form;
 
 import lombok.Data;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Date;
 
 @Data
 public class NewsForm {
@@ -29,7 +27,7 @@ public class NewsForm {
     /**
      * 新闻摘要
      */
-    @Size(max = 228,message = "摘要不能超过114个字")
+    @Size(max = 114,message = "摘要不能超过114个字")
     private String newsDigest;
 
     /**
@@ -49,11 +47,12 @@ public class NewsForm {
     @Size(min = 1,message = "请输入新闻内容")
     private String newsText;
 
-    /**
-     * 新闻更新时间
-     */
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updateTime;
+//    /**
+//     * 新闻更新时间
+//     */
+//    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+//    private Date updateTime;
 
     /**
      * 新闻图片

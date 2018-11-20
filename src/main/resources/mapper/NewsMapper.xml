@@ -45,27 +45,27 @@
     <select id="selectByKey" resultType="NewsInfo">
         select news_id,news_title,news_digest,update_time
         from news
-        where ( news_title = #{key} or news_digest = #{key} or news_author = #{key} or news_text = #{key} )
+        where ( news_title like #{key} or news_digest like #{key} or news_author like #{key} or news_text like #{key} )
         <include refid="testRights"/>
     </select>
 
     <update id="publish" >
         update news
-        set news_status = 1
+        set news_status = 1, publish_time = now()
         where news_id = #{id}
         <include refid="testRights"/>
     </update>
 
     <update id="update" parameterType="NewsForm">
         update news
-        set news_title = #{newsTitle},news_digest = #{newsDigest},news_author = #{newsAuthor},news_text = #{newText},news_image = #{newsImage},news_status = #{newsStatus}
+        set news_title = #{newsTitle},news_digest = #{newsDigest},news_author = #{newsAuthor},news_text = #{newsText},news_image = #{newsImage},news_status = #{newsStatus}
         where news_id = #{newsId}
         <include refid="testRights"/>
     </update>
 
     <insert id="insert" parameterType="NewsForm">
         insert news
-        set association_id = #{associationId},news_title = #{newsTitle},news_digest = #{newsDigest},news_author = #{newsAuthor},news_text = #{newText},news_image = #{newsImage},news_status = #{newsStatus}
+        set association_id = #{associationId},news_title = #{newsTitle},news_digest = #{newsDigest},news_author = #{newsAuthor},news_text = #{newsText},news_image = #{newsImage},news_status = #{newsStatus}
     </insert>
 
     <delete id="delete" >

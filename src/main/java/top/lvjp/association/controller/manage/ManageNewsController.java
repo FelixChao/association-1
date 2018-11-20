@@ -1,11 +1,11 @@
 package top.lvjp.association.controller.manage;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import top.lvjp.association.VO.NewsInfo;
 import top.lvjp.association.VO.Result;
+import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.form.NewsForm;
 import top.lvjp.association.service.NewsService;
@@ -14,8 +14,8 @@ import top.lvjp.association.util.ResultUtil;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-@Controller
-@RequestMapping("/manager/news")
+@RestController
+@RequestMapping("/manage/news")
 public class ManageNewsController {
 
     @Autowired
@@ -28,11 +28,7 @@ public class ManageNewsController {
      */
     @GetMapping("/form/{id}")
     public Result getFormById(@PathVariable("id") Integer id){
-        NewsForm newsForm = newsService.getFormById(id);
-        if (newsForm == null) {
-            return ResultUtil.error(ResultEnum.NEWS_NOT_EXISTS);
-        }
-        return ResultUtil.success(newsForm);
+        return ResultUtil.success(newsService.getFormById(id));
     }
 
     /**
@@ -47,7 +43,7 @@ public class ManageNewsController {
     public Result<NewsInfo> selectByStatus(@RequestParam("status") Integer status,
                                            @RequestParam("pageNum") Integer pageNum,
                                            @RequestParam("size") Integer size,HttpServletRequest request){
-        Integer id = (Integer) request.getSession().getAttribute("associationId");
+        Integer id = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         return ResultUtil.success(newsService.selectByStatus(status,id,pageNum,size));
     }
 
@@ -60,7 +56,7 @@ public class ManageNewsController {
     public Result<NewsInfo> queryByKey(@RequestParam("key") String key,
                                         @RequestParam("pageNum") Integer pageNum,
                                         @RequestParam("size") Integer size, HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         return  ResultUtil.success(newsService.queryByKey(key,associationId,pageNum,size));
     }
 
@@ -71,7 +67,7 @@ public class ManageNewsController {
      */
     @PostMapping("/publish")
     public Result publish(@RequestParam("id") Integer id,HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         int success = newsService.publish(id,associationId);
         if (success == 1){
             return ResultUtil.success();
@@ -89,7 +85,7 @@ public class ManageNewsController {
         if(bindingResult.hasErrors()){
             return ResultUtil.error(ResultEnum.FORM_VALID_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
         }
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         if (associationId != 0){
             newsForm.setAssociationId(associationId);
         }
@@ -109,7 +105,7 @@ public class ManageNewsController {
         if(bindingResult.hasErrors()){
             return ResultUtil.error(ResultEnum.FORM_VALID_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
         }
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         if (associationId != 0){
             newsForm.setAssociationId(associationId);
         }
@@ -125,11 +121,10 @@ public class ManageNewsController {
      */
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("id") Integer id,HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute("associationId");
+        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         int success = newsService.delete(id,associationId);
         if (success == 1) return ResultUtil.success();
         return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
     }
 
-    //TODO 测试
 }

@@ -83,6 +83,14 @@ public interface ActivityService {
     ActivityInfo getInfoById(Integer id);
 
     /**
+     * 获取当前用户的社团所有的活动,(只返回标题)
+     * @param associationId 所属社团
+     * @param status 活动发布状态
+     * @return activityInfo
+     */
+    List<ActivityInfo> selectAll(Integer associationId,Integer status);
+
+    /**
      * 通过关键字查找本社团的活动
      * @param key 查找关键字
      * @param associationId 执行操作的用户所属社团
@@ -99,11 +107,12 @@ public interface ActivityService {
 
     /**
      * 删除活动,且只能删除所属部门的活动
-     * @param id 需要删除的活动的编号
+     * 同时删除该活动的报名表
+     * @param activityId 需要删除的活动的编号
      * @param associationId 执行操作的用户所属社团
-     * @return 成功返回1,否则0
+     * @return
      */
-    int delete(Integer id,Integer associationId);
+    boolean delete(Integer activityId,Integer associationId);
 
     /**
      * 获取活动的表单信息,用于修改

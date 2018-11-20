@@ -46,6 +46,6 @@ pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
-logging:
-  level:
-    top.lvjp.association.mapper: trace
+#logging:
+#  level:
+#    top.lvjp.association.mapper: trace

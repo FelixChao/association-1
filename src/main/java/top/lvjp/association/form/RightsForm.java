@@ -1,7 +1,7 @@
 package top.lvjp.association.form;
 
 import lombok.Data;
-import top.lvjp.association.util.RegexpUtil;
+import top.lvjp.association.constant.RegexpConstant;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -24,13 +24,13 @@ public class RightsForm {
     /**
      * 电话
      */
-    @Pattern(regexp = RegexpUtil.PHONE,message = "请输入正确的电话")
+    @Pattern(regexp = RegexpConstant.PHONE,message = "请输入正确的电话")
     private String phone;
 
     /**
      * QQ
      */
-    @Pattern(regexp = RegexpUtil.QQ,message = "请输入正确的QQ")
+    @Pattern(regexp = RegexpConstant.QQ,message = "请输入正确的QQ")
     private String qq;
 
     /**

@@ -5,6 +5,7 @@ import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.lvjp.association.VO.ActivityInfo;
 import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.entity.Activity;
@@ -12,6 +13,7 @@ import top.lvjp.association.entity.Association;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.form.ActivityForm;
+import top.lvjp.association.mapper.ActivityApplyMapper;
 import top.lvjp.association.mapper.ActivityMapper;
 import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.service.ActivityService;
@@ -26,6 +28,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Autowired
     private AssociationMapper associationMapper;
+
+    @Autowired
+    private ActivityApplyMapper activityApplyMapper;
 
     @Override
     public List<ActivityInfo> selectLatest(Integer count) {
@@ -98,6 +103,11 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
+    public List<ActivityInfo> selectAll(Integer associationId, Integer status) {
+        return activityMapper.selectAll(associationId,status);
+    }
+
+    @Override
     public PageVO<ActivityInfo> queryByKey(String key,Integer associationId,Integer pageNum,Integer size) {
         key = "%"+key+"%";
         PageHelper.startPage(pageNum,size);
@@ -112,8 +122,14 @@ public class ActivityServiceImpl implements ActivityService {
     }
 
     @Override
-    public int delete(Integer id,Integer associationId) {
-        return activityMapper.delete(id,associationId);
+    @Transactional
+    public boolean delete(Integer activityId,Integer associationId) {
+        if (activityMapper.selectByIdAndAssociation(activityId,associationId) != null){
+            activityApplyMapper.deleteActivityApply(activityId);
+            activityMapper.delete(activityId,associationId);
+            return true;
+        }
+        return false;
     }
 
     @Override

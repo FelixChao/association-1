@@ -38,7 +38,7 @@ public class Association {
     /**
      * 报名状态, 0 不可报名, 1 可以报名
      */
-    private Integer applyState;
+    private Integer applyEnable;
 
     /**
      * 社团级别,1校级,0院级

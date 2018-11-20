@@ -8,6 +8,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ActivityInfo {
 
     /**
@@ -19,7 +20,7 @@ public class ActivityInfo {
     /**
      * 所属社团
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("name")
     private String associationName;
 
@@ -32,7 +33,7 @@ public class ActivityInfo {
     /**
      * 活动开始时间
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("start")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date startTime;
@@ -40,7 +41,7 @@ public class ActivityInfo {
     /**
      * 活动结束时间
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("end")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date endTime;
@@ -48,7 +49,7 @@ public class ActivityInfo {
     /**
      * 活动内容更新时间
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("update")
     @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private Date updateTime;
@@ -56,7 +57,7 @@ public class ActivityInfo {
     /**
      * 活动内容
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("text")
     private String activityText;
 
@@ -75,14 +76,14 @@ public class ActivityInfo {
     /**
      * 最大报名人数
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("max")
     private Integer maxApply;
 
     /**
      * 已报名人数
      */
-    @JsonInclude(JsonInclude.Include.NON_NULL)
+//    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("apply")
     private Integer applyNumber;
 

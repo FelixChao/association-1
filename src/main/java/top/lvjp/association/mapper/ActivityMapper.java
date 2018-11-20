@@ -11,6 +11,7 @@ public interface ActivityMapper {
 
     List<ActivityInfo> selectLatest(Integer count);
 
+    //TODO 可合并为一个方法,使用choose
     List<ActivityInfo> selectCurrent();
 
     List<ActivityInfo> selectFuture();
@@ -31,6 +32,8 @@ public interface ActivityMapper {
 
     Activity selectById(Integer id);
 
+    List<ActivityInfo> selectAll(@Param("associationId") Integer association,@Param("status") Integer status);
+
     List<ActivityInfo> queryByKey(@Param("key") String key,@Param("associationId") Integer associationId);
 
     int publish(@Param("id") Integer id,@Param("associationId") Integer associationId);
@@ -42,4 +45,6 @@ public interface ActivityMapper {
     int insert(ActivityForm activityForm);
 
     int addApply(Integer id);
+
+    ActivityInfo selectByIdAndAssociation(@Param("activityId") Integer activityId, @Param("associationId") Integer associationId);
 }

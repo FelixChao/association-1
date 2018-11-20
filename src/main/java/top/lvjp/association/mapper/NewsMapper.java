@@ -19,7 +19,7 @@ public interface NewsMapper {
 
     List<NewsInfo> selectByKey(@Param("key") String key, @Param("associationId") Integer associationId);
 
-    int publish(@Param("id") Integer id,@Param("associatinoId") Integer associationId);
+    int publish(@Param("id") Integer id,@Param("associationId") Integer associationId);
 
     int update(NewsForm newsForm);
 

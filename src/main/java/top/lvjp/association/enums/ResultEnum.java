@@ -20,7 +20,9 @@ public enum ResultEnum {
     USER_IS_EXISTS(11,"用户名已存在"),
     OPERATE_IS_FAIL(12,"操作失败"),
     APPLY_ALREADY_EXISTS(13,"报名信息已存在"),
-    NEWS_NOT_EXISTS(14,"新闻不存在")
+    NEWS_NOT_EXISTS(14,"新闻不存在"),
+    PARAMETERS_IS_NULL(15,"缺少参数"),
+    RIGHTS_NOT_SATISFY(16,"权限不足"),
     ;
 
     private Integer code;

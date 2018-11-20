@@ -2,7 +2,7 @@ package top.lvjp.association.form;
 
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
-import top.lvjp.association.util.RegexpUtil;
+import top.lvjp.association.constant.RegexpConstant;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -57,7 +57,7 @@ public class ActivityForm {
     /**
      * 活动标签
      */
-    @Pattern(regexp = RegexpUtil.LABEL, message = "请用逗号将标签分隔开")
+    @Pattern(regexp = RegexpConstant.LABEL, message = "请用逗号将标签分隔开")
     private String activityLabel;
 
     /**

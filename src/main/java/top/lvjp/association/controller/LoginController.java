@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.lvjp.association.VO.Result;
+import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.service.impl.UserServiceImpl;
@@ -62,10 +63,10 @@ public class LoginController {
             if (user == null) {
                 return ResultUtil.error(ResultEnum.LOGIN_INFO_ERROR);
             }else {
-                session.setAttribute("userName",user.getUserName());
-                session.setAttribute("userId",user.getUserId());
-                session.setAttribute("userType",user.getUserType());
-                session.setAttribute("associationId",user.getAssociationId());
+                session.setAttribute(SessionConstant.USER_NAME,user.getUserName());
+                session.setAttribute(SessionConstant.USER_ID,user.getUserId());
+                session.setAttribute(SessionConstant.USER_TYPE,user.getUserType());
+                session.setAttribute(SessionConstant.USER_ASSOCIATION,user.getAssociationId());
                 user.setUserPassword(null);
                 return ResultUtil.success(user);
             }

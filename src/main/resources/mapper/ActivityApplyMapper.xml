@@ -2,22 +2,61 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.ActivityApplyMapper">
 
-    <insert id="insertApply" parameterType="activityApplyForm">
+    <sql id="testRights">
+        <if test="associationId != 0">
+            and exists(select * from activity where activity_id = #{activityId} and association_id = #{associationId})
+        </if>
+    </sql>
+
+    <insert id="insertApply" parameterType="ActivityApplyForm">
         insert activity_apply
             (activity_id,student_name,student_number,sex,phone,qq,academy)
         values
             ( #{activityId},#{studentName},#{studentNumber},#{sex},#{phone},#{qq},#{academy} )
     </insert>
 
-    <select id="selectByActivityAndStudent" resultType="activityApply">
+    <select id="selectByActivityAndStudent" resultType="ActivityApply">
         select *
         from activity_apply
         where activity_id = #{activityId} and student_number = #{studentNumber}
     </select>
 
-    <select id="selectByActivity" parameterType="integer" resultType="activityApply">
+    <select id="selectByActivity" resultType="ActivityApply">
         select *
         from activity_apply
         where activity_id = #{activityId}
+        <include refid="testRights"/>
     </select>
+
+    <select id="query" resultType="ActivityApply">
+        select *
+        from activity_apply
+        <where>
+            <if test="query.studentName != null">
+                student_name like #{query.studentName}
+            </if>
+            <if test="query.studentNumber != null">
+                and student_number like #{query.studentNumber}
+            </if>
+            <if test="query.academy != null">
+                and academy like #{query.academy}
+            </if>
+            <if test="query.minTime != null">
+                and apply_time &gt; #{query.minTime}
+            </if>
+            <if test="query.maxTime != null">
+                and apply_time &lt; #{query.maxTime}
+            </if>
+            <if test="query.sex != null">
+                and sex = #{query.sex}
+            </if>
+            <include refid="testRights"/>
+        </where>
+    </select>
+
+    <delete id="deleteActivityApply">
+        delete from activity_apply
+        where activity_id = #{activityId}
+    </delete>
+
 </mapper>

@@ -43,6 +43,9 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public NewsForm getFormById(Integer id) {
         News news = newsMapper.selectById(id);
+        if (news == null) {
+            throw new MyException(ResultEnum.NEWS_NOT_EXISTS);
+        }
         NewsForm newsForm = new NewsForm();
         BeanUtils.copyProperties(news,newsForm);
         return newsForm;

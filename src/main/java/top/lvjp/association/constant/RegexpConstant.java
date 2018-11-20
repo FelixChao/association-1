@@ -1,6 +1,6 @@
-package top.lvjp.association.util;
+package top.lvjp.association.constant;
 
-public class RegexpUtil {
+public class RegexpConstant {
 
     public final static String STUDENT_NUMBER = "^20[12]\\d{7}$";
 
