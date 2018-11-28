@@ -22,11 +22,11 @@
     </select>
 
     <select id="selectByActivity" resultType="ActivityApply">
-        select *
-        from activity_apply
-        where activity_id = #{activityId}
-        <include refid="testRights"/>
-    </select>
+    select *
+    from activity_apply
+    where activity_id = #{activityId}
+    <include refid="testRights"/>
+</select>
 
     <select id="query" resultType="ActivityApply">
         select *

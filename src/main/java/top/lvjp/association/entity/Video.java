@@ -23,6 +23,11 @@ public class Video {
     private String videoPath;
 
     /**
+     * 介绍语
+     */
+    private String videoDescription;
+
+    /**
      * 所属社团id
      */
     private Integer associationId;

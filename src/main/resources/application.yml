@@ -1,3 +1,10 @@
 spring:
   profiles:
     active: dev
+
+# 自定义属性
+upload:
+  image-path: D:/mingliyuan/img/
+  video-path: D:/mingliyuan/associationFile/file/video/
+  image-types: PNG,JPG,GIF,JPEG
+  video-types: MP4,AVI

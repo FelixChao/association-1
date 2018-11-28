@@ -36,9 +36,13 @@ spring:
     cache: false
     servlet:
       content-type: text/html
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
 
 mybatis:
-  type-aliases-package: top.lvjp.assoication.entity
+#  type-aliases-package: top.lvjp.assoication.entity
   mapper-locations: classpath:mapper/*.xml
   config-location: classpath:mybatis-config.xml
 # 分页插件
@@ -46,6 +50,9 @@ pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
+
 #logging:
 #  level:
 #    top.lvjp.association.mapper: trace
+
+

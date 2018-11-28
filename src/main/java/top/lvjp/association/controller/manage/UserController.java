@@ -1,4 +1,4 @@
-package top.lvjp.association.controller;
+package top.lvjp.association.controller.manage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;

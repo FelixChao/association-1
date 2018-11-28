@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<meta charset="UTF-8"/>
+<body>
+<h1>上传视频</h1>
+<!--<h3 th:text="${message}" style="color: #f00;"></h3>-->
+<form method="POST" action="/manage/video/upload" enctype="multipart/form-data">
+    <input type="file" name="file" /><br/><br/>
+    title: <input type="text" name="title"><br/><br/>
+    associationId:<input type="text" name="associationId"><br/><br/>
+    userId:<input type="text" name="userId"><br/><br/>
+    desc:<input type="text" name="desc"><br/><br/>
+    <input type="submit" value="上传" />
+</form>
+<br>
+<br>
+<br>
+<br>
+<!--<a href="/demo/download">下载</a>-->
+
+</body>
+</html>

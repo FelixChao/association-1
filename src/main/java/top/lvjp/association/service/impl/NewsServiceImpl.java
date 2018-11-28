@@ -33,6 +33,11 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
+    public PageVO<NewsInfo> listAll() {
+        return null; //TODO
+    }
+
+    @Override
     public NewsInfo getInfoById(Integer id) {
         News news = newsMapper.selectById(id);
         NewsInfo newsInfo = new NewsInfo();

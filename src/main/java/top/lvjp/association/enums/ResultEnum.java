@@ -23,7 +23,10 @@ public enum ResultEnum {
     NEWS_NOT_EXISTS(14,"新闻不存在"),
     PARAMETERS_IS_NULL(15,"缺少参数"),
     RIGHTS_NOT_SATISFY(16,"权限不足"),
-    ;
+    FILE_TYPE_ERROR(17,"文件类型不对"),
+    FILL_UPLOAD_FAILED(18, "文件上传失败"),
+    FILE_IS_EMPTY(19, "文件为空,请重新选择文件"),
+    IDENTIFY_VALID_FAILED(20, "身份验证失败");
 
     private Integer code;
 

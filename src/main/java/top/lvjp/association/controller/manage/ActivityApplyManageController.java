@@ -15,11 +15,10 @@ import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("manage/activity/apply")
-public class ManageActivityApplyController {
+public class ActivityApplyManageController {
 
     @Autowired
     private ActivityApplyService activityApplyService;
-
 
     /**
      * 查找当前用户社团的活动的报名表
@@ -36,7 +35,6 @@ public class ManageActivityApplyController {
         Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         return ResultUtil.success(activityApplyService.selectByActivity(associationId,activityId,pageNum,size));
     }
-
 
     /**
      * 查询符合条件的活动报名信息

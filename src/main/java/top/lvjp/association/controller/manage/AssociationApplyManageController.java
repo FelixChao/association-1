@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 @RequestMapping("/manage/association/apply")
 @RestController
-public class ManageAssociationApplyController {
+public class AssociationApplyManageController {
 
     @Autowired
     private AssociationApplyService associationApplyService;

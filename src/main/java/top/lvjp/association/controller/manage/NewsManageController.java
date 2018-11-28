@@ -16,7 +16,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/manage/news")
-public class ManageNewsController {
+public class NewsManageController {
 
     @Autowired
     private NewsService newsService;

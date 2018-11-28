@@ -17,7 +17,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/manage/activity")
-public class ManageActivityController {
+public class ActivityManageController {
 
     @Autowired
     private ActivityService activityService;
