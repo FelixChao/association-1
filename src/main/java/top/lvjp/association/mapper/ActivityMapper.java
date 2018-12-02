@@ -2,6 +2,7 @@ package top.lvjp.association.mapper;
 
 import org.apache.ibatis.annotations.Param;
 import top.lvjp.association.VO.ActivityInfo;
+import top.lvjp.association.VO.PictureVO;
 import top.lvjp.association.entity.Activity;
 import top.lvjp.association.form.ActivityForm;
 
@@ -47,4 +48,8 @@ public interface ActivityMapper {
     int addApply(Integer id);
 
     ActivityInfo selectByIdAndAssociation(@Param("activityId") Integer activityId, @Param("associationId") Integer associationId);
+
+    List<PictureVO> listActivityIcon();
+
+    int updateActivityIcon(@Param("pictureId") Integer pictureId, @Param("picturePath") String picturePath, @Param("activityId") Integer activityId);
 }

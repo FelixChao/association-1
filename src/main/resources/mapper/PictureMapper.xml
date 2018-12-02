@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="top.lvjp.association.mapper.PictureMapper">
+
+    <resultMap id="pictureVO" type="PictureVO">
+        <id property="pictureId" column="picture_id"/>
+        <result property="pictureTitle" column="picture_title"/>
+        <result property="picturePath" column="picture_path"/>
+    </resultMap>
+
+    <sql id="testRights">
+        <if test="associationId != 0">
+            and association_id = #{associationId}
+        </if>
+    </sql>
+
+    <!--<select id="listAll" resultMap="pictureVO">-->
+        <!--select picture_id, picture_title, picture_path-->
+        <!--from picture-->
+        <!--order by picture_id desc -->
+    <!--</select>-->
+
+    <select id="listByAssociation" resultMap="pictureVO">
+        select picture_id, picture_title, picture_path
+        from picture
+        <if test="associationId != null">
+            where association_id = #{associationId}
+        </if>
+        order by picture_id desc
+    </select>
+
+    <select id="getById" resultType="Picture">
+        select picture_id, picture_title, picture_path, association_id, picture_category, create_time, user_id, is_icon
+        from picture
+        where picture_id = #{pictureId}        
+    </select>
+
+    <insert id="insert" parameterType="Picture">
+        insert picture
+          (picture_title, picture_path, association_id, picture_category, user_id)
+        values (#{pictureTitle}, #{picturePath}, #{associationId}, #{pictureCategory}, #{userId})
+    </insert>
+    
+
+    <update id="updateIcon">
+        update picture
+        set is_icon = #{isIcon}
+        where picture_id = #{pictureId}
+    </update>
+
+    <delete id="delete">
+        delete from picture
+        where picture_id in 
+        <foreach collection="ids" item="pictureId" separator="," open="(" close=")" index="index">
+            #{pictureId}
+        </foreach>
+        and is_icon = 0
+        <include refid="testRights"/>
+    </delete>
+
+</mapper>

@@ -10,9 +10,9 @@ public class VideoForm {
 
     private Integer videoId;
 
-    private Integer associationId;
-
-    private Integer userId;
+//    private Integer associationId;
+//
+//    private Integer userId;
 
 //    @NotNull(message = "请选择上传文件")
     private MultipartFile file;

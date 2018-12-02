@@ -49,6 +49,13 @@
         <include refid="testRights"/>
     </select>
 
+    <select id="listAll" resultType="NewsInfo">
+        select news_id,news_title,news_digest,publish_time
+        from news
+        where news_status = 1
+        order by update_time desc
+    </select>
+
     <update id="publish" >
         update news
         set news_status = 1, publish_time = now()

@@ -26,4 +26,6 @@ public interface NewsMapper {
     int insert(NewsForm newsInfo);
 
     int delete(@Param("id") Integer id,@Param("associationId") Integer associationId);
+
+    List<NewsInfo> listAll();
 }

@@ -7,6 +7,7 @@ import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.form.QueryForm;
 import top.lvjp.association.service.AssociationApplyService;
+import top.lvjp.association.service.AssociationService;
 import top.lvjp.association.util.ResultUtil;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,9 @@ public class AssociationApplyManageController {
 
     @Autowired
     private AssociationApplyService associationApplyService;
+
+    @Autowired
+    private AssociationService associationService;
 
 
     /**
@@ -77,4 +81,15 @@ public class AssociationApplyManageController {
         return ResultUtil.success(associationApplyService.query(queryForm,userAssociation,pageNum,size));
     }
 
+    @PostMapping("/enable")
+    public Result updateStatus(@RequestParam("associationId") Integer associationId,
+            @RequestParam("status") Integer status,HttpServletRequest request){
+        Integer userAssociation= (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (userAssociation != 0){
+            associationId = userAssociation;
+        }
+        int count = associationService.updateApplyStatus(status, associationId);
+        if (count != 0) return ResultUtil.success(count);
+        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
+    }
 }

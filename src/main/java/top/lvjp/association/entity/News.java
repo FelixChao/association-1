@@ -48,6 +48,11 @@ public class News {
     private Date updateTime;
 
     /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
      * 新闻发布时间
      */
     private Date publishTime;

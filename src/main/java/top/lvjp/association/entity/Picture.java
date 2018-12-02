@@ -30,7 +30,7 @@ public class Picture {
     /**
      * 照片类别
      */
-    private String pictureCategory;
+    private Integer pictureCategory;
 
     /**
      * 上传时间
@@ -41,5 +41,10 @@ public class Picture {
      * 上传用户
      */
     private Integer userId;
+
+    /**
+     * 是否作为图标, 1: 是, 0: 不是
+     */
+    private Integer isIcon;
 
 }

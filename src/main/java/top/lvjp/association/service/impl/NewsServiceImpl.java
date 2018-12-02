@@ -33,8 +33,11 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public PageVO<NewsInfo> listAll() {
-        return null; //TODO
+    public PageVO<NewsInfo> listAll(Integer pageNum, Integer size) {
+        PageHelper.startPage(pageNum, size);
+        List<NewsInfo> newsInfos = newsMapper.listAll();
+        PageInfo<NewsInfo> pageInfo = new PageInfo<>(newsInfos);
+        return new PageVO<>(pageInfo);
     }
 
     @Override

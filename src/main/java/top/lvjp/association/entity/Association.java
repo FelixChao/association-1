@@ -2,6 +2,8 @@ package top.lvjp.association.entity;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class Association {
 
@@ -44,5 +46,15 @@ public class Association {
      * 社团级别,1校级,0院级
      */
     private Integer associationGrade;
+
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 
 }

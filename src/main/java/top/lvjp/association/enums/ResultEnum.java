@@ -26,7 +26,8 @@ public enum ResultEnum {
     FILE_TYPE_ERROR(17,"文件类型不对"),
     FILL_UPLOAD_FAILED(18, "文件上传失败"),
     FILE_IS_EMPTY(19, "文件为空,请重新选择文件"),
-    IDENTIFY_VALID_FAILED(20, "身份验证失败");
+    IDENTIFY_VALID_FAILED(20, "身份验证失败"),
+    PARAMETERS_IS_ERROR(21, "参数错误");
 
     private Integer code;
 

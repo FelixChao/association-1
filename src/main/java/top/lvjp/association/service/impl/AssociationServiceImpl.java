@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import top.lvjp.association.VO.*;
 import top.lvjp.association.dto.ActivitiesDTO;
 import top.lvjp.association.entity.Association;
+import top.lvjp.association.enums.ResultEnum;
+import top.lvjp.association.exception.MyException;
 import top.lvjp.association.mapper.ActivityMapper;
 import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.NewsMapper;
@@ -54,5 +56,16 @@ public class AssociationServiceImpl implements AssociationService {
     @Override
     public List<AssociationInfo> getAssociationNames() {
         return associationMapper.getAssociationNames();
+    }
+
+    @Override
+    public int updateApplyStatus(Integer status, Integer associationId) {
+        Integer enable;
+        if (status == 0){
+            enable = 0;
+        }else if (status == 1){
+            enable = 1;
+        } else throw new MyException(ResultEnum.PARAMETERS_IS_ERROR);
+        return associationMapper.updateApplyStatus(enable, associationId);
     }
 }

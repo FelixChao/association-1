@@ -15,7 +15,7 @@ public interface NewsService {
      */
     List<NewsInfo> selectLatest(Integer count);
 
-    PageVO<NewsInfo> listAll();
+    PageVO<NewsInfo> listAll(Integer pageNum, Integer size);
 
     /**
      * 通过id查询某一新闻

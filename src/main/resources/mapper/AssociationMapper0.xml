@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.AssociationMapper">
 
+    <resultMap id="associationIcon" type="PictureVO">
+        <id property="id" column="association_id"/>
+        <result property="pictureId" column="picture_id"/>
+        <result property="pictureTitle" column="association_name"/>
+        <result property="picturePath" column="picture_path"/>
+    </resultMap>
 
     <select id="selectById" parameterType="Integer" resultType="association">
         select *
@@ -32,4 +38,21 @@
         where association_id = #{id}
     </update>
 
+    <select id="listAssociationIcon" resultMap="associationIcon">
+        select picture_id, picture_path, association_name, association_id
+        from association
+    </select>
+
+    <update id="updateAssociationIcon">
+        update association
+        set picture_id = #{pictureId},
+            picture_path = #{picturePath}
+        where association_id = #{associationId}
+    </update>
+
+    <update id="updateApplyStatus">
+        update association
+        set apply_enable = #{enable}
+        where association_id = #{associationId}
+    </update>
 </mapper>

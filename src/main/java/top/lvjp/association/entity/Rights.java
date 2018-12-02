@@ -2,6 +2,8 @@ package top.lvjp.association.entity;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class Rights {
 
@@ -34,6 +36,11 @@ public class Rights {
      * 创建时间
      */
     private String createTime;
+
+    /**
+     * 更新时间
+     */
+    private Date updateTime;
 
     /**
      * 维权内容

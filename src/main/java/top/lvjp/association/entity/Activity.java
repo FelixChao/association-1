@@ -33,6 +33,11 @@ public class Activity {
     private Date endTime;
 
     /**
+     * 创建时间
+     */
+    private Date createTime;
+
+    /**
      * 活动内容更新时间
      */
     private Date updateTime;

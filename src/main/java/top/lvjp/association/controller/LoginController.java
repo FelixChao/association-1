@@ -53,11 +53,7 @@ public class LoginController {
                             @RequestParam("password") String password,
                             @RequestParam("code") String code, HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
-        String rightCode = null;
-        if(!code.equals("1024")){
-            log.error(session.getAttribute(RandomValidateCodeUtil.CODE_KEY).toString());
-            rightCode = session.getAttribute(RandomValidateCodeUtil.CODE_KEY).toString();
-        }else rightCode  = "1024";
+        String rightCode = session.getAttribute(RandomValidateCodeUtil.CODE_KEY).toString();
         if (rightCode.equals(code)) {
             User user = userService.selectByNameAndPassword(name,password);
             if (user == null) {

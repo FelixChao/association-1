@@ -2,6 +2,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.ActivityMapper">
 
+    <resultMap id="activityIcon" type="PictureVO">
+        <id property="id" column="activity_id"/>
+        <result property="pictureId" column="picture_id"/>
+        <result property="pictureTitle" column="activity_title"/>
+        <result property="picturePath" column="picture_path"/>
+    </resultMap>
+
     <sql id="testRights" >
         <if test="associationId != 0">
             and association_id = #{associationId}
@@ -141,12 +148,24 @@
         where activity_id =#{id}
         <include refid="testRights" />
     </delete>
-    
+
     <select id="selectByIdAndAssociation" resultType="ActivityInfo">
         select activity_id,activity_title,activity_image,activity_label,update_time
         from activity
-        where activity_id  = #{activityId} 
+        where activity_id  = #{activityId}
         <include refid="testRights"/>
     </select>
-    
+
+    <select id="listActivityIcon" resultMap="activityIcon">
+        select picture_id, activity_title, picture_path, activity_id
+        from activity
+        where not isnull(picture_id)
+    </select>
+
+    <update id="updateActivityIcon">
+        update activity
+        set picture_id = #{pictureId},
+            picture_path = #{picturePath}
+        where activity_id = #{activityId}
+    </update>
 </mapper>

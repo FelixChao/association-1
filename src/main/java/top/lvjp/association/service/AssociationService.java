@@ -33,4 +33,6 @@ public interface AssociationService {
      * @return
      */
     List<AssociationInfo> getAssociationNames();
+
+    int updateApplyStatus(Integer status, Integer associationId);
 }
