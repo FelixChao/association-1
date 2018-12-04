@@ -1,12 +1,13 @@
-package top.lvjp.association.entity;
+package top.lvjp.association.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class Rights {
-
+public class RightsVO {
     /**
      * 维权编号
      */
@@ -15,11 +16,13 @@ public class Rights {
     /**
      * 相关社团
      */
-    private Integer associationId;
+    @JsonProperty("association")
+    private String associationName;
 
     /**
      * 学生姓名
      */
+    @JsonProperty("student")
     private String studentName;
 
     /**
@@ -35,26 +38,36 @@ public class Rights {
     /**
      * 创建时间
      */
-    private String createTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
+    private Date createTime;
 
     /**
      * 更新时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
     private Date updateTime;
 
     /**
      * 维权标题
      */
+    @JsonProperty("title")
     private String rightsTitle;
 
     /**
      * 维权内容
      */
+    @JsonProperty("content")
     private String rightsContent;
 
     /**
      * 维权状态, 0:未处理,1:正在处理,2:处理完成
      */
+    @JsonProperty("status")
     private Integer rightsStatus;
 
+    /**
+     * 解决办法
+     */
+    private String solution;
 }
+

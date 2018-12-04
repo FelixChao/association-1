@@ -5,6 +5,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import top.lvjp.association.VO.Result;
+import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.form.RightsForm;
 import top.lvjp.association.service.RightsService;
 import top.lvjp.association.util.ResultUtil;
@@ -28,7 +29,8 @@ public class RightsController {
         if(bindingResult.hasErrors()){
             return ResultUtil.validError(bindingResult.getFieldError().getDefaultMessage());
         }
-        rightsService.insertRights(rightsForm);
-        return ResultUtil.success();
+        int count = rightsService.insertRights(rightsForm);
+        if (count == 1) return ResultUtil.success();
+        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
     }
 }

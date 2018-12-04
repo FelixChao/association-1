@@ -2,10 +2,82 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.RightsMapper">
 
-    <insert id="insertRights" parameterType="rightsForm">
+    <resultMap id="rightsVO" type="RightsVO">
+        <id property="rightsId" column="rights_id" />
+        <result property="associationName" column="association_name"/>
+        <result property="studentName" column="student_name"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="rightsTitle" column="rights_title"/>
+        <result property="rightsContent" column="rights_content"/>
+        <result property="rightsStatus" column="rights_status"/>
+        <result property="solution" column="solution"/>
+    </resultMap>
+
+    <resultMap id="rightsInfo" type="RightsInfo">
+        <id property="rightsId" column="rights_id" />
+        <result property="associationName" column="association_name"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="rightsTitle" column="rights_title"/>
+        <result property="rightsStatus" column="rights_status"/>
+        <result property="solution" column="solution"/>
+    </resultMap>
+
+    <select id="listAll" resultMap="rightsInfo">
+        select rights_id, association_name, rights_title, rights_status, solution
+        from rights r
+        join association a on r.association_id = a.association_id
+        order by r.update_time desc
+    </select>
+
+    <select id="listByAssociation" parameterType="integer" resultMap="rightsInfo">
+        select rights_id, association_name, rights_title, rights_status, solution
+        from rights r
+        join association a on r.association_id = a.association_id
+        where r.association_id = #{associationId}
+        order by r.update_time desc
+    </select>
+
+    <select id="listByStatus" resultMap="rightsInfo">
+        select rights_id, association_name, rights_title, rights_status, solution
+        from rights r
+        join association a on r.association_id = a.association_id
+        where rights_status = #{status}
+        <if test="associationId != null">
+            and r.association_id = #{associationId}
+        </if>
+    </select>
+
+    <select id="getById" resultMap="rightsVO">
+        select  rights_id, association_name, student_name, phone, email, rights_title, rights_content,
+                rights_status, solution, r.create_time, r.update_time
+        from rights
+        join association a on r.association_id = a.association_id
+        where rights_id = #{rightsId}
+        <if test="associationId != null">
+            and r.association_id = #{associationId}
+        </if>
+    </select>
+
+    <insert id="insertRights" parameterType="RightsForm">
         insert rights
-          (association_id,student_name,phone,qq,rights_text)
+          (association_id,student_name,phone,email,rights_content)
         values
-          ( #{associationId},#{studentName},#{phone},#{qq},#{rightsText} )
+          ( #{associationId},#{studentName},#{phone},#{email},#{rightsContent} )
     </insert>
+
+    <update id="update">
+        update rights
+        set rights_status = #{status}
+        <if test="solution != null">
+            , solution = #{solution}
+        </if>
+        where rights_id = #{rightsId}
+        <if test="associationId != null">
+            and association_id = #{associationId}
+        </if>
+    </update>
+
 </mapper>

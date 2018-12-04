@@ -14,7 +14,7 @@ public class RightsForm {
      * 相关社团
      */
     @NotNull(message = "社团不能为空")
-    private String associationId;
+    private Integer associationId;
 
     /**
      * 学生姓名
@@ -24,19 +24,24 @@ public class RightsForm {
     /**
      * 电话
      */
-    @Pattern(regexp = RegexpConstant.PHONE,message = "请输入正确的电话")
+    @Pattern(regexp = RegexpConstant.PHONE, message = "请输入正确的电话")
     private String phone;
 
     /**
-     * QQ
+     * 邮箱
      */
-    @Pattern(regexp = RegexpConstant.QQ,message = "请输入正确的QQ")
-    private String qq;
+    @Pattern(regexp = RegexpConstant.EMAIL, message = "请输入正确的邮箱")
+    private String email;
+
+    /**
+     * 维权标题
+     */
+    private String rightsTitle;
 
     /**
      * 维权内容
      */
     @Size(min = 1,message = "请填写维权内容")
-    private String rightsText;
+    private String rightsContent;
 
 }
