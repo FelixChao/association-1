@@ -1,12 +1,13 @@
 package top.lvjp.association.form;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.lvjp.association.constant.RegexpConstant;
 
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
 @Data
@@ -21,38 +22,45 @@ public class ActivityForm {
      * 所属社团编号
      */
     @NotNull(message = "请选择社团")
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 活动标题
      */
-    @Size(min = 1,message = "请输入标题")
+    @NotEmpty(message = "活动标题不能为空")
     private String activityTitle;
 
     /**
      * 活动开始时间
      */
-    @NotNull
+    @NotNull(message = "请选择活动开始时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:SS")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date startTime;
 
     /**
      * 活动结束时间
      */
-    @NotNull
+    @NotNull(message = "请选择活动结束时间")
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:SS")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date endTime;
 
     /**
      * 活动内容
      */
-    @Size(min = 1,message = "请输入活动内容")
-    private String activityText;
+    @NotEmpty(message = "请输入活动内容")
+    private String activityContent;
 
     /**
-     * 活动图片
+     * 活动图片编号
      */
-    private String activityImage;
+    private Integer pictureId;
+
+    /**
+     * 活动图片地址
+     */
+    private String picturePath;
 
     /**
      * 活动标签

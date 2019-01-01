@@ -41,6 +41,9 @@
         <!--</encoder>-->
     <!--</appender>-->
 
+    <logger name="top.lvjp.association.mapper" level="TRACE" additivity="false">
+
+    </logger>
     <root>
         <appender-ref ref="errorFile" />
         <!--<appender-ref ref="infoFile" />-->

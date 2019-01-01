@@ -10,7 +10,7 @@
     <!--外部tomcat部署: -->
     <!--<packaging>war</packaging>-->
 
-    <name>association</name>
+    <name>associationName</name>
     <description>Association project for Spring Boot</description>
 
     <parent>
@@ -85,6 +85,13 @@
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
             <version>1.1.10</version>
+        </dependency>
+
+        <!-- 热部署 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>

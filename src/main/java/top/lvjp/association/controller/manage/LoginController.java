@@ -1,4 +1,4 @@
-package top.lvjp.association.controller;
+package top.lvjp.association.controller.manage;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,16 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import top.lvjp.association.VO.Result;
+import top.lvjp.association.VO.UserVO;
 import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.enums.ResultEnum;
-import top.lvjp.association.service.impl.UserServiceImpl;
+import top.lvjp.association.service.UserService;
 import top.lvjp.association.util.RandomValidateCodeUtil;
 import top.lvjp.association.util.ResultUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Slf4j
@@ -25,7 +27,7 @@ import java.util.Date;
 public class LoginController {
 
     @Autowired
-    private UserServiceImpl userService;
+    private UserService userService;
 
     /**
      * 获取验证码
@@ -54,20 +56,32 @@ public class LoginController {
                             @RequestParam("code") String code, HttpServletRequest httpServletRequest) {
         HttpSession session = httpServletRequest.getSession();
         String rightCode = session.getAttribute(RandomValidateCodeUtil.CODE_KEY).toString();
-        if (rightCode.equals(code)) {
-            User user = userService.selectByNameAndPassword(name,password);
-            if (user == null) {
-                return ResultUtil.error(ResultEnum.LOGIN_INFO_ERROR);
-            }else {
-                session.setAttribute(SessionConstant.USER_NAME,user.getUserName());
-                session.setAttribute(SessionConstant.USER_ID,user.getUserId());
-                session.setAttribute(SessionConstant.USER_TYPE,user.getUserType());
-                session.setAttribute(SessionConstant.USER_ASSOCIATION,user.getAssociationId());
-                user.setUserPassword(null);
-                return ResultUtil.success(user);
-            }
-        } else {
+        if (!rightCode.equals(code)) {
             return ResultUtil.error(ResultEnum.VALIDATE_CODE_ERROR);
         }
+        User user = userService.selectByNameAndPassword(name,password);
+        if (user == null) {
+            return ResultUtil.error(ResultEnum.LOGIN_INFO_ERROR);
+        }
+        session.setAttribute(SessionConstant.USER_NAME,user.getUserName());
+        session.setAttribute(SessionConstant.USER_ID,user.getUserId());
+        session.setAttribute(SessionConstant.USER_TYPE,user.getUserType());
+        session.setAttribute(SessionConstant.USER_ASSOCIATION,user.getAssociationId());
+        UserVO userVO = userService.getUserVO(user.getUserId());
+        log.info("用户 id: {} 于 {} 登录, 基本信息为 {}", user.getUserId(),
+                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()),
+                user.toString());
+        return ResultUtil.success(userVO);
     }
+
+    @PostMapping(value = "/logout")
+    public Result logout( HttpServletRequest httpServletRequest) {
+        HttpSession session = httpServletRequest.getSession();
+        session.setMaxInactiveInterval(0);
+//        log.info("用户 id: {} 于 {} 退出登录, 基本信息为 {}", user.getUserId(),
+//                new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(System.currentTimeMillis()),
+//                user.toString());
+        return ResultUtil.success();
+    }
+
 }

@@ -14,11 +14,11 @@ public interface VideoMapper {
 
     Video getById(Integer id);
 
-    List<VideoInfo> listByAssociation(@Param("associationId")Integer associationId);
+    List<VideoInfo> listByAssociation(@Param("associationId") String associationId);
 
     int insert(Video video);
 
     int update(Video video);
 
-    int delete(@Param("videoId") Integer videoId, @Param("associationId") Integer associationId);
+    int delete(@Param("videoId") Integer videoId);
 }

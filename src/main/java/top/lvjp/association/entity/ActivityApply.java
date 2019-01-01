@@ -1,5 +1,6 @@
 package top.lvjp.association.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.util.Date;
@@ -31,7 +32,7 @@ public class ActivityApply {
     /**
      * 性别
      */
-    private Integer sex;
+    private String sex;
 
     /**
      * 电话
@@ -51,6 +52,7 @@ public class ActivityApply {
     /**
      * 申请时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date applyTime;
 
 }

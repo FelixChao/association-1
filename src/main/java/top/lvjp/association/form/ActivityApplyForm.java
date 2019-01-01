@@ -26,6 +26,7 @@ public class ActivityApplyForm {
     /**
      * 学号
      */
+    @NotNull(message = "学号不能为空")
     @Pattern(regexp = RegexpConstant.STUDENT_NUMBER,message = "请输入正确的学号")
     private String studentNumber;
 
@@ -33,7 +34,7 @@ public class ActivityApplyForm {
      * 性别
      */
     @NotNull(message = "性别不能为空")
-    private Integer sex;
+    private String sex;
 
     /**
      * 电话

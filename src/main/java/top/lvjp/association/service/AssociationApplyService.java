@@ -7,11 +7,13 @@ import top.lvjp.association.form.QueryForm;
 
 public interface AssociationApplyService {
 
-    void insertApply(AssociationApplyForm apply);
+    int insertApply(AssociationApplyForm apply);
 
-    PageVO<AssociationApply> listByAssociation(Integer id, Integer pageNum, Integer size);
+    PageVO<AssociationApply> listByAssociation(String id, Integer pageNum, Integer size);
 
-    PageVO<AssociationApply> query(QueryForm queryForm, Integer associationId, Integer pageNum, Integer size);
+    PageVO<AssociationApply> query(QueryForm queryForm, Integer pageNum, Integer size);
 
-    int delete(Integer associationId);
+    int deleteAll(String associationId);
+
+    int deleteByIds(Integer[] ids, String associationId);
 }

@@ -15,7 +15,7 @@ public class News {
     /**
      * 所属社团编号
      */
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 新闻标题
@@ -40,7 +40,7 @@ public class News {
     /**
      * 新闻正文内容
      */
-    private String newsText;
+    private String newsContent;
 
     /**
      * 新闻更新时间
@@ -58,8 +58,13 @@ public class News {
     private Date publishTime;
 
     /**
-     * 新闻图片
+     * 新闻图标编号
      */
-    private String newsImage;
+    private Integer pictureId;
+
+    /**
+     * 新闻图标地址
+     */
+    private String picturePath;
 
 }

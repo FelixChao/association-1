@@ -36,8 +36,8 @@ public class User {
     /**
      * 用户所属社团
      */
-    @JsonProperty("association")
-    private Integer associationId;
+    @JsonProperty("associationName")
+    private String associationId;
 
     /**
      * 创建时间

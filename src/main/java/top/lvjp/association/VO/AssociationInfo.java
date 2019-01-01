@@ -11,7 +11,7 @@ public class AssociationInfo {
      * 社团编号
      */
     @JsonProperty("id")
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 社团名称
@@ -30,7 +30,7 @@ public class AssociationInfo {
      * 社团logo
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("icon")
-    private String associationIcon;
+    @JsonProperty("picture")
+    private String picturePath;
 
 }

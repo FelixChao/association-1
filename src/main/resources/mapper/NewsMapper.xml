@@ -3,12 +3,12 @@
 <mapper namespace="top.lvjp.association.mapper.NewsMapper">
 
     <sql id="testRights">
-        <if test="associationId != 0">
+        <if test="associationId != null">
             and association_id = #{associationId}
         </if>
     </sql>
 
-    <select id="selectLatest" parameterType="integer" resultType="NewsInfo">
+    <select id="listLatest" parameterType="integer" resultType="NewsInfo">
         select news_id,news_title,news_digest,publish_time
         from news
         where news_status = 1
@@ -17,24 +17,24 @@
 
     <!--<select id="getById" parameterType="Integer" resultType="newsInfo">-->
         <!--select news_id,association_name,news_title,news_author,news_text,news_digest,publish_time-->
-        <!--from news as n join association as a on a.association_id = n.association_id-->
+        <!--from news as n join associationName as a on a.association_id = n.association_id-->
         <!--where news_id = #{id} and news_status = 1-->
     <!--</select>-->
 
-    <select id="selectById" parameterType="integer" resultType="News">
+    <select id="getById" parameterType="integer" resultType="News">
         select *
-        from news as n join association as a on a.association_id = n.association_id
-        where news_id = #{id} and news_status = 1
+        from news
+        where news_id = #{id}
     </select>
 
-    <select id="selectByAssociation" parameterType="integer" resultType="NewsInfo">
+    <select id="listByAssociation" parameterType="String" resultType="NewsInfo">
         select news_id,news_title,news_digest,publish_time
         from news
         where association_id = #{id} and news_status = 1
         order by publish_time DESC limit 3
     </select>
 
-    <select id="selectByStatus"  resultType="NewsInfo">
+    <select id="listByStatus" resultType="NewsInfo">
         select news_id,news_title,news_digest,update_time
         from news
         where news_status = #{status}
@@ -42,10 +42,10 @@
         order by update_time
     </select>
 
-    <select id="selectByKey" resultType="NewsInfo">
-        select news_id,news_title,news_digest,update_time
+    <select id="listByKey" resultType="NewsInfo">
+        select news_id,news_title,news_digest,update_time, news_status
         from news
-        where ( news_title like #{key} or news_digest like #{key} or news_author like #{key} or news_text like #{key} )
+        where ( news_title like #{key} or news_digest like #{key} or news_author like #{key} or news_content like #{key} )
         <include refid="testRights"/>
     </select>
 
@@ -60,25 +60,35 @@
         update news
         set news_status = 1, publish_time = now()
         where news_id = #{id}
-        <include refid="testRights"/>
     </update>
 
     <update id="update" parameterType="NewsForm">
         update news
-        set news_title = #{newsTitle},news_digest = #{newsDigest},news_author = #{newsAuthor},news_text = #{newsText},news_image = #{newsImage},news_status = #{newsStatus}
+        set news_title = #{newsTitle}, news_digest = #{newsDigest}, news_author = #{newsAuthor},
+            news_content = #{newsContent}, picture_id = #{pictureId}, picture_path = #{picturePath},
+            news_status = #{newsStatus}
+        <if test="newsStatus == 1">
+            , publish_time = now()
+        </if>
+        <if test="newsStatus == 0">
+            , publish_time = null
+        </if>
         where news_id = #{newsId}
-        <include refid="testRights"/>
     </update>
 
     <insert id="insert" parameterType="NewsForm">
         insert news
-        set association_id = #{associationId},news_title = #{newsTitle},news_digest = #{newsDigest},news_author = #{newsAuthor},news_text = #{newsText},news_image = #{newsImage},news_status = #{newsStatus}
+        set association_id = #{associationId}, news_title = #{newsTitle}, news_digest = #{newsDigest},
+            news_author = #{newsAuthor}, news_content = #{newsContent}, picture_id = #{pictureId},
+            picture_Path = #{picturePath}, news_status = #{newsStatus}
+        <if test="newsStatus == 1">
+            , publish_time = now()
+        </if>
     </insert>
 
     <delete id="delete" >
         delete from news
         where news_id = #{id}
-        <include refid="testRights"/>
     </delete>
 
 </mapper>

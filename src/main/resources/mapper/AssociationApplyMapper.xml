@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.AssociationApplyMapper">
+    
     <insert id="insertApply" parameterType="AssociationApplyForm">
         insert into association_apply
           (association_id,student_name,student_number,sex,phone,qq,campus,academy,speciality,department,reason)
@@ -16,7 +17,7 @@
         where association_id = #{associationId} and student_number =  #{studentNumber}
     </select>
 
-    <select id="listByAssociation" parameterType="integer" resultType="AssociationApply">
+    <select id="listByAssociation" parameterType="string" resultType="AssociationApply">
         select apply_id,student_name,student_number,sex,phone,qq,campus,
                 academy,speciality,apply_time,reason
         from association_apply
@@ -26,7 +27,7 @@
 
     <select id="query" resultType="AssociationApply">
         select apply_id,student_name,student_number,sex,phone,qq,campus,
-                academy,speciality,apply_time,reason
+                academy,speciality,apply_time,reason, department
         from association_apply
         <where>
             <if test="query.studentName != null">
@@ -37,6 +38,18 @@
             </if>
             <if test="query.academy != null">
                 and academy like #{query.academy}
+            </if>
+            <if test="query.qq != null">
+                and qq like #{query.qq}
+            </if>
+            <if test="query.phone != null">
+                and phone like #{query.phone}
+            </if>
+            <if test="query.speciality != null">
+                and speciality like #{query.speciality}
+            </if>
+            <if test="query.department != null">
+                and department like #{query.department}
             </if>
             <if test="query.minTime != null">
                 and apply_time &gt; #{query.minTime}
@@ -50,14 +63,23 @@
             <if test="query.campus != null">
                 and campus = #{query.campus}
             </if>
-            <if test="associationId != 0">
-                and association_id = #{associationId}
+            <if test="query.associationId != null">
+                and association_id = #{query.associationId}
             </if>
         </where>
     </select>
 
-    <delete id="delete">
+    <delete id="deleteAll">
         delete from association_apply
         where association_id = #{associationId}
     </delete>
+
+    <delete id="deleteByIds">
+        delete from association_apply
+        where association_id = #{associationId} and apply_id in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+
 </mapper>

@@ -14,7 +14,7 @@ public class AssociationApplyForm {
      * 申请社团编号
      */
     @NotNull(message = "报名社团不能为空")
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 学生姓名
@@ -25,6 +25,7 @@ public class AssociationApplyForm {
     /**
      * 学号
      */
+    @NotNull(message = "学号不能为空")
     @Pattern(regexp = RegexpConstant.STUDENT_NUMBER,message = "请输入正确的学号")
     private String studentNumber;
 
@@ -32,7 +33,7 @@ public class AssociationApplyForm {
      * 性别
      */
     @NotNull(message = "性别不能为空")
-    private Integer sex;
+    private String sex;
 
     /**
      * 电话

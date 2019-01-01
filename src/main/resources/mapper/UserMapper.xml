@@ -2,44 +2,63 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.UserMapper">
 
-    <!--<resultMap id="user" type="top.lvjp.association.entity.User">-->
-        <!--<id column="user_id" property="userId" />-->
-        <!--<result column="user_name" property="userName" />-->
-        <!--<result column="user_password" property="userPassword" />-->
-        <!--<result column="user_type" property="userType" />-->
-    <!--</resultMap>-->
+    <resultMap id="user" type="top.lvjp.association.entity.User">
+        <id column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="user_password" property="userPassword" />
+        <result column="user_type" property="userType" />
+        <result column="association_id" property="associationId"/>
+    </resultMap>
 
-    <select id="selectByNameAndPassword" resultType="user">
+    <resultMap id="userVO" type="UserVO">
+        <id column="user_id" property="userId" />
+        <result column="user_name" property="userName" />
+        <result column="association_name" property="associationName" />
+        <result column="type_name" property="userType" />
+    </resultMap>
+
+    <select id="getByNameAndPassword" resultMap="user">
         select user_id,user_name,user_password,user_type,association_id
         from user
         where user_name = #{name} and user_password = #{password}
     </select>
 
-    <select id="selectById" parameterType="integer" resultType="user">
+    <select id="getById" parameterType="integer" resultMap="user">
         select user_id,user_name,user_type,association_id
         from user
         where user_id = #{id}
     </select>
 
-    <select id="selectAll" resultType="user" >
-        select user_id,user_name,user_type,association_id
-        from user
+    <select id="getVOById" resultMap="userVO">
+        select user_id, user_name, type_name, association_name
+        from user as u
+        join association as a on u.association_id = a.association_id
+        join user_type_name as ut on u.user_type = ut.user_type
+        where u.user_id = #{id}
     </select>
 
-    <select id="selectByName" parameterType="String" resultType="user">
+    <select id="listAll" resultMap="userVO" >
+        select user_id, user_name, type_name, association_name
+        from user as u
+        join association as a on u.association_id = a.association_id
+        join user_type_name as ut on u.user_type = ut.user_type
+    </select>
+
+    <select id="getByName" parameterType="string" resultMap="user">
         select  user_id,user_name,user_password,user_type,association_id
         from user
         where user_name = #{name}
     </select>
 
-    <insert id="insert" parameterType="userForm">
+    <insert id="insert" parameterType="UserForm">
         insert user (user_name,user_password,user_type,association_id)
         values (#{userName},#{userPassword},#{userType},#{associationId})
     </insert>
 
-    <update id="update" parameterType="top.lvjp.association.entity.User" >
+    <update id="update" parameterType="UserForm" >
         update user
-        set user_name = #{userName},user_password = #{userPassword},user_type = #{userType},association_id = #{associationId})
+        set user_name = #{userName},user_password = #{userPassword},user_type = #{userType},
+            association_id = #{associationId}
         where user_id = #{userId}
     </update>
 

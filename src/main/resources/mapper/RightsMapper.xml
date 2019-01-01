@@ -32,7 +32,7 @@
         order by r.update_time desc
     </select>
 
-    <select id="listByAssociation" parameterType="integer" resultMap="rightsInfo">
+    <select id="listByAssociation" parameterType="String" resultMap="rightsInfo">
         select rights_id, association_name, rights_title, rights_status, solution
         from rights r
         join association a on r.association_id = a.association_id
@@ -50,15 +50,11 @@
         </if>
     </select>
 
-    <select id="getById" resultMap="rightsVO">
-        select  rights_id, association_name, student_name, phone, email, rights_title, rights_content,
-                rights_status, solution, r.create_time, r.update_time
+    <select id="getById" resultType="Rights">
+        select  rights_id, association_id, student_name, phone, email, rights_title, rights_content,
+                rights_status, solution, create_time, update_time
         from rights
-        join association a on r.association_id = a.association_id
         where rights_id = #{rightsId}
-        <if test="associationId != null">
-            and r.association_id = #{associationId}
-        </if>
     </select>
 
     <insert id="insertRights" parameterType="RightsForm">
@@ -75,9 +71,11 @@
             , solution = #{solution}
         </if>
         where rights_id = #{rightsId}
-        <if test="associationId != null">
-            and association_id = #{associationId}
-        </if>
     </update>
+
+    <delete id="delete" parameterType="integer">
+        delete from rights
+        where rights_id = #{rightsId}
+    </delete>
 
 </mapper>

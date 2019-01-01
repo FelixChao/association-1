@@ -5,9 +5,9 @@ import lombok.Getter;
 @Getter
 public enum CategoryEnum {
 
-    YIHSU(1,"艺术类"),
-    TIYU(2,"体育类"),
-    WENXUE(3,"文学类"),
+    LILUN(1,"理论实践类"),
+    TIYU(2,"体育竞技类"),
+    YIHSU(3,"艺术欣赏类"),
     ;
 
     private Integer code;

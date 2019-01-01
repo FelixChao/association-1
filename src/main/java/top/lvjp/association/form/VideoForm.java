@@ -10,7 +10,7 @@ public class VideoForm {
 
     private Integer videoId;
 
-//    private Integer associationId;
+//    private String associationId;
 //
 //    private Integer userId;
 

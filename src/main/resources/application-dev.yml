@@ -36,11 +36,17 @@ spring:
     cache: false
     servlet:
       content-type: text/html
+# 文件上传配置
   servlet:
     multipart:
       max-file-size: 500MB
       max-request-size: 500MB
-
+#  热部署
+  devtools:
+    restart:
+      enabled: true
+      additional-paths: src/main/java
+#      exclude: static
 mybatis:
 #  type-aliases-package: top.lvjp.assoication.entity
   mapper-locations: classpath:mapper/*.xml
@@ -51,8 +57,8 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
 
-#logging:
-#  level:
-#    top.lvjp.association.mapper: trace
+logging:
+  level:
+    top.lvjp.association.mapper: trace
 
 

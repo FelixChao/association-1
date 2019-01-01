@@ -25,7 +25,7 @@ public class Picture {
     /**
      * 所属社团id
      */
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 照片类别
@@ -43,7 +43,7 @@ public class Picture {
     private Integer userId;
 
     /**
-     * 是否作为图标, 1: 是, 0: 不是
+     * 是否作为图标, 数值代表被使用的次数
      */
     private Integer isIcon;
 

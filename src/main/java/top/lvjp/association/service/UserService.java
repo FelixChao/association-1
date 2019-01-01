@@ -1,6 +1,7 @@
 package top.lvjp.association.service;
 
 import top.lvjp.association.VO.PageVO;
+import top.lvjp.association.VO.UserVO;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.form.UserForm;
 
@@ -14,18 +15,18 @@ public interface UserService {
      */
     User selectByNameAndPassword(String name, String password);
 
-    /**
-     * 通过id查询用户
-     * @param id
-     * @return user
-     */
-    User selectById(Integer id);
+//    /**
+//     * 通过id查询用户
+//     * @param id
+//     * @return user
+//     */
+//    User getById(Integer id);
 
     /**
      * 查询所有用户
-     * @return List &lt User &gt
+     * @return List &lt UserVO &gt
      */
-    PageVO<User> selectAll(Integer pageNum, Integer pageSize);
+    PageVO<UserVO> listAll(Integer pageNum, Integer pageSize);
 
     /**
      * 添加一个用户
@@ -39,7 +40,7 @@ public interface UserService {
      * @param user
      * @return 成功返回1,失败返回0
      */
-    int update(User user);
+    int update(UserForm user);
 
     /**
      * 删除一个用户
@@ -47,4 +48,11 @@ public interface UserService {
      * @return 成功返回1,失败返回0
      */
     int deleteById(Integer id);
+
+    /**
+     * 获取用户信息
+     * @param userId
+     * @return UserVO
+     */
+    UserVO getUserVO(Integer userId);
 }

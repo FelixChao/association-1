@@ -21,7 +21,7 @@ public class ActivityInfo {
      * 所属社团
      */
 //    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("name")
+    @JsonProperty("association")
     private String associationName;
 
     /**
@@ -58,20 +58,27 @@ public class ActivityInfo {
      * 活动内容
      */
 //    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("text")
-    private String activityText;
+    @JsonProperty("content")
+    private String activityContent;
 
     /**
      * 活动图片
      */
-    @JsonProperty("image")
-    private String activityImage;
+    @JsonProperty("picture")
+    private String picturePath;
 
     /**
      * 活动标签
      */
     @JsonProperty("label")
     private String activityLabel;
+
+
+    /**
+     * 文章发布状态
+     */
+    @JsonProperty("status")
+    private String textStatus;
 
     /**
      * 最大报名人数
@@ -84,7 +91,7 @@ public class ActivityInfo {
      * 已报名人数
      */
 //    @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("apply")
+    @JsonProperty("applied")
     private Integer applyNumber;
 
 }

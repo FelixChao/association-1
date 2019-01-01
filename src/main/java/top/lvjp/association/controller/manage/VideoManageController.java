@@ -3,7 +3,9 @@ package top.lvjp.association.controller.manage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
+import top.lvjp.association.VO.VideoInfo;
 import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.entity.Video;
 import top.lvjp.association.enums.ResultEnum;
@@ -26,7 +28,8 @@ public class VideoManageController {
     private FileUtil fileUtil;
 
     /**
-     * 查询当前用户所在社团的视频
+     * 查询社团的视频
+     * 非最高管理员只能查看本社团视频
      * @param pageNum
      * @param size
      * @param request
@@ -34,9 +37,13 @@ public class VideoManageController {
      */
     @GetMapping("/list")
     public Result selectByAssociation(@RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer size,
-                                      HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        return ResultUtil.success(videoService.listByAssociation(associationId,pageNum,size));
+                                      @RequestParam("associationId") String associationId, HttpServletRequest request){
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (associationId.equals(userAssociation) || userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+            PageVO<VideoInfo> videoPageVO = videoService.listByAssociation(associationId,pageNum,size);
+            return ResultUtil.success(videoPageVO);
+        }
+        return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
     }
 
     /**
@@ -46,18 +53,19 @@ public class VideoManageController {
      * @param request
      * @return
      */
+    // TODO to test
     @PostMapping("/upload")
     public Result upload(VideoForm videoForm, BindingResult bindingResult, HttpServletRequest request){
         if (bindingResult.hasErrors()){
             throw new MyException(ResultEnum.FORM_VALID_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
         Video video = new Video();
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         Integer userId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ID);
-        if (associationId == null || userId == null) {
+        if (userAssociation == null || userId == null) {
             throw new MyException(ResultEnum.IDENTIFY_VALID_FAILED);
         }
-        video.setAssociationId(associationId);
+        video.setAssociationId(userAssociation);
         video.setUserId(userId);
         video.setVideoTitle(videoForm.getTitle());
         video.setVideoDescription(videoForm.getDesc());
@@ -67,39 +75,33 @@ public class VideoManageController {
     }
 
 
-
     /**
-     * 更新
-     * @param videoForm
-     * @param bindingResult
+     * 更新视频信息
+     * @param videoId 更新的视频的编号
+     * @param title 更新标题
+     * @param description 更新描述
      * @param request
      * @return
      */
     @PostMapping("/update")
-    public Result update(VideoForm videoForm, BindingResult bindingResult, HttpServletRequest request){
-        if (bindingResult.hasErrors()){
-            throw new MyException(ResultEnum.FORM_VALID_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());
+    public Result update(@RequestParam("videoId") Integer videoId, @RequestParam("title") String title ,
+                         @RequestParam("desc") String description, HttpServletRequest request){
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (title == null || title.isEmpty()){
+            return ResultUtil.error(ResultEnum.PARAMETERS_IS_ERROR.getCode(), "标题不能为空");
         }
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         Video video = new Video();
-        video.setVideoId(videoForm.getVideoId());
-        video.setVideoTitle(videoForm.getTitle());
-        video.setVideoDescription(videoForm.getDesc());
-        video.setAssociationId(associationId);
-        int count = videoService.update(video);
-        if (count == 0) {
-            throw new MyException(ResultEnum.OPERATE_IS_FAIL);
-        }
+        video.setVideoId(videoId);
+        video.setVideoTitle(title);
+        video.setVideoDescription(description);
+        int count = videoService.update(video, userAssociation);
         return ResultUtil.success(count);
     }
 
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("id") Integer videoId, HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        int count = videoService.delete(videoId,associationId);
-        if (count == 0) {
-            throw new MyException(ResultEnum.OPERATE_IS_FAIL);
-        }
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        int count = videoService.delete(videoId,userAssociation);
         return ResultUtil.success(count);
     }
 }

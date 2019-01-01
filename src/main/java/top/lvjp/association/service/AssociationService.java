@@ -2,17 +2,18 @@ package top.lvjp.association.service;
 
 import top.lvjp.association.VO.AssociationInfo;
 import top.lvjp.association.VO.AssociationVO;
+import top.lvjp.association.form.AssociationForm;
 
 import java.util.List;
 
 public interface AssociationService {
 
     /**
-     * 通过id查询社团
+     * 通过 id 查询社团
      * @param id
      * @return 返回社团信息,AssociationInfo
      */
-    AssociationVO getVOById(Integer id);
+    AssociationVO getVOById(String id);
 
     /**
      * 查询热门社团
@@ -34,5 +35,13 @@ public interface AssociationService {
      */
     List<AssociationInfo> getAssociationNames();
 
-    int updateApplyStatus(Integer status, Integer associationId);
+    int updateApplyStatus(Integer status, String associationId);
+
+    int updateAssociationIcon(String associationId, Integer pictureId);
+
+    int updateAssociationDesc(String associationId, String description);
+
+    int updateAssociation(AssociationForm form);
+
+    AssociationForm getAssociationForm(String associationId);
 }

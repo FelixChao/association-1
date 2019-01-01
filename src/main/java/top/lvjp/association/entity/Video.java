@@ -30,7 +30,7 @@ public class Video {
     /**
      * 所属社团id
      */
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 上传用户

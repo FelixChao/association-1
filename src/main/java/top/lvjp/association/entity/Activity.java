@@ -15,7 +15,7 @@ public class Activity {
     /**
      * 所属社团编号
      */
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 活动标题
@@ -45,12 +45,17 @@ public class Activity {
     /**
      * 活动内容
      */
-    private String activityText;
+    private String activityContent;
 
     /**
-     * 活动图片
+     * 活动图片的编号
      */
-    private String activityImage;
+    private Integer pictureId;
+
+    /**
+     * 活动图片的地址
+     */
+    private String picturePath;
 
     /**
      * 活动标签

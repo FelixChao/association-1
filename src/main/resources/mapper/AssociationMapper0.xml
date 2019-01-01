@@ -2,37 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.AssociationMapper">
 
-    <resultMap id="associationIcon" type="PictureVO">
-        <id property="id" column="association_id"/>
+    <resultMap id="associationIcon" type="PictureInfo">
+        <id property="associationId" column="association_id"/>
         <result property="pictureId" column="picture_id"/>
         <result property="pictureTitle" column="association_name"/>
         <result property="picturePath" column="picture_path"/>
     </resultMap>
 
-    <select id="selectById" parameterType="Integer" resultType="association">
+    <select id="getById" parameterType="String" resultType="Association">
         select *
         from association
         where association_id = #{id}
     </select>
 
-    <select id="selectPop" parameterType="Integer" resultType="associationInfo">
-        select association_id,association_name,association_icon
+    <select id="listPop" parameterType="integer" resultType="AssociationInfo">
+        select association_id,association_name,picture_path
         from association
         order by apply_number limit #{count}
     </select>
 
-    <select id="selectByCategory" parameterType="String" resultType="associationInfo">
-        select association_id,association_name,association_icon
+    <select id="listByCategory" parameterType="string" resultType="AssociationInfo">
+        select association_id,association_name,picture_path
         from association
         where association_category = #{category}
     </select>
 
-    <select id="getAssociationNames" resultType="associationInfo">
+<select id="getAssociationNames" resultType="AssociationInfo">
         select association_id,association_name
         from association
     </select>
 
-    <update id="addApply" parameterType="integer"  >
+    <update id="addApply" parameterType="String"  >
         update association
         set apply_number = apply_number+1
         where association_id = #{id}
@@ -53,6 +53,29 @@
     <update id="updateApplyStatus">
         update association
         set apply_enable = #{enable}
+        where association_id = #{associationId}
+    </update>
+
+    <update id="updateAssociation">
+        update association
+        set association_name = #{associationName},
+            association_description = #{associationDescription},
+            association_category = #{associationCategory},
+            picture_id = #{pictureId},
+            picture_path = #{picturePath},
+            apply_enable = #{applyEnable}
+        where association_id = #{associationId}
+    </update>
+
+    <update id="updateAssociationDesc">
+        update association
+        set association_description = #{description}
+        where association_id = #{associationId}
+    </update>
+
+    <update id="reduceApply">
+        update association
+        set apply_number = apply_number - #{count}
         where association_id = #{associationId}
     </update>
 </mapper>

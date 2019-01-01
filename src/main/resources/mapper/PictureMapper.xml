@@ -2,17 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.PictureMapper">
 
-    <resultMap id="pictureVO" type="PictureVO">
+    <resultMap id="pictureInfo" type="PictureInfo">
         <id property="pictureId" column="picture_id"/>
         <result property="pictureTitle" column="picture_title"/>
         <result property="picturePath" column="picture_path"/>
     </resultMap>
 
-    <sql id="testRights">
-        <if test="associationId != 0">
-            and association_id = #{associationId}
-        </if>
-    </sql>
 
     <!--<select id="listAll" resultMap="pictureVO">-->
         <!--select picture_id, picture_title, picture_path-->
@@ -20,7 +15,7 @@
         <!--order by picture_id desc -->
     <!--</select>-->
 
-    <select id="listByAssociation" resultMap="pictureVO">
+    <select id="listByAssociation" resultMap="pictureInfo">
         select picture_id, picture_title, picture_path
         from picture
         <if test="associationId != null">
@@ -42,9 +37,21 @@
     </insert>
     
 
-    <update id="updateIcon">
+    <!--<update id="updateIcon">
         update picture
         set is_icon = #{isIcon}
+        where picture_id = #{pictureId}
+    </update>-->
+
+    <update id="addIconCount">
+        update picture
+        set is_icon = is_icon + 1
+        where picture_id = #{pictureId}
+    </update>
+
+    <update id="reduceIconCount">
+        update picture
+        set is_icon = is_icon - 1
         where picture_id = #{pictureId}
     </update>
 
@@ -55,7 +62,9 @@
             #{pictureId}
         </foreach>
         and is_icon = 0
-        <include refid="testRights"/>
+        <if test="associationId != null">
+            and association_id = #{associationId}
+        </if>
     </delete>
 
 </mapper>

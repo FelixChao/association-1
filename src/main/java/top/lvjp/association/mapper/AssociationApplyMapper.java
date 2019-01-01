@@ -11,11 +11,14 @@ public interface AssociationApplyMapper {
 
     int insertApply(AssociationApplyForm apply);
 
-    List<AssociationApply> selectByAssociationAndStudent(@Param("associationId") Integer associationId, @Param("studentNumber") String studentNumber);
+    List<AssociationApply> selectByAssociationAndStudent(@Param("associationId") String associationId,
+                                                         @Param("studentNumber") String studentNumber);
 
-    List<AssociationApply> listByAssociation(Integer associationI);
+    List<AssociationApply> listByAssociation(String associationId);
 
-    int delete(Integer associationId);
+    int deleteAll(String associationId);
 
-    List<AssociationApply> query(@Param("query") QueryForm query, @Param("associationId") Integer associationId);
+    List<AssociationApply> query(@Param("query") QueryForm query);
+
+    int deleteByIds(@Param("ids") Integer[] ids, @Param("associationId") String associatoinId);
 }

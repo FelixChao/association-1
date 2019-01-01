@@ -4,12 +4,15 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.lvjp.association.VO.PageVO;
+import top.lvjp.association.VO.UserVO;
+import top.lvjp.association.entity.User;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.form.UserForm;
+import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.UserMapper;
-import top.lvjp.association.entity.User;
 import top.lvjp.association.service.UserService;
 
 import java.util.List;
@@ -20,27 +23,31 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private AssociationMapper associationMapper;
+
     @Override
     public User selectByNameAndPassword(String name, String password) {
-        return userMapper.selectByNameAndPassword(name,password);
+        return userMapper.getByNameAndPassword(name,password);
     }
 
-    @Override
-    public User selectById(Integer id) {
-        return userMapper.selectById(id);
-    }
+//    @Override
+//    public User getById(Integer id) {
+//        return userMapper.getById(id);
+//    }
 
     @Override
-    public PageVO<User> selectAll(Integer pageNum, Integer pageSize) {
+    public PageVO<UserVO> listAll(Integer pageNum, Integer pageSize) {
         PageHelper.startPage(pageNum,pageSize);
-        List<User> users = userMapper.selectAll();
-        PageInfo<User> pageInfo = new PageInfo<User>(users);
-        return new PageVO<User>(pageInfo);
+        List<UserVO> users = userMapper.listAll();
+        PageInfo<UserVO> pageInfo = new PageInfo<>(users);
+        return new PageVO<>(pageInfo);
     }
 
     @Override
+    @Transactional
     public int insert(UserForm userForm) {
-        User user = userMapper.selectByName(userForm.getUserName());
+        User user = userMapper.getByName(userForm.getUserName());
         if (user != null) {
             throw new MyException(ResultEnum.USER_IS_EXISTS);
         }
@@ -48,12 +55,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int update(User user) {
+    public int update(UserForm user) {
         return userMapper.update(user);
     }
 
     @Override
     public int deleteById(Integer id) {
         return userMapper.deleteById(id);
+    }
+
+    @Override
+    public UserVO getUserVO(Integer userId) {
+        return userMapper.getVOById(userId);
     }
 }

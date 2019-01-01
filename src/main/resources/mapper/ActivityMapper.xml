@@ -2,70 +2,70 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.ActivityMapper">
 
-    <resultMap id="activityIcon" type="PictureVO">
-        <id property="id" column="activity_id"/>
-        <result property="pictureId" column="picture_id"/>
-        <result property="pictureTitle" column="activity_title"/>
-        <result property="picturePath" column="picture_path"/>
-    </resultMap>
+    <!--<resultMap id="activityIcon" type="PictureInfo">-->
+        <!--<id property="id" column="activity_id"/>-->
+        <!--<result property="pictureId" column="picture_id"/>-->
+        <!--<result property="pictureTitle" column="activity_title"/>-->
+        <!--<result property="picturePath" column="picture_path"/>-->
+    <!--</resultMap>-->
 
     <sql id="testRights" >
-        <if test="associationId != 0">
+        <if test="associationId != null">
             and association_id = #{associationId}
         </if>
     </sql>
 
     <select id="selectLatest" parameterType="integer" resultType="ActivityInfo" >
-        select activity_id,activity_title,activity_image,activity_label
+        select activity_id,activity_title,picture_path,activity_label
         from activity
         where text_status = 1
         order by start_time desc limit #{count}
     </select>
 
-    <select id="selectCurrent" resultType="ActivityInfo" parameterType="integer">
-        select activity_id,activity_title,activity_image,activity_label
+    <select id="selectCurrent" resultType="ActivityInfo">
+        select activity_id,activity_title,picture_path,activity_label
         from activity
         where text_status = 1 and start_time &lt; now() and end_time &gt; now()
         order by start_time desc
     </select>
 
     <select id="selectFuture" resultType="ActivityInfo" >
-        select activity_id,activity_title,activity_image,activity_label
+        select activity_id,activity_title,picture_path,activity_label
         from activity
         where text_status = 1 and start_time &gt; now()
         order by start_time desc
     </select>
 
     <select id="selectPast" resultType="ActivityInfo" >
-        select activity_id,activity_title,activity_image,activity_label
+        select activity_id,activity_title,picture_path,activity_label
         from activity
         where text_status = 1 and end_time &lt; now()
         order by start_time desc
     </select>
 
-    <select id="selectCurrentByAssociation" parameterType="integer" resultType="ActivityInfo">
-        select activity_id,activity_title,activity_image,activity_label,start_time,end_time
+    <select id="selectCurrentByAssociation" parameterType="String" resultType="ActivityInfo">
+        select activity_id,activity_title,picture_path,activity_label,start_time,end_time
         from activity
         where text_status = 1 and association_id = #{id} and start_time &lt; now() and end_time &gt; now()
         order by start_time desc
     </select>
 
-    <select id="selectFutureByAssociation" parameterType="integer" resultType="ActivityInfo">
-        select activity_id,activity_title,activity_image,activity_label,start_time,end_time
+    <select id="selectFutureByAssociation" parameterType="String" resultType="ActivityInfo">
+        select activity_id,activity_title,picture_path,activity_label,start_time,end_time
         from activity
         where text_status = 1 and association_id = #{id} and start_time &gt; now()
         order by start_time desc
     </select>
 
-    <select id="selectPastByAssociation" parameterType="integer" resultType="ActivityInfo">
-        select activity_id,activity_title,activity_image,activity_label,start_time,end_time
+    <select id="selectPastByAssociation" parameterType="String" resultType="ActivityInfo">
+        select activity_id,activity_title,picture_path,activity_label,start_time,end_time
         from activity
         where text_status = 1 and association_id = #{id} and end_time &lt; now()
         order by start_time desc
     </select>
 
     <select id="selectCurrnetByStatus" resultType="ActivityInfo">
-        select activity_id,activity_title,activity_image,activity_label,update_time
+        select activity_id,activity_title,picture_path,activity_label,update_time
         from activity
         where text_status = #{status} and start_time &lt; now() and end_time &gt; now()
         <include refid="testRights" />
@@ -73,7 +73,7 @@
     </select>
 
     <select id="selectFutureByStatus" resultType="ActivityInfo">
-        select activity_id,activity_title,activity_image,activity_label,update_time
+        select activity_id,activity_title,picture_path,activity_label,update_time
         from activity
         where text_status = #{status} and start_time &gt; now()
         <include refid="testRights" />
@@ -81,25 +81,25 @@
     </select>
 
     <select id="selectPastByStatus" resultType="ActivityInfo">
-        select activity_id,activity_title,activity_image,activity_label,update_time
+        select activity_id,activity_title,picture_path,activity_label,update_time
         from activity
         where text_status = #{status} and end_time &lt; now()
         <include refid="testRights" />
         order by update_time desc
     </select>
 
-    <select id="selectById" resultType="Activity" parameterType="integer">
+    <select id="getById" resultType="Activity" parameterType="integer">
         select *
-        from activity as c join association as s on c.association_id = s.association_id
+        from activity
         where activity_id = #{id}
     </select>
 
     <select id="queryByKey" parameterType="string" resultType="ActivityInfo">
-        select  activity_id,activity_title,activity_image,activity_label,update_time
+        select  activity_id, activity_title, picture_path, activity_label, update_time, text_status
         from activity
-        where text_status = 1
-          and (activity_title like #{key} or activity_label like #{key} or activity_text like #{key})
+        where (activity_title like #{key} or activity_label like #{key} or activity_content like #{key})
         <include refid="testRights" />
+        order by association_id
     </select>
 
     <select id="selectAll" resultType="ActivityInfo">
@@ -119,53 +119,56 @@
         update activity
         set text_status = 1
         where activity_id = #{id}
-        <include refid="testRights" />
     </update>
 
     <update id="update" parameterType="ActivityForm">
         update activity
-        set activity_title = #{activityTitle},
-            start_time = #{startTime},end_time = #{endTime},activity_text = #{activityText},
-            activity_image = #{activityImage},activity_label = #{activityLabel},
-            max_apply = #{maxApply},text_status = #{textStatus}
+        set activity_title = #{activityTitle}, association_id = #{associationId},
+            start_time = #{startTime}, end_time = #{endTime}, activity_content = #{activityContent},
+            picture_path = #{picturePath}, picture_id = #{pictureId}, activity_label = #{activityLabel},
+            max_apply = #{maxApply}, text_status = #{textStatus}
         where activity_id = #{activityId}
-        <include refid="testRights" />
     </update>
 
     <insert id="insert" parameterType="ActivityForm" >
         insert activity   (
-            association_id,activity_title,start_time,end_time,activity_text,
-            activity_image,activity_label,max_apply,text_status
+            association_id, activity_title, start_time, end_time, activity_content,
+            picture_id, picture_path, activity_label, max_apply, text_status
         )
         values (
-            #{associationId},#{activityTitle},#{startTime},#{endTime},#{activityText},
-            #{activityImage},#{activityLabel},#{maxApply},#{textStatus}
+            #{associationId}, #{activityTitle}, #{startTime}, #{endTime}, #{activityContent},
+            #{pictureId}, #{picturePath}, #{activityLabel}, #{maxApply}, #{textStatus}
         )
     </insert>
 
     <delete id="delete" parameterType="integer">
         delete from activity
         where activity_id =#{id}
-        <include refid="testRights" />
     </delete>
 
-    <select id="selectByIdAndAssociation" resultType="ActivityInfo">
-        select activity_id,activity_title,activity_image,activity_label,update_time
-        from activity
-        where activity_id  = #{activityId}
-        <include refid="testRights"/>
-    </select>
+    <!--<select id="selectByIdAndAssociation" resultType="ActivityInfo">-->
+        <!--select activity_id,activity_title,picture_path,activity_label,update_time-->
+        <!--from activity-->
+        <!--where activity_id  = #{activityId}-->
+        <!--<include refid="testRights"/>-->
+    <!--</select>-->
 
-    <select id="listActivityIcon" resultMap="activityIcon">
-        select picture_id, activity_title, picture_path, activity_id
-        from activity
-        where not isnull(picture_id)
-    </select>
+    <!--<select id="listActivityIcon" resultMap="activityIcon">-->
+        <!--select picture_id, activity_title, picture_path, activity_id-->
+        <!--from activity-->
+        <!--where not isnull(picture_id)-->
+    <!--</select>-->
 
     <update id="updateActivityIcon">
         update activity
         set picture_id = #{pictureId},
             picture_path = #{picturePath}
+        where activity_id = #{activityId}
+    </update>
+
+    <update id="reduceApply">
+        update activity
+        set apply_number = apply_number - #{count}
         where activity_id = #{activityId}
     </update>
 </mapper>

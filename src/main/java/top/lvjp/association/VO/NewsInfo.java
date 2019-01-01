@@ -19,14 +19,14 @@ public class NewsInfo {
     /**
      * 新闻标题
      */
-    @JsonProperty("tilte")
+    @JsonProperty("title")
     private String newsTitle;
 
     /**
      * 所属社团
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("name")
+    @JsonProperty("association")
     private String associationName;
 
     /**
@@ -47,8 +47,8 @@ public class NewsInfo {
      * 新闻正文内容
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("text")
-    private String newsText;
+    @JsonProperty("content")
+    private String newsContent;
 
     /**
      * 新闻发布时间
@@ -65,4 +65,8 @@ public class NewsInfo {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("update")
     private Date updateTime;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("status")
+    private Integer newsStatus;
 }

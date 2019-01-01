@@ -14,7 +14,7 @@ public class RightsForm {
      * 相关社团
      */
     @NotNull(message = "社团不能为空")
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 学生姓名

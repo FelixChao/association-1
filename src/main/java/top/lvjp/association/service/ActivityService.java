@@ -2,6 +2,7 @@ package top.lvjp.association.service;
 
 import top.lvjp.association.VO.ActivityInfo;
 import top.lvjp.association.VO.PageVO;
+import top.lvjp.association.dto.ActivitiesDTO;
 import top.lvjp.association.form.ActivityForm;
 
 import java.util.List;
@@ -19,37 +20,43 @@ public interface ActivityService {
      * 查询现在正在进行的活动
      * @return List &lt;ActivityInfo&gt;
      */
-    List<ActivityInfo> selectCurrent();
+    PageVO<ActivityInfo> selectCurrent(Integer pageNum, Integer size);
 
     /**
      * 查询即将开始的活动
      * @return List &lt;ActivityInfo&gt;
      */
-    List<ActivityInfo> selectFuture();
+    PageVO<ActivityInfo> selectFuture(Integer pageNum, Integer size);
 
     /**
      * 查询已经结束的活动
      * @return List &lt;ActivityInfo&gt;
      */
-    List<ActivityInfo> selectPast();
+    PageVO<ActivityInfo> selectPast(Integer pageNum, Integer size);
+
+    /**
+     * 查询所有活动, 将结果按活动状态封装在 ActivitiesDTO 中
+     * @return
+     */
+    ActivitiesDTO listAll();
 
     /**
      * 查询某个社团现在正在进行的活动
      * @return List &lt;ActivityInfo&gt;
      */
-    List<ActivityInfo> selectCurrentByAssociation(Integer id);
+    List<ActivityInfo> selectCurrentByAssociation(String id);
 
     /**
      * 查询某个社团即将开始的活动
      * @return List &lt;ActivityInfo&gt;
      */
-    List<ActivityInfo> selectFutureByAssociation(Integer id);
+    List<ActivityInfo> selectFutureByAssociation(String id);
 
     /**
      * 查询某个社团已经结束的活动
      * @return List &lt;ActivityInfo&gt;
      */
-    List<ActivityInfo> selectPastByAssociation(Integer id);
+    List<ActivityInfo> selectPastByAssociation(String id);
 
     /**
      * 查询associationId社团的发布状态为status的正在进行活动
@@ -57,7 +64,7 @@ public interface ActivityService {
      * @param associationId 社团,如果为0,则查询全部社团
      * @return PageInfo&lt;ActivityInfo&gt;
      */
-    PageVO<ActivityInfo> selectCurrentByStatus(Integer status, Integer associationId, Integer pageNum, Integer size);
+    PageVO<ActivityInfo> selectCurrentByStatus(Integer status, String associationId, Integer pageNum, Integer size);
 
     /**
      * 查询associationId社团的发布状态为status的即将进行活动
@@ -65,7 +72,7 @@ public interface ActivityService {
      * @param associationId 社团,如果为0,则查询全部社团
      * @return PageInfo&lt;ActivityInfo&gt;
      */
-    PageVO<ActivityInfo> selectFutureByStatus(Integer status,Integer associationId,Integer pageNum,Integer size);
+    PageVO<ActivityInfo> selectFutureByStatus(Integer status, String associationId, Integer pageNum, Integer size);
 
     /**
      * 查询associationId社团的发布状态为status的已经结束的活动
@@ -73,7 +80,7 @@ public interface ActivityService {
      * @param associationId 社团,如果为0,则查询全部社团
      * @return PageInfo&lt;ActivityInfo&gt;
      */
-    PageVO<ActivityInfo> selectPastByStatus(Integer status, Integer associationId, Integer pageNum, Integer size);
+    PageVO<ActivityInfo> selectPastByStatus(Integer status, String associationId, Integer pageNum, Integer size);
 
     /**
      * 通过id 查询某一个活动
@@ -88,7 +95,7 @@ public interface ActivityService {
      * @param status 活动发布状态
      * @return activityInfo
      */
-    List<ActivityInfo> selectAll(Integer associationId,Integer status);
+    List<ActivityInfo> selectAll(String associationId,Integer status);
 
     /**
      * 通过关键字查找本社团的活动
@@ -96,14 +103,14 @@ public interface ActivityService {
      * @param associationId 执行操作的用户所属社团
      * @return PageInfo&lt;ActivityInfo&gt;
      */
-    PageVO<ActivityInfo> queryByKey(String key,Integer associationId,Integer pageNum,Integer size);
+    PageVO<ActivityInfo> queryByKey(String key,String associationId,Integer pageNum,Integer size);
 
     /**
      * 发布或者取消发布
      * @param id   相关活动编号
      * @return 成功返回1,否则0
      */
-    int publish(Integer id,Integer associationId);
+    int publish(Integer id,String associationId);
 
     /**
      * 删除活动,且只能删除所属部门的活动
@@ -112,7 +119,7 @@ public interface ActivityService {
      * @param associationId 执行操作的用户所属社团
      * @return
      */
-    int delete(Integer activityId,Integer associationId);
+    int delete(Integer activityId,String associationId);
 
     /**
      * 获取活动的表单信息,用于修改
@@ -124,9 +131,10 @@ public interface ActivityService {
     /**
      * 更新活动内容
      * @param activityForm 表单信息
+     * @param associationId 用户所属社团
      * @return 成功返回1,否则0
      */
-    int update(ActivityForm activityForm);
+    int update(ActivityForm activityForm, String associationId);
 
     /**
      * 添加活动
@@ -135,4 +143,5 @@ public interface ActivityService {
      */
     int insert(ActivityForm activityForm);
 
+    int updateActivityIcon(Integer activityId, Integer pictureId, String userAssociation);
 }

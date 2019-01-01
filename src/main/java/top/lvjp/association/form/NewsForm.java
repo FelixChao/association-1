@@ -2,6 +2,7 @@ package top.lvjp.association.form;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -16,12 +17,12 @@ public class NewsForm {
     /**
      * 所属社团编号
      */
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 新闻标题
      */
-    @Size(min = 1,message = "请输入新闻标题")
+    @NotBlank(message = "请输入新闻标题")
     private String newsTitle;
 
     /**
@@ -44,8 +45,8 @@ public class NewsForm {
     /**
      * 新闻正文内容
      */
-    @Size(min = 1,message = "请输入新闻内容")
-    private String newsText;
+    @NotBlank(message = "请输入新闻内容")
+    private String newsContent;
 
 //    /**
 //     * 新闻更新时间
@@ -57,5 +58,10 @@ public class NewsForm {
     /**
      * 新闻图片
      */
-    private String newsImage;
+    private Integer pictureId;
+
+    /**
+     * 新闻图片地址
+     */
+    private String picturePath;
 }

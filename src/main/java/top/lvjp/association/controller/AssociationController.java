@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import top.lvjp.association.VO.AssociationInfo;
 import top.lvjp.association.VO.AssociationVO;
 import top.lvjp.association.VO.Result;
-import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.service.AssociationService;
 import top.lvjp.association.util.ResultUtil;
 
@@ -27,11 +26,8 @@ public class AssociationController {
      * @return
      */
     @GetMapping("/detail")
-    public Result getDetail(@RequestParam("id") Integer id){
+    public Result getDetail(@RequestParam("id") String id){
         AssociationVO associationVO = associationService.getVOById(id);
-        if (associationVO == null) {
-            return ResultUtil.error(ResultEnum.RESULT_IS_NULL);
-        }
         return ResultUtil.success(associationVO);
     }
 
@@ -47,7 +43,7 @@ public class AssociationController {
     }
 
     /**
-     * 获取所有的社团信息
+     * 获取某一类社团信息
      * @param category
      * @return
      */
@@ -61,7 +57,7 @@ public class AssociationController {
      * 获取所有的社团
      * @return
      */
-    @GetMapping("/all/name")
+    @GetMapping("/names")
     public Result getAssociationNames(){
         List<AssociationInfo> associationInfos = associationService.getAssociationNames();
         return ResultUtil.success(associationInfos);

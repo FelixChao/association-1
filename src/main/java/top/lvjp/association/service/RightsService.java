@@ -7,16 +7,18 @@ import top.lvjp.association.form.RightsForm;
 
 public interface RightsService {
 
-    RightsVO getById(Integer rightsId, Integer associationId);
+    RightsVO getById(Integer rightsId, String associationId);
 
     PageVO<RightsInfo> listAll(Integer pageNum, Integer size);
 
-    PageVO<RightsInfo> listByAssociation(Integer associationId, Integer pageNum, Integer size);
+    PageVO<RightsInfo> listByAssociation(String associationId, Integer pageNum, Integer size);
 
-    PageVO<RightsInfo> listByStatus(Integer status, Integer associationId, Integer pageNum, Integer size);
+    PageVO<RightsInfo> listByStatus(Integer status, String associationId, Integer pageNum, Integer size);
 
     int insertRights(RightsForm rightsForm);
 
-    int update(Integer associationId, Integer rightsId, Integer status, String solution);
+    int update(String associationId, Integer rightsId, Integer status, String solution);
+
+    int delete(Integer rightsId);
 
 }

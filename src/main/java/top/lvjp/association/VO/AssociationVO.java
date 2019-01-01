@@ -13,7 +13,7 @@ public class AssociationVO {
      * 社团编号
      */
     @JsonProperty("id")
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 社团名称
@@ -30,8 +30,8 @@ public class AssociationVO {
     /**
      * 社团logo
      */
-    @JsonProperty("icon")
-    private String associationIcon;
+    @JsonProperty("picture")
+    private String picturePath;
 
     /**
      * 社团新闻

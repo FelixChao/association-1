@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import top.lvjp.association.VO.NewsInfo;
+import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
 import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.enums.ResultEnum;
@@ -26,8 +27,8 @@ public class NewsManageController {
      * @param id 新闻的编号
      * @return newsform
      */
-    @GetMapping("/form/{id}")
-    public Result getFormById(@PathVariable("id") Integer id){
+    @GetMapping("/form")
+    public Result getFormById(@RequestParam("id") Integer id){
         return ResultUtil.success(newsService.getFormById(id));
     }
 
@@ -40,11 +41,15 @@ public class NewsManageController {
      * @return PageVO&lt;NewsInof&gt;
      */
     @GetMapping("/list")
-    public Result<NewsInfo> selectByStatus(@RequestParam("status") Integer status,
+    public Result selectByStatus(@RequestParam("status") Integer status,
                                            @RequestParam("pageNum") Integer pageNum,
                                            @RequestParam("size") Integer size,HttpServletRequest request){
-        Integer id = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        return ResultUtil.success(newsService.selectByStatus(status,id,pageNum,size));
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+            userAssociation = null;
+        }
+        PageVO<NewsInfo> newsInfo = newsService.listByStatus(status, userAssociation, pageNum, size);
+        return ResultUtil.success(newsInfo);
     }
 
     /**
@@ -53,11 +58,15 @@ public class NewsManageController {
      * @return PageVO&lt;NewsInfo&gt;
      */
     @GetMapping("/query")
-    public Result<NewsInfo> queryByKey(@RequestParam("key") String key,
+    public Result queryByKey(@RequestParam("key") String key,
                                         @RequestParam("pageNum") Integer pageNum,
                                         @RequestParam("size") Integer size, HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        return  ResultUtil.success(newsService.queryByKey(key,associationId,pageNum,size));
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+            userAssociation = null;
+        }
+        PageVO<NewsInfo> newsInfoPageVO = newsService.queryByKey(key, userAssociation, pageNum, size);
+        return  ResultUtil.success(newsInfoPageVO);
     }
 
     /**
@@ -66,37 +75,33 @@ public class NewsManageController {
      * @return 成功返回1,失败0
      */
     @PostMapping("/publish")
-    public Result publish(@RequestParam("id") Integer id,HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        int success = newsService.publish(id,associationId);
-        if (success == 1){
-            return ResultUtil.success();
-        }
-        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
+    public Result publish(@RequestParam("id") Integer id, HttpServletRequest request){
+        String associationId = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        int count = newsService.publish(id, associationId);
+        return ResultUtil.success(count);
     }
 
     /**
      * 更新新闻
      * @param newsForm 新闻表单
-     * @return 成功返回1,失败0
+     * @return
      */
     @PostMapping("/update")
     public Result update(@Valid NewsForm newsForm, BindingResult bindingResult,HttpServletRequest request){
         if(bindingResult.hasErrors()){
             return ResultUtil.error(ResultEnum.FORM_VALID_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
         }
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (associationId != 0){
-            newsForm.setAssociationId(associationId);
-        }
-        int success = newsService.update(newsForm);
-        if (success == 1) return ResultUtil.success();
-        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+//        if (!userAssociation.equals(newsForm.getAssociationId())
+//                && !userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+//            return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY.getCode(), "非最高管理员只能发布本社团新闻");
+//        }
+        int count = newsService.update(newsForm, userAssociation);
+        return ResultUtil.success(count);
     }
 
     /**
      * 填写新闻
-     * 如果用户不是超级管理员,只能发布本社团的活动
      * @param newsForm 新闻表单
      * @return
      */
@@ -105,26 +110,21 @@ public class NewsManageController {
         if(bindingResult.hasErrors()){
             return ResultUtil.error(ResultEnum.FORM_VALID_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
         }
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (associationId != 0){
-            newsForm.setAssociationId(associationId);
-        }
-        int success = newsService.insert(newsForm);
-        if (success == 1) return ResultUtil.success();
-        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        int count = newsService.insert(newsForm, userAssociation);
+        return ResultUtil.success(count);
     }
 
     /**
      * 删除新闻
      * @param id 新闻编号
-     * @return 成功返回1,失败0
+     * @return
      */
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("id") Integer id,HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        int success = newsService.delete(id,associationId);
-        if (success != 0) return ResultUtil.success();
-        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
+        String associationId = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        int count = newsService.delete(id, associationId);
+        return ResultUtil.success(count);
     }
 
 }

@@ -13,7 +13,7 @@ public interface NewsService {
      * @param count 查询数量
      * @return List &lt;NewsInfo&gt;
      */
-    List<NewsInfo> selectLatest(Integer count);
+    List<NewsInfo> listLatest(Integer count);
 
     PageVO<NewsInfo> listAll(Integer pageNum, Integer size);
 
@@ -37,7 +37,7 @@ public interface NewsService {
      * @param associationId 社团编号
      * @return PageVO&lt;NewsInof&gt;
      */
-    PageVO<NewsInfo> selectByStatus(Integer status,Integer associationId,Integer pageNum,Integer size);
+    PageVO<NewsInfo> listByStatus(Integer status, String associationId, Integer pageNum, Integer size);
 
     /**
      * 通过关键字 key 查询社团的新闻
@@ -45,35 +45,37 @@ public interface NewsService {
      * @param associationId 社团编号
      * @return PageVO&lt;NewsInfo&gt;
      */
-    PageVO<NewsInfo> queryByKey(String key, Integer associationId, Integer pageNum, Integer size);
+    PageVO<NewsInfo> queryByKey(String key, String associationId, Integer pageNum, Integer size);
 
     /**
      * 发布新闻
      * @param id 新闻编号
      * @param associationId 社团编号
-     * @return 成功返回1,失败0
+     * @return
      */
-    int publish(Integer id, Integer associationId);
+    int publish(Integer id, String associationId);
 
     /**
-     * 发布新闻
+     * 更新新闻
      * @param newsForm 新闻表单
+     * @param associationId 用户所属社团
      * @return 成功返回1,失败0
      */
-    int update(NewsForm newsForm);
+    int update(NewsForm newsForm, String associationId);
 
     /**
-     * 发布新闻
+     * 填写新闻
+     * 非最高管理员只能填写本社团新闻
      * @param newsForm 新闻表单
-     * @return 成功返回1,失败0
+     * @return
      */
-    int insert(NewsForm newsForm);
+    int insert(NewsForm newsForm, String associationId);
 
     /**
      * 删除新闻
      * @param id 新闻编号
      * @param associationId 社团编号
-     * @return 成功返回1,失败0
+     * @return
      */
-    int delete(Integer id,Integer associationId);
+    int delete(Integer id,String associationId);
 }

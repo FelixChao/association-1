@@ -2,9 +2,20 @@ spring:
   profiles:
     active: dev
 
+
+#spring:
+#  profiles: dev,prod
+
+#
+#spring:
+#  profiles: prod
+
 # 自定义属性
+
 upload:
-  image-path: D:/mingliyuan/img/
-  video-path: D:/mingliyuan/associationFile/file/video/
+  image-path: D:/mingliyuan/association_ms/file/video/
+  video-path: D:/mingliyuan/association_ms/file/image/
+#  image-path: /home/project/association_ms/file/image/
+#  video-path: /home/project/association_ms/file/video/
   image-types: PNG,JPG,GIF,JPEG
   video-types: MP4,AVI

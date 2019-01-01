@@ -5,9 +5,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
+import top.lvjp.association.VO.VideoInfo;
 import top.lvjp.association.service.VideoService;
 import top.lvjp.association.util.ResultUtil;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/video")
@@ -23,7 +27,8 @@ public class VideoController {
      */
     @GetMapping("/latest")
     public Result selectLatest(@RequestParam("count") Integer count){
-        return ResultUtil.success(videoService.listLatest(count));
+        List<VideoInfo> videoInfoList = videoService.listLatest(count);
+        return ResultUtil.success(videoInfoList);
     }
 
     /**
@@ -32,9 +37,10 @@ public class VideoController {
      * @param size
      * @return
      */
-    @GetMapping("/all")
+    @GetMapping("/list")
     public Result listAll(@RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer size){
-        return ResultUtil.success(videoService.listAll(pageNum, size));
+        PageVO<VideoInfo> videoInfoPageVO = videoService.listAll(pageNum, size);
+        return ResultUtil.success(videoInfoPageVO);
     }
 
     /**
@@ -44,6 +50,7 @@ public class VideoController {
      */
     @GetMapping("detail")
     public Result getDetail(@RequestParam("id") Integer id){
-        return ResultUtil.success(videoService.getInfoById(id));
+        VideoInfo videoInfo = videoService.getInfoById(id);
+        return ResultUtil.success(videoInfo);
     }
 }

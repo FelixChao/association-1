@@ -9,23 +9,23 @@ import java.util.List;
 
 public interface NewsMapper {
 
-    List<NewsInfo> selectLatest(Integer count);
+    List<NewsInfo> listLatest(Integer count);
 
-    News selectById(Integer id);
+    News getById(Integer id);
 
-    List<NewsInfo> selectByAssociation(Integer id);
+    List<NewsInfo> listByAssociation(String id);
 
-    List<NewsInfo> selectByStatus(@Param("status") Integer status, @Param("associationId") Integer associationId);
+    List<NewsInfo> listByStatus(@Param("status") Integer status, @Param("associationId") String associationId);
 
-    List<NewsInfo> selectByKey(@Param("key") String key, @Param("associationId") Integer associationId);
+    List<NewsInfo> listByKey(@Param("key") String key, @Param("associationId") String associationId);
 
-    int publish(@Param("id") Integer id,@Param("associationId") Integer associationId);
+    int publish(@Param("id") Integer id);
 
     int update(NewsForm newsForm);
 
     int insert(NewsForm newsInfo);
 
-    int delete(@Param("id") Integer id,@Param("associationId") Integer associationId);
+    int delete(@Param("id") Integer id);
 
     List<NewsInfo> listAll();
 }

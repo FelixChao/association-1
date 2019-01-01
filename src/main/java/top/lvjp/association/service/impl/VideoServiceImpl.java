@@ -2,14 +2,19 @@ package top.lvjp.association.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.sun.org.apache.xerces.internal.dom.PSVIDOMImplementationImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.VideoInfo;
+import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.entity.Association;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.entity.Video;
+import top.lvjp.association.enums.ResultEnum;
+import top.lvjp.association.exception.MyException;
 import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.UserMapper;
 import top.lvjp.association.mapper.VideoMapper;
@@ -46,9 +51,9 @@ public class VideoServiceImpl implements VideoService {
     @Override
     public VideoInfo getInfoById(Integer id) {
         Video video = videoMapper.getById(id);
-        Association association = associationMapper.selectById(video.getAssociationId());
+        Association association = associationMapper.getById(video.getAssociationId());
         String associationName = association.getAssociationName();
-        User user = userMapper.selectById(video.getUserId());
+        User user = userMapper.getById(video.getUserId());
         String userName = user.getUserName();
         VideoInfo videoInfo = new VideoInfo();
         BeanUtils.copyProperties(video,videoInfo);
@@ -58,7 +63,7 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public PageVO<VideoInfo> listByAssociation(Integer associationId, Integer pageNum, Integer size) {
+    public PageVO<VideoInfo> listByAssociation(String associationId, Integer pageNum, Integer size) {
         PageHelper.startPage(pageNum,size);
         List<VideoInfo> videoInfos = videoMapper.listByAssociation(associationId);
         PageInfo<VideoInfo> videoInfoPageInfo = new PageInfo<>(videoInfos);
@@ -71,12 +76,24 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public int update(Video video) {
+    @Transactional
+    public int update(Video video, String associationId) {
+        Video v = videoMapper.getById(video.getVideoId());
+        if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
+                && !associationId.equals(v.getAssociationId())){
+            throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
+        }
         return videoMapper.update(video);
     }
 
     @Override
-    public int delete(Integer videoId, Integer associationId) {
-        return videoMapper.delete(videoId,associationId);
+    @Transactional
+    public int delete(Integer videoId, String associationId) {
+        Video video = videoMapper.getById(videoId);
+        if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
+                && !associationId.equals(video.getAssociationId())){
+            throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
+        }
+        return videoMapper.delete(videoId);
     }
 }

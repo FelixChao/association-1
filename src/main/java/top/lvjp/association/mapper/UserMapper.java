@@ -1,6 +1,7 @@
 package top.lvjp.association.mapper;
 
 import org.apache.ibatis.annotations.Param;
+import top.lvjp.association.VO.UserVO;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.form.UserForm;
 
@@ -8,17 +9,19 @@ import java.util.List;
 
 public interface UserMapper {
 
-    User selectByNameAndPassword(@Param("name") String name, @Param("password") String password);
+    User getByNameAndPassword(@Param("name") String name, @Param("password") String password);
 
-    User selectById(Integer id);
+    User getById(Integer id);
 
-    List<User> selectAll();
+    UserVO getVOById(Integer id);
+
+    List<UserVO> listAll();
 
     int insert(UserForm user);
 
-    int update(User user);
+    int update(UserForm user);
 
     int deleteById(Integer id);
 
-    User selectByName(String name);
+    User getByName(String name);
 }

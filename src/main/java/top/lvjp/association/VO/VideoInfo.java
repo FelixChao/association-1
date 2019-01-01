@@ -20,13 +20,14 @@ public class VideoInfo {
      * 上传者
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("author")
+    @JsonProperty("user")
     private String userName;
 
     /**
      * 所属社团
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonProperty("association")
     private String associationName;
 
     /**
@@ -39,7 +40,7 @@ public class VideoInfo {
      * 介绍语
      */
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonProperty("desc")
+    @JsonProperty("description")
     private String videoDescription;
 
     /**

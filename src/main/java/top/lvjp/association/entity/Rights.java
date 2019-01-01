@@ -15,7 +15,7 @@ public class Rights {
     /**
      * 相关社团
      */
-    private Integer associationId;
+    private String associationId;
 
     /**
      * 学生姓名
@@ -35,7 +35,7 @@ public class Rights {
     /**
      * 创建时间
      */
-    private String createTime;
+    private Date createTime;
 
     /**
      * 更新时间
@@ -57,4 +57,5 @@ public class Rights {
      */
     private Integer rightsStatus;
 
+    private String solution;
 }

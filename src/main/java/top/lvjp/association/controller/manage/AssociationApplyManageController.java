@@ -2,9 +2,13 @@ package top.lvjp.association.controller.manage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
 import top.lvjp.association.constant.SessionConstant;
+import top.lvjp.association.entity.AssociationApply;
+import top.lvjp.association.enums.ApplyStatusEnum;
 import top.lvjp.association.enums.ResultEnum;
+import top.lvjp.association.exception.MyException;
 import top.lvjp.association.form.QueryForm;
 import top.lvjp.association.service.AssociationApplyService;
 import top.lvjp.association.service.AssociationService;
@@ -22,29 +26,69 @@ public class AssociationApplyManageController {
     @Autowired
     private AssociationService associationService;
 
-
     /**
      * 查询社团报名表
-     * 普通用户只能查询本社团的报名表, 超级管理员可指定查询某社团的报名表
-     * @param associationId 指定查询的社团编号, 可为null
+     * 最高管理员可指定查询某社团的报名表, 否则只能查询本社团
+     * @param associationId 指定查询的社团编号
      * @param pageNum
      * @param size
      * @param request
      * @return
      */
     @GetMapping("list")
-    public Result listByAssociation(@RequestParam(value = "associationId", required = false) Integer associationId,
+    public Result listByAssociation(@RequestParam("associationId") String associationId,
                                     @RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer size,
                                     HttpServletRequest request){
-        Integer userAssociation = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation == 0){
-            if (associationId == null) {
-                return ResultUtil.error(ResultEnum.PARAMETERS_IS_NULL);
-            }
-            return ResultUtil.success(associationApplyService.listByAssociation(associationId,pageNum,size));
-        } else {
-            return ResultUtil.success(associationApplyService.listByAssociation(userAssociation,pageNum,size));
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE) || userAssociation.equals(associationId)){
+            PageVO<AssociationApply> applyPageVO = associationApplyService.listByAssociation(associationId, pageNum, size);
+            return ResultUtil.success(applyPageVO);
         }
+        return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
+    }
+
+    /**
+     * 通过指定条件查询社团报名表
+     * 最高管理员可查询指定社团报名表, 其他用户只能在本社团报名表中查询( 强制 )
+     * @param queryForm 查询条件的表单
+     * @param pageNum
+     * @param size
+     * @param request 获取用户身份
+     * @return
+     */
+    @GetMapping("/query")
+    public Result query(QueryForm queryForm, @RequestParam("pageNum") Integer pageNum,
+                        @RequestParam("size") Integer size, HttpServletRequest request){
+        queryForm.setAssociationId(null);
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (!userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)) {
+            queryForm.setAssociationId(userAssociation);
+        }
+        PageVO<AssociationApply> applyPageVO = associationApplyService.query(queryForm, pageNum, size);
+        return ResultUtil.success(applyPageVO);
+    }
+
+    /**
+     * 更新报名状态
+     * 非最高管理员只能更新本社团报名状态
+     * @param associationId
+     * @param status
+     * @param request
+     * @return
+     */
+    @PostMapping("/updateApply")
+    public Result updateStatus(@RequestParam("associationId") String associationId,
+            @RequestParam("status") Integer status,HttpServletRequest request){
+        String userAssociation= (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (!ApplyStatusEnum.FORBID_APPLY.getStatus().equals(status)
+                && !ApplyStatusEnum.ALLOW_APPLY.getStatus().equals(status)) {
+            throw new MyException(ResultEnum.PARAMETERS_IS_ERROR);
+        }
+        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE) || associationId.equals(userAssociation)){
+            associationService.updateApplyStatus(status, associationId);
+            return ResultUtil.success();
+        }
+        return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
     }
 
     /**
@@ -54,42 +98,33 @@ public class AssociationApplyManageController {
      * @param request
      * @return
      */
-    @DeleteMapping("/delete")
-    public Result delete(@RequestParam("associationId") Integer associationId,HttpServletRequest request){
-        Integer userAssociation = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation == 0){
-            int count = associationApplyService.delete(associationId);
+    @DeleteMapping("/clean")
+    public Result clean(@RequestParam("associationId") String associationId,HttpServletRequest request){
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        int count;
+        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE) || userAssociation.equals(associationId)){
+            count = associationApplyService.deleteAll(associationId);
             return ResultUtil.success(count);
-        } else if (userAssociation.equals(associationId)){
-            int count = associationApplyService.delete(userAssociation);
-            return ResultUtil.success(count);
-        } else return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
+        }
+        return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
     }
 
     /**
-     * 通过指定条件查询社团报名表
-     * @param queryForm
-     * @param pageNum
-     * @param size
+     * 批量删除报名信息
+     * @param ids 报名编号数组
+     * @param associationId
      * @param request
      * @return
      */
-    @GetMapping("/query")
-    public Result query(QueryForm queryForm, @RequestParam("pageNum") Integer pageNum,
-                        @RequestParam("size") Integer size, HttpServletRequest request){
-        Integer userAssociation = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        return ResultUtil.success(associationApplyService.query(queryForm,userAssociation,pageNum,size));
-    }
-
-    @PostMapping("/enable")
-    public Result updateStatus(@RequestParam("associationId") Integer associationId,
-            @RequestParam("status") Integer status,HttpServletRequest request){
-        Integer userAssociation= (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation != 0){
-            associationId = userAssociation;
+    @DeleteMapping("/delete")
+    public Result delete(@RequestParam("ids") Integer[] ids, @RequestParam("associationId") String associationId,
+                         HttpServletRequest request){
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
+                || userAssociation.equals(associationId)){
+            int count = associationApplyService.deleteByIds(ids, associationId);
+            return ResultUtil.success(count);
         }
-        int count = associationService.updateApplyStatus(status, associationId);
-        if (count != 0) return ResultUtil.success(count);
-        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
+        return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
     }
 }

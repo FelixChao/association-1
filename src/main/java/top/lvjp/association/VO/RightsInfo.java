@@ -1,6 +1,7 @@
 package top.lvjp.association.VO;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -12,6 +13,7 @@ public class RightsInfo {
     /**
      * 维权编号
      */
+    @JsonProperty("id")
     private Integer rightsId;
 
     /**
@@ -41,5 +43,7 @@ public class RightsInfo {
      * 更新时间
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "GMT+8")
+    @JsonProperty("time")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Date updateTime;
 }

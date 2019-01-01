@@ -1,28 +1,34 @@
 package top.lvjp.association.mapper;
 
 import org.apache.ibatis.annotations.Param;
-import org.omg.PortableInterceptor.INACTIVE;
 import top.lvjp.association.VO.AssociationInfo;
-import top.lvjp.association.VO.PictureVO;
+import top.lvjp.association.VO.PictureInfo;
 import top.lvjp.association.entity.Association;
+import top.lvjp.association.form.AssociationForm;
 
 import java.util.List;
 
 public interface AssociationMapper {
 
-    Association selectById(Integer id);
+    Association getById(String id);
 
-    List<AssociationInfo> selectPop(Integer count);
+    List<AssociationInfo> listPop(Integer count);
 
-    List<AssociationInfo> selectByCategory(String category);
+    List<AssociationInfo> listByCategory(String category);
 
     List<AssociationInfo> getAssociationNames();
 
-    int addApply(Integer id);
+    int addApply(String id);
 
-    List<PictureVO> listAssociationIcon();
+    List<PictureInfo> listAssociationIcon();
 
-    int updateAssociationIcon(@Param("pictureId") Integer picture_id, @Param("picturePath") String picture_path, @Param("associationId") Integer associationId);
+    int updateAssociationIcon(@Param("pictureId") Integer pictureId, @Param("picturePath") String picturePath, @Param("associationId") String associationId);
 
-    int updateApplyStatus(@Param("enable") Integer enable, @Param("associationId") Integer associationId);
+    int updateApplyStatus(@Param("enable") Integer enable, @Param("associationId") String associationId);
+
+    int updateAssociation(AssociationForm form);
+
+    int updateAssociationDesc(@Param("associationId") String associationId, @Param("description") String description);
+
+    int reduceApply(@Param("associationId") String associationId, @Param("count") int count);
 }

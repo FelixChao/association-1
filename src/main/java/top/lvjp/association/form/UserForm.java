@@ -2,11 +2,14 @@ package top.lvjp.association.form;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 @Data
 public class UserForm {
+
+    private Integer userId;
 
     /**
      * 用户名
@@ -25,4 +28,6 @@ public class UserForm {
      */
     private Integer userType;
 
+    @NotNull
+    private String associationId;
 }

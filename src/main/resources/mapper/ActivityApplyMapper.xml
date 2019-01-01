@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="top.lvjp.association.mapper.ActivityApplyMapper">
 
-    <sql id="testRights">
-        <if test="associationId != 0">
-            and exists(select * from activity where activity_id = #{activityId} and association_id = #{associationId})
-        </if>
-    </sql>
+    <!--<sql id="testRights">-->
+        <!--<if test="associationId != null">-->
+            <!--and exists(select * from activity where activity_id = #{activityId} and association_id = #{associationId})-->
+        <!--</if>-->
+    <!--</sql>-->
 
     <insert id="insertApply" parameterType="ActivityApplyForm">
         insert activity_apply
@@ -25,12 +25,11 @@
     select *
     from activity_apply
     where activity_id = #{activityId}
-    <include refid="testRights"/>
 </select>
 
     <select id="query" resultType="ActivityApply">
         select *
-        from activity_apply
+        from activity_apply as aa
         <where>
             <if test="query.studentName != null">
                 student_name like #{query.studentName}
@@ -41,6 +40,12 @@
             <if test="query.academy != null">
                 and academy like #{query.academy}
             </if>
+            <if test="query.qq != null">
+                and qq like #{query.qq}
+            </if>
+            <if test="query.phone != null">
+                and phone like #{query.phone}
+            </if>
             <if test="query.minTime != null">
                 and apply_time &gt; #{query.minTime}
             </if>
@@ -50,13 +55,26 @@
             <if test="query.sex != null">
                 and sex = #{query.sex}
             </if>
-            <include refid="testRights"/>
+            <if test="query.activityId != null">
+                and activity_id = #{query.activityId}
+            </if>
+            <if test="query.activityId == null and associationId != null">
+                and exists(select * from activity where aa.activity_id = activity_id and association_id = #{associationId})
+            </if>
         </where>
     </select>
 
     <delete id="deleteActivityApply">
         delete from activity_apply
         where activity_id = #{activityId}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from activity_apply
+        where activity_id = #{activityId} and apply_id in
+        <foreach collection="ids" item="id" index="index" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </delete>
 
 </mapper>

@@ -27,7 +27,7 @@ public interface VideoService {
      * @param associationId
      * @return
      */
-    PageVO<VideoInfo> listByAssociation(Integer associationId, Integer pageNum, Integer size);
+    PageVO<VideoInfo> listByAssociation(String associationId, Integer pageNum, Integer size);
 
 /// 相关信息已在前端展示
 //    /**
@@ -36,7 +36,7 @@ public interface VideoService {
 //     * @param associationId
 //     * @return
 //     */
-//    VideoForm getForm(Integer videoId, Integer associationId);
+//    VideoForm getForm(Integer videoId, String associationId);
 
     /**
      * 上传一个视频
@@ -47,11 +47,12 @@ public interface VideoService {
 
 
     /**
-     * 修改视频信息
+     * 修改视频信息, 非最高管理员只能修改本社团视频信息
      * @param video
+     * @param associationId 执行操作的用户
      * @return
      */
-    int update(Video video);
+    int update(Video video, String associationId);
 
     /**
      * 删除视频
@@ -60,5 +61,5 @@ public interface VideoService {
      * @param associationId
      * @return
      */
-    int delete(Integer videoId, Integer associationId);
+    int delete(Integer videoId, String associationId);
 }

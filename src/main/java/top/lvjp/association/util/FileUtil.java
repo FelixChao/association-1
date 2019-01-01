@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
+import top.lvjp.association.config.MyWebMvcConfigurer;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.exception.MyException;
 
@@ -44,10 +45,11 @@ public class FileUtil {
      * @param file 要上传的文件
      * @param userId 上传用户
      * @param type 指定类型, 必须为 IMAGE_FILE 或 VIDEO_FILE
-     * @return 返回上传的文件存储的位置和文件名, URI
+     * @return 返回上传的文件的访问地址 ( 自定义资源路径 + 文件名 )
      */
     public String uploadFile(MultipartFile file, Integer userId, int type){
         String path = null;
+        String accessPath = null;
         if (file == null || file.isEmpty()) {
             throw new MyException(ResultEnum.FILE_IS_EMPTY);
         }
@@ -61,6 +63,7 @@ public class FileUtil {
             for (int i = 0; i < types.length; i++) {
                 if (fileType.equals(types[i])){
                     path = imagePath;
+                    accessPath = MyWebMvcConfigurer.IMAGE_ACCESS_PATH;
                     break;
                 }
             }
@@ -69,6 +72,7 @@ public class FileUtil {
             for (int i = 0; i < types.length; i++) {
                 if (fileType.equals(types[i])){
                     path = videoPath;
+                    accessPath = MyWebMvcConfigurer.VIDEO_ACCESS_PATH;
                     break;
                 }
             }
@@ -94,7 +98,7 @@ public class FileUtil {
             e.printStackTrace();
             throw new MyException(ResultEnum.FILL_UPLOAD_FAILED);
         }
-        return dest.getPath();
+        return accessPath + fileName;
     }
 }
 

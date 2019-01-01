@@ -23,96 +23,100 @@ public class ActivityManageController {
     private ActivityService activityService;
 
     /**
-     * 查询 associationId 社团的发布状态为 status 的正在进行活动
+     * 查询本社团的发布状态为 status 的正在进行活动
+     * 最高管理员查询全部社团活动
      * @param status 活动发布状态
      * @param pageNum 当前页
      * @param size 每页显示数量
+     * @param request
      * @return PageVO&lt;ActivityInfo&gt;
      */
     @GetMapping("/current")
-    public Result selectCurrentByStatus(@RequestParam("status") Integer status,
-                                        @RequestParam("pageNum") Integer pageNum,
-                                        @RequestParam("size") Integer size,HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        PageVO<ActivityInfo> pageInfo = activityService.selectCurrentByStatus(status,associationId,pageNum,size);
+    public Result listCurrentByStatus(@RequestParam("status") Integer status,
+                                      @RequestParam("pageNum") Integer pageNum,
+                                      @RequestParam("size") Integer size,HttpServletRequest request){
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+            userAssociation = null;
+        }
+        PageVO<ActivityInfo> pageInfo = activityService.selectCurrentByStatus(status, userAssociation, pageNum, size);
         return ResultUtil.success(pageInfo);
     }
 
     /**
-     * 查询associationId社团的发布状态为status的即将进行活动
+     * 查询本社团的发布状态为 status 的即将进行活动
+     * 最高管理员查询全部社团活动
      * @param status 活动发布状态
      * @param pageNum 当前页
      * @param size 每页显示数量
      * @return PageVO&lt;ActivityInfo&gt;
      */
     @GetMapping("/future")
-    public Result selectFutureByStatus(@RequestParam("status") Integer status,
-                                       @RequestParam("pageNum") Integer pageNum,
-                                       @RequestParam("size") Integer size,HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+    public Result listFutureByStatus(@RequestParam("status") Integer status,
+                                     @RequestParam("pageNum") Integer pageNum,
+                                     @RequestParam("size") Integer size,HttpServletRequest request){
+        String associationId = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         PageVO<ActivityInfo> pageInfo = activityService.selectFutureByStatus(status,associationId,pageNum,size);
        return ResultUtil.success(pageInfo);
     }
 
     /**
-     * 查询associationId社团的发布状态为status的已经结束活动
+     * 查询本社团的发布状态为 status 的已经结束活动
+     * 最高管理员查询全部社团活动
      * @param status 活动发布状态
      * @param pageNum 当前页
      * @param size 每页显示数量
      * @return PageVO&lt;ActivityInfo&gt;
      */
     @GetMapping("/past")
-    public Result selectPastByStatus(@RequestParam("status") Integer status,
-                                     @RequestParam("pageNum") Integer pageNum,
-                                     @RequestParam("size") Integer size, HttpServletRequest request){
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+    public Result listPastByStatus(@RequestParam("status") Integer status,
+                                   @RequestParam("pageNum") Integer pageNum,
+                                   @RequestParam("size") Integer size, HttpServletRequest request){
+        String associationId = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
         PageVO<ActivityInfo> pageInfo = activityService.selectPastByStatus(status,associationId,pageNum,size);
         return ResultUtil.success(pageInfo);
     }
 
     /**
-     * 通过关键字 Key 查找相关活动
+     * 通过关键字 Key 在本社团查找相关活动
      * @param key 查询关键字
      * @param pageNum 当前页
      * @param size 每页显示数量
+     * @param request
      * @return PageVO&lt;ActivityInfo&gt;
      */
     @GetMapping("/query")
     public Result queryByKey(@RequestParam("key") String key,
                              @RequestParam("pageNum") Integer pageNum,
                              @RequestParam("size") Integer size, HttpServletRequest request){
-        Integer associationId = (Integer)request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        PageVO<ActivityInfo> pageInfo = activityService.queryByKey(key,associationId,pageNum,size);
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        PageVO<ActivityInfo> pageInfo = activityService.queryByKey(key,userAssociation,pageNum,size);
         return ResultUtil.success(pageInfo);
     }
 
     /**
-     * 发布
+     * 发布本社团活动
      * @param id 选择的活动的编号
      * @return 成功返回success,失败则返回 操作失败,或者抛出异常
      */
-    @PostMapping("/publish/{id}")
-    public Result publish(@PathVariable Integer id,HttpServletRequest request){
-        int success;
-        Integer associationId = (Integer)request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        success = activityService.publish(id,associationId);
-        if (success == 1) return ResultUtil.success();
-        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
+    @PostMapping("/publish")
+    public Result publish(@RequestParam("id") Integer id,HttpServletRequest request){
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        int count = activityService.publish(id, userAssociation);
+        return ResultUtil.success(count);
     }
 
     /**
-     * 删除活动
+     * 删除本社团的活动
      * @param id 删除活动的编号
      * @param request 发送的请求
      * @return 成功返回success,失败则返回 操作失败,或者抛出异常
      */
-    @PostMapping("/delete/{id}")
-    public Result delete(@PathVariable Integer id,HttpServletRequest request){
-        int success;
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        success = activityService.delete(id,associationId);
-        if (success != 0) return ResultUtil.success();
-        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
+    @DeleteMapping("/delete")
+    public Result delete(@RequestParam("id") Integer id,HttpServletRequest request){
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        int count = activityService.delete(id,userAssociation);
+        return ResultUtil.success(count);
     }
 
     /**
@@ -120,34 +124,46 @@ public class ActivityManageController {
      * @param id 查询表单的id
      * @return ActivityForm
      */
-    @GetMapping("/form/{id}")
-    public Result getForm(@PathVariable("id") Integer id){
-        return ResultUtil.success(activityService.getForm(id));
+    @GetMapping("/form")
+    public Result getForm(@RequestParam("id") Integer id){
+        ActivityForm activityForm = activityService.getForm(id);
+        return ResultUtil.success(activityForm);
     }
-
 
     /**
      * 更新活动
+     * 非最高管理员只能更新本社团的活动
      * @param activityForm 提交表单
      * @param bindingResult 表单验证的结果
      * @return 成功返回success,失败则返回 操作失败,或者抛出异常
      */
     @PostMapping("/update")
-    public Result update(@Valid ActivityForm activityForm,BindingResult bindingResult,HttpServletRequest request){
+    public Result update(@Valid ActivityForm activityForm, BindingResult bindingResult,
+                         HttpServletRequest request){
         if(bindingResult.hasErrors()){
             return ResultUtil.validError(bindingResult.getFieldError().getDefaultMessage());
         }
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (associationId != 0){
-            activityForm.setAssociationId(associationId);
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (!userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
+                && !userAssociation.equals(activityForm.getAssociationId())){
+            return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY.getCode(),
+                    "非最高管理员只能将活动所属社团设为本社团");
         }
-        int success = activityService.update(activityForm);
-        if (success == 1) return ResultUtil.success();
-        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
+        int count = activityService.update(activityForm, userAssociation);
+        return ResultUtil.success(count);
+    }
+
+    @PostMapping("/picture/update")
+    public Result updateActivityIcon(@RequestParam("activityId") Integer activityId,
+                                     @RequestParam("pictureId") Integer pictureId,HttpServletRequest request){
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        int count = activityService.updateActivityIcon(activityId, pictureId, userAssociation);
+        return ResultUtil.success(count);
     }
 
     /**
-     * 添加活动,如何用户associationId不为0,只能发布本社团的活动
+     * 添加活动
+     * 非最高管理员只能添加本社团活动
      * @param activityForm 提交的表单
      * @param bindingResult 表单验证的结果
      * @return 成功返回success,失败则返回 操作失败,或者抛出异常
@@ -157,12 +173,13 @@ public class ActivityManageController {
         if(bindingResult.hasErrors()){
             return ResultUtil.validError(bindingResult.getFieldError().getDefaultMessage());
         }
-        Integer associationId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (associationId != 0){
-            activityForm.setAssociationId(associationId);
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        if (!userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
+                && !userAssociation.equals(activityForm.getAssociationId())){
+            return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY.getCode(),
+                    "非最高管理员只能将活动所属社团设为本社团");
         }
-        int success = activityService.insert(activityForm);
-        if (success == 1) return ResultUtil.success();
-        return ResultUtil.error(ResultEnum.OPERATE_IS_FAIL);
+        int count = activityService.insert(activityForm);
+        return ResultUtil.success(count);
     }
 }
