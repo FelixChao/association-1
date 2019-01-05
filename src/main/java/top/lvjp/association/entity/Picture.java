@@ -26,11 +26,11 @@ public class Picture {
      * 所属社团id
      */
     private String associationId;
-
-    /**
-     * 照片类别
-     */
-    private Integer pictureCategory;
+//
+//    /**
+//     * 照片类别
+//     */
+//    private Integer pictureCategory;
 
     /**
      * 上传时间

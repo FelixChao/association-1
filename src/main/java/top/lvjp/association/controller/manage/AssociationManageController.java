@@ -9,6 +9,7 @@ import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.form.AssociationForm;
 import top.lvjp.association.service.AssociationService;
 import top.lvjp.association.util.ResultUtil;
+import top.lvjp.association.util.RightsTestUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -31,9 +32,9 @@ public class AssociationManageController {
     public Result updateIcon(@RequestParam("associationId") String associationId,
                              @RequestParam("pictureId") Integer pictureId, HttpServletRequest request){
        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE) || associationId.equals(userAssociation)){
-            int count = associationService.updateAssociationIcon(associationId, pictureId);
-            return ResultUtil.success(count);
+        if (RightsTestUtil.hasRights(userAssociation, associationId)){
+            associationService.updateAssociationIcon(associationId, pictureId);
+            return ResultUtil.success();
         }
         return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
     }
@@ -49,7 +50,7 @@ public class AssociationManageController {
     public Result updateDesc(@RequestParam("associationId") String associationId,
                              @RequestParam("description") String description, HttpServletRequest request){
        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE) || associationId.equals(userAssociation)){
+        if (RightsTestUtil.hasRights(userAssociation, associationId)){
             int count = associationService.updateAssociationDesc(associationId, description);
             return ResultUtil.success(count);
         }
@@ -66,7 +67,7 @@ public class AssociationManageController {
     @GetMapping("/form")
     public Result getForm(@RequestParam("associationId") String associationId, HttpServletRequest request){
        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE) || associationId.equals(userAssociation)){
+        if (RightsTestUtil.hasRights(userAssociation, associationId)){
             AssociationForm associationForm = associationService.getAssociationForm(associationId);
             return ResultUtil.success(associationForm);
         }
@@ -86,7 +87,7 @@ public class AssociationManageController {
         if (bindingResult.hasErrors()) {
             return ResultUtil.error(ResultEnum.FORM_VALID_ERROR.getCode(), bindingResult.getFieldError().getDefaultMessage());
         }
-        int count = associationService.updateAssociation(form);
-        return ResultUtil.success(count);
+        associationService.updateAssociation(form);
+        return ResultUtil.success();
     }
 }

@@ -23,7 +23,7 @@ public class PictureInfo {
     /**
      * 图片标题
      */
-    @JsonProperty("associationName")
+    @JsonProperty("title")
     private String pictureTitle;
 
     /**

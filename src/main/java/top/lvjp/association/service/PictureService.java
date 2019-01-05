@@ -5,6 +5,8 @@ import top.lvjp.association.VO.PictureInfo;
 import top.lvjp.association.VO.PictureVO;
 import top.lvjp.association.entity.Picture;
 
+import java.util.List;
+
 public interface PictureService {
 
     /**
@@ -17,12 +19,13 @@ public interface PictureService {
 
     /**
      * 查询某个社团的图片
+     * 非最高管理员只能查询本社团图片
      * @param associationId
      * @param pageNum
      * @param size
      * @return
      */
-    PageVO<PictureInfo> listByAssciation(String associationId, Integer pageNum, Integer size);
+    PageVO<PictureInfo> listByAssociation(String associationId, Integer pageNum, Integer size);
 
     /**
      * 查询社徽
@@ -58,8 +61,28 @@ public interface PictureService {
      * 删除一组图片, 只能删除本社团的图片
      * @param pictureIds 要删除的图片 id 数组
      * @param associationId
-     * @return
+     * @return 返回成功删除的数量
      */
     int delete(Integer[] pictureIds, String associationId);
+
+    /**
+     * 获取头图, 首页滑动图片
+     * @return
+     */
+    List<PictureInfo> listHeadPicture();
+
+    /**
+     * 替换头图
+     * @param oldId
+     * @param newId
+     */
+    void replaceHeadIcon(Integer oldId, Integer newId);
+
+    /**
+     * 更新头图
+     * @param pictureId 需要更新的图片 id
+     * @param isIcon 更新的状态, 是否作为头图使用
+     */
+    void updateHeadIcon(Integer pictureId, Integer isIcon);
 
 }

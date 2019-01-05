@@ -92,12 +92,8 @@ public class NewsManageController {
             return ResultUtil.error(ResultEnum.FORM_VALID_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
         }
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-//        if (!userAssociation.equals(newsForm.getAssociationId())
-//                && !userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
-//            return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY.getCode(), "非最高管理员只能发布本社团新闻");
-//        }
-        int count = newsService.update(newsForm, userAssociation);
-        return ResultUtil.success(count);
+        newsService.update(newsForm, userAssociation);
+        return ResultUtil.success();
     }
 
     /**
@@ -111,8 +107,8 @@ public class NewsManageController {
             return ResultUtil.error(ResultEnum.FORM_VALID_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
         }
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        int count = newsService.insert(newsForm, userAssociation);
-        return ResultUtil.success(count);
+        newsService.insert(newsForm, userAssociation);
+        return ResultUtil.success();
     }
 
     /**

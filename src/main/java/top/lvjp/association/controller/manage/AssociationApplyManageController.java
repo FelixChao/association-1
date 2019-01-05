@@ -13,6 +13,7 @@ import top.lvjp.association.form.QueryForm;
 import top.lvjp.association.service.AssociationApplyService;
 import top.lvjp.association.service.AssociationService;
 import top.lvjp.association.util.ResultUtil;
+import top.lvjp.association.util.RightsTestUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -40,7 +41,7 @@ public class AssociationApplyManageController {
                                     @RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer size,
                                     HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE) || userAssociation.equals(associationId)){
+        if (RightsTestUtil.hasRights(userAssociation, associationId)){
             PageVO<AssociationApply> applyPageVO = associationApplyService.listByAssociation(associationId, pageNum, size);
             return ResultUtil.success(applyPageVO);
         }
@@ -84,7 +85,7 @@ public class AssociationApplyManageController {
                 && !ApplyStatusEnum.ALLOW_APPLY.getStatus().equals(status)) {
             throw new MyException(ResultEnum.PARAMETERS_IS_ERROR);
         }
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE) || associationId.equals(userAssociation)){
+        if (RightsTestUtil.hasRights(userAssociation, associationId)){
             associationService.updateApplyStatus(status, associationId);
             return ResultUtil.success();
         }
@@ -120,8 +121,7 @@ public class AssociationApplyManageController {
     public Result delete(@RequestParam("ids") Integer[] ids, @RequestParam("associationId") String associationId,
                          HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                || userAssociation.equals(associationId)){
+        if (RightsTestUtil.hasRights(userAssociation, associationId)){
             int count = associationApplyService.deleteByIds(ids, associationId);
             return ResultUtil.success(count);
         }

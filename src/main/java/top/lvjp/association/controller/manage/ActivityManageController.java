@@ -7,7 +7,6 @@ import top.lvjp.association.VO.ActivityInfo;
 import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
 import top.lvjp.association.constant.SessionConstant;
-import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.form.ActivityForm;
 import top.lvjp.association.service.ActivityService;
 import top.lvjp.association.util.ResultUtil;
@@ -144,22 +143,17 @@ public class ActivityManageController {
             return ResultUtil.validError(bindingResult.getFieldError().getDefaultMessage());
         }
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (!userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !userAssociation.equals(activityForm.getAssociationId())){
-            return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY.getCode(),
-                    "非最高管理员只能将活动所属社团设为本社团");
-        }
         int count = activityService.update(activityForm, userAssociation);
         return ResultUtil.success(count);
     }
 
-    @PostMapping("/picture/update")
-    public Result updateActivityIcon(@RequestParam("activityId") Integer activityId,
-                                     @RequestParam("pictureId") Integer pictureId,HttpServletRequest request){
-        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        int count = activityService.updateActivityIcon(activityId, pictureId, userAssociation);
-        return ResultUtil.success(count);
-    }
+//    @PostMapping("/picture/update")
+//    public Result updateActivityIcon(@RequestParam("activityId") Integer activityId,
+//                                     @RequestParam("pictureId") Integer pictureId,HttpServletRequest request){
+//        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+//        activityService.updateActivityIcon(activityId, pictureId, userAssociation);
+//        return ResultUtil.success();
+//    }
 
     /**
      * 添加活动
@@ -174,12 +168,7 @@ public class ActivityManageController {
             return ResultUtil.validError(bindingResult.getFieldError().getDefaultMessage());
         }
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (!userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !userAssociation.equals(activityForm.getAssociationId())){
-            return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY.getCode(),
-                    "非最高管理员只能将活动所属社团设为本社团");
-        }
-        int count = activityService.insert(activityForm);
-        return ResultUtil.success(count);
+        activityService.insert(activityForm, userAssociation);
+        return ResultUtil.success();
     }
 }

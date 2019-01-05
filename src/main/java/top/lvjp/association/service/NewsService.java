@@ -34,48 +34,49 @@ public interface NewsService {
     /**
      * 查询社团文章状态为 status 的新闻
      * @param status 文章发布状态
-     * @param associationId 社团编号
+     * @param userAssociation 用户社团编号
      * @return PageVO&lt;NewsInof&gt;
      */
-    PageVO<NewsInfo> listByStatus(Integer status, String associationId, Integer pageNum, Integer size);
+    PageVO<NewsInfo> listByStatus(Integer status, String userAssociation, Integer pageNum, Integer size);
 
     /**
      * 通过关键字 key 查询社团的新闻
      * @param key 查询关键字
-     * @param associationId 社团编号
+     * @param userAssociation 用户社团编号
      * @return PageVO&lt;NewsInfo&gt;
      */
-    PageVO<NewsInfo> queryByKey(String key, String associationId, Integer pageNum, Integer size);
+    PageVO<NewsInfo> queryByKey(String key, String userAssociation, Integer pageNum, Integer size);
 
     /**
      * 发布新闻
      * @param id 新闻编号
-     * @param associationId 社团编号
+     * @param userAssociation 用户社团编号
      * @return
      */
-    int publish(Integer id, String associationId);
+    int publish(Integer id, String userAssociation);
 
     /**
      * 更新新闻
      * @param newsForm 新闻表单
-     * @param associationId 用户所属社团
+     * @param userAssociation 用户所属社团
      * @return 成功返回1,失败0
      */
-    int update(NewsForm newsForm, String associationId);
+    int update(NewsForm newsForm, String userAssociation);
 
     /**
      * 填写新闻
      * 非最高管理员只能填写本社团新闻
      * @param newsForm 新闻表单
+     * @param userAssociation
      * @return
      */
-    int insert(NewsForm newsForm, String associationId);
+    int insert(NewsForm newsForm, String userAssociation);
 
     /**
      * 删除新闻
      * @param id 新闻编号
-     * @param associationId 社团编号
+     * @param userAssociation 用户社团编号
      * @return
      */
-    int delete(Integer id,String associationId);
+    int delete(Integer id,String userAssociation);
 }

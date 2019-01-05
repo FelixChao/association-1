@@ -11,6 +11,7 @@ import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.service.RightsService;
 import top.lvjp.association.util.ResultUtil;
+import top.lvjp.association.util.RightsTestUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -49,11 +50,11 @@ public class RightsManageController {
                                     @RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer size,
                                     HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(USER_ASSOCIATION);
-        if (!userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !userAssociation.equals(associationId)) {
+        if (!RightsTestUtil.hasRights(userAssociation, associationId)) {
             return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
         }
-        return ResultUtil.success(rightsService.listByAssociation(associationId, pageNum, size));
+        PageVO<RightsInfo> rightsInfoPageVO = rightsService.listByAssociation(associationId, pageNum, size);
+        return ResultUtil.success(rightsInfoPageVO);
     }
 
     /**

@@ -18,6 +18,7 @@ import top.lvjp.association.form.RightsForm;
 import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.RightsMapper;
 import top.lvjp.association.service.RightsService;
+import top.lvjp.association.util.RightsTestUtil;
 
 import java.util.List;
 
@@ -33,8 +34,7 @@ public class RightsServiceImpl implements RightsService {
     @Override
     public RightsVO getById(Integer rightsId, String associationId) {
         Rights rights = rightsMapper.getById(rightsId);
-        if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !associationId.equals(rights.getAssociationId())){
+        if (!RightsTestUtil.hasRights(associationId, rights.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         Association association = associationMapper.getById(rights.getAssociationId());
@@ -82,8 +82,7 @@ public class RightsServiceImpl implements RightsService {
     @Transactional
     public int update(String associationId, Integer rightsId, Integer status, String solution) {
         Rights rights = rightsMapper.getById(rightsId);
-        if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !associationId.equals(rights.getAssociationId())){
+        if (!RightsTestUtil.hasRights(associationId, rights.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         return rightsMapper.update(rightsId, status, solution);

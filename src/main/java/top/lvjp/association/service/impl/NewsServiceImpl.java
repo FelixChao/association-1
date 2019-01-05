@@ -21,6 +21,7 @@ import top.lvjp.association.mapper.NewsMapper;
 import top.lvjp.association.mapper.PictureMapper;
 import top.lvjp.association.service.NewsService;
 import top.lvjp.association.util.ResultUtil;
+import top.lvjp.association.util.RightsTestUtil;
 
 import java.util.List;
 
@@ -71,27 +72,26 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public PageVO<NewsInfo> listByStatus(Integer status, String associationId, Integer pageNum, Integer size) {
+    public PageVO<NewsInfo> listByStatus(Integer status, String userAssociation, Integer pageNum, Integer size) {
         PageHelper.startPage(pageNum,size);
-        List<NewsInfo> newsInfos = newsMapper.listByStatus(status,associationId);
+        List<NewsInfo> newsInfos = newsMapper.listByStatus(status, userAssociation);
         PageInfo<NewsInfo> pageInfo = new PageInfo<>(newsInfos);
         return new PageVO<>(pageInfo);
     }
 
     @Override
-    public PageVO<NewsInfo> queryByKey(String key, String associationId, Integer pageNum, Integer size) {
+    public PageVO<NewsInfo> queryByKey(String key, String userAssociation, Integer pageNum, Integer size) {
         key = "%" + key + "%";
         PageHelper.startPage(pageNum,size);
-        List<NewsInfo> newsInfos = newsMapper.listByKey(key,associationId);
+        List<NewsInfo> newsInfos = newsMapper.listByKey(key, userAssociation);
         PageInfo<NewsInfo> pageInfo = new PageInfo<>(newsInfos);
         return new PageVO<>(pageInfo);
     }
 
     @Override
-    public int publish(Integer id, String associationId) {
+    public int publish(Integer id, String userAssociation) {
         News news = newsMapper.getById(id);
-        if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !associationId.equals(news.getAssociationId())){
+        if(!RightsTestUtil.hasRights(userAssociation, news.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         return newsMapper.publish(id);
@@ -99,23 +99,18 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public int update(NewsForm newsForm, String associationId) {
+    public int update(NewsForm newsForm, String userAssociation) {
         News news = newsMapper.getById(newsForm.getNewsId());
-        if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && (!associationId.equals(news.getAssociationId())
-                    || !associationId.equals(newsForm.getAssociationId()))){
+        if (RightsTestUtil.hasRights(userAssociation, news.getAssociationId())
+                    || !userAssociation.equals(newsForm.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
-        }
-        if (news.getPictureId() != null){
-            pictureMapper.reduceIconCount(news.getPictureId());
         }
         newsForm.setPicturePath(null);
         if (newsForm.getPictureId() != null){
             Picture picture = pictureMapper.getById(newsForm.getPictureId());
             if (picture != null){
-                throw new MyException(ResultEnum.PICTURE_NOT_EXSIST);
+                throw new MyException(ResultEnum.PICTURE_NOT_EXIST);
             }
-            pictureMapper.addIconCount(picture.getPictureId());
             newsForm.setPicturePath(picture.getPicturePath());
         }
         return newsMapper.update(newsForm);
@@ -128,17 +123,15 @@ public class NewsServiceImpl implements NewsService {
         if (association == null) {
             throw new MyException(ResultEnum.ASSOCIATION_NOT_EXISTS);
         }
-        if (!userAssociation.equals(newsForm.getAssociationId())
-                && !userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+        if (!RightsTestUtil.hasRights(userAssociation, newsForm.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY.getCode(), "非最高管理员只能发布本社团新闻");
         }
         newsForm.setPicturePath(null);
         if (null != newsForm.getPictureId()){
             Picture picture = pictureMapper.getById(newsForm.getPictureId());
             if (picture != null){
-                throw new MyException(ResultEnum.PICTURE_NOT_EXSIST);
+                throw new MyException(ResultEnum.PICTURE_NOT_EXIST);
             }
-            pictureMapper.addIconCount(picture.getPictureId());
             newsForm.setPicturePath(picture.getPicturePath());
         }
         return newsMapper.insert(newsForm);
@@ -146,14 +139,10 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public int delete(Integer id, String associationId) {
+    public int delete(Integer id, String userAssociation) {
         News news = newsMapper.getById(id);
-        if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !associationId.equals(news.getAssociationId())){
+        if (RightsTestUtil.hasRights(userAssociation, news.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
-        }
-        if (news.getPictureId() != null) {
-            pictureMapper.reduceIconCount(news.getPictureId());
         }
         return newsMapper.delete(id);
     }

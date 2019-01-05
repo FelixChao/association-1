@@ -18,6 +18,7 @@ import top.lvjp.association.form.QueryForm;
 import top.lvjp.association.mapper.ActivityApplyMapper;
 import top.lvjp.association.mapper.ActivityMapper;
 import top.lvjp.association.service.ActivityApplyService;
+import top.lvjp.association.util.RightsTestUtil;
 
 import java.util.List;
 
@@ -56,8 +57,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
         if (activity == null) {
             throw new MyException(ResultEnum.ACTIVITY_NOT_EXISTS);
         }
-        if (!userAssociation.equals(activity.getAssociationId())
-                && !userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+        if (!RightsTestUtil.hasRights(userAssociation, activity.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         PageHelper.startPage(pageNum,size);
@@ -71,8 +71,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     public PageVO<ActivityApply> query(QueryForm queryForm, String associationId, Integer pageNum, Integer size) {
         if (queryForm.getActivityId() != null){
             Activity activity = activityMapper.getById(queryForm.getActivityId());
-            if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                    && !associationId.equals(activity.getAssociationId())){
+            if (!RightsTestUtil.hasRights(associationId, activity.getAssociationId())){
                 throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
             }
         } else if (associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
@@ -94,8 +93,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @Transactional
     public int deleteByActivityId(Integer activityId, String userAssociation) {
         Activity activity = activityMapper.getById(activityId);
-        if (!userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !userAssociation.equals(activity.getAssociationId())) {
+        if (!RightsTestUtil.hasRights(userAssociation, activity.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         int count = activityApplyMapper.deleteActivityApply(activityId);
@@ -107,8 +105,7 @@ public class ActivityApplyServiceImpl implements ActivityApplyService {
     @Transactional
     public int deleteByIds(Integer[] ids, Integer activityId, String userAssociation) {
         Activity activity = activityMapper.getById(activityId);
-        if (!userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !userAssociation.equals(activity.getAssociationId())) {
+        if (!RightsTestUtil.hasRights(userAssociation, activity.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         return activityApplyMapper.deleteByIds(ids, activityId);

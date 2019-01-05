@@ -139,9 +139,10 @@ public interface ActivityService {
     /**
      * 添加活动
      * @param activityForm 活动信息
+     * @param userAssociation
      * @return 成功返回1,否则返回0
      */
-    int insert(ActivityForm activityForm);
+    int insert(ActivityForm activityForm, String userAssociation);
 
     int updateActivityIcon(Integer activityId, Integer pictureId, String userAssociation);
 }

@@ -1,5 +1,7 @@
 package top.lvjp.association.VO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -36,12 +38,14 @@ public class PictureVO {
      * 照片类别
      */
     @JsonProperty("category")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private String pictureCategory;
 
     /**
      * 上传时间
      */
     @JsonProperty("time")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date createTime;
 
     /**
@@ -51,8 +55,7 @@ public class PictureVO {
     private String userName;
 
     /**
-     * 被使用次数
+     * 是否为图徽
      */
-    @JsonProperty("used")
     private Integer isIcon;
 }

@@ -11,6 +11,7 @@ import top.lvjp.association.VO.NewsInfo;
 import top.lvjp.association.dto.ActivitiesDTO;
 import top.lvjp.association.entity.Association;
 import top.lvjp.association.entity.Picture;
+import top.lvjp.association.enums.PictureIconEnum;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.form.AssociationForm;
@@ -84,17 +85,20 @@ public class AssociationServiceImpl implements AssociationService {
     @Transactional
     public int updateAssociationIcon(String associationId, Integer pictureId) {
         String picturePath = null;
-        Picture picture = null;
+        Picture picture;
         Association association = associationMapper.getById(associationId);
         if (association.getPictureId() != null){
-            pictureMapper.reduceIconCount(association.getPictureId());
+            pictureMapper.updateIcon(association.getPictureId(), PictureIconEnum.NOT_ICON.getValue());
         }
         if (pictureId != null){
             picture = pictureMapper.getById(pictureId);
             if ( picture == null){
-                throw new MyException(ResultEnum.PICTURE_NOT_EXSIST);
+                throw new MyException(ResultEnum.PICTURE_NOT_EXIST);
             }
-            pictureMapper.addIconCount(pictureId);
+            if (picture.getIsIcon() != PictureIconEnum.NOT_ICON.getValue()){
+                throw new MyException(ResultEnum.PICTURE_HAS_USED);
+            }
+            pictureMapper.updateIcon(pictureId, PictureIconEnum.ASSOCIATION_ICON.getValue());
             picturePath = picture.getPicturePath();
         }
         return associationMapper.updateAssociationIcon(pictureId, picturePath, associationId);
@@ -118,15 +122,18 @@ public class AssociationServiceImpl implements AssociationService {
             throw new MyException(ResultEnum.ASSOCIATION_NOT_EXISTS);
         }
         if (association.getPictureId() != null) {
-            pictureMapper.reduceIconCount(association.getPictureId());
+            pictureMapper.updateIcon(association.getPictureId(), PictureIconEnum.NOT_ICON.getValue());
         }
         if (form.getPictureId() != null ){
             Picture newPicture = pictureMapper.getById(form.getPictureId());
             if (newPicture == null) {
-                throw new MyException(ResultEnum.PICTURE_NOT_EXSIST);
+                throw new MyException(ResultEnum.PICTURE_NOT_EXIST);
+            }
+            if (newPicture.getIsIcon() != 0){
+                throw new MyException(ResultEnum.PICTURE_HAS_USED);
             }
             form.setPicturePath(newPicture.getPicturePath());
-            pictureMapper.addIconCount(newPicture.getPictureId());
+            pictureMapper.updateIcon(newPicture.getPictureId(), PictureIconEnum.ASSOCIATION_ICON.getValue());
         }
         return associationMapper.updateAssociation(form);
     }

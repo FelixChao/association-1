@@ -2,19 +2,16 @@ package top.lvjp.association.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import org.springframework.aop.interceptor.ConcurrencyThrottleInterceptor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.lvjp.association.VO.ActivityInfo;
 import top.lvjp.association.VO.PageVO;
-import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.dto.ActivitiesDTO;
 import top.lvjp.association.entity.Activity;
 import top.lvjp.association.entity.Association;
 import top.lvjp.association.entity.Picture;
-import top.lvjp.association.entity.Rights;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.form.ActivityForm;
@@ -23,8 +20,8 @@ import top.lvjp.association.mapper.ActivityMapper;
 import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.PictureMapper;
 import top.lvjp.association.service.ActivityService;
+import top.lvjp.association.util.RightsTestUtil;
 
-import javax.management.openmbean.OpenMBeanAttributeInfoSupport;
 import java.util.List;
 
 @Service
@@ -150,8 +147,7 @@ public class ActivityServiceImpl implements ActivityService {
     @Transactional
     public int publish(Integer id,String associationId) {
         Activity activity = activityMapper.getById(id);
-        if (!activity.getAssociationId().equals(associationId)
-                && !associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+        if (!RightsTestUtil.hasRights(associationId, activity.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         return activityMapper.publish(id);
@@ -164,8 +160,7 @@ public class ActivityServiceImpl implements ActivityService {
         if (activity == null) {
             throw new MyException(ResultEnum.ACTIVITY_NOT_EXISTS);
         }
-        if (!activity.getAssociationId().equals(associationId)
-                && !associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+        if (!RightsTestUtil.hasRights(associationId, activity.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         activityApplyMapper.deleteActivityApply(activityId);
@@ -187,22 +182,20 @@ public class ActivityServiceImpl implements ActivityService {
 //        if (associationName == null) {
 //            throw new MyException(ResultEnum.ASSOCIATION_NOT_EXISTS);
 //        }
-        Activity activity = activityMapper.getById(activityForm.getActivityId());
-        if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !associationId.equals(activity.getAssociationId())){
-            throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
+        if (!RightsTestUtil.hasRights(associationId, activityForm.getAssociationId())){
+            throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY.getCode(), "非最高管理员只能将活动所属社团设为本社团!");
         }
-        if (activity.getPictureId() != null) {
-            pictureMapper.reduceIconCount(activity.getPictureId());
+        Activity activity = activityMapper.getById(activityForm.getActivityId());
+        if (!RightsTestUtil.hasRights(associationId, activity.getAssociationId())){
+            throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         String picturePath = null;
         Picture picture;
         if (activityForm.getPictureId() != null){
             picture = pictureMapper.getById(activityForm.getPictureId());
             if (picture == null) {
-                throw new MyException(ResultEnum.PICTURE_NOT_EXSIST);
+                throw new MyException(ResultEnum.PICTURE_NOT_EXIST);
             }
-            pictureMapper.addIconCount(picture.getPictureId());
             picturePath = picture.getPicturePath();
         }
         activityForm.setPicturePath(picturePath);
@@ -211,18 +204,20 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public int insert(ActivityForm activityForm) {
+    public int insert(ActivityForm activityForm, String userAssociation) {
 //        Association associationName = associationMapper.getById(activityForm.getAssociationId());
 //        if (associationName == null) {
 //            throw new MyException(ResultEnum.ASSOCIATION_NOT_EXISTS);
 //        }
+        if (!RightsTestUtil.hasRights(userAssociation, activityForm.getAssociationId())){
+            throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY.getCode(), "非最高管理员只能将活动所属社团设为本社团!");
+        }
         String picturePath = null;
         if (activityForm.getPictureId() != null){
             Picture picture = pictureMapper.getById(activityForm.getPictureId());
             if (picture == null) {
-                throw new MyException(ResultEnum.PICTURE_NOT_EXSIST);
+                throw new MyException(ResultEnum.PICTURE_NOT_EXIST);
             }
-            pictureMapper.addIconCount(picture.getPictureId());
             picturePath = picture.getPicturePath();
         }
         activityForm.setPicturePath(picturePath);
@@ -234,16 +229,11 @@ public class ActivityServiceImpl implements ActivityService {
     public int updateActivityIcon(Integer activityId, Integer pictureId, String userAssociation) {
         String picturePath = null;
         Activity activity = activityMapper.getById(activityId);
-        if (!activity.getAssociationId().equals(userAssociation) && !userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+        if (!RightsTestUtil.hasRights(userAssociation, activity.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
-        }
-        Integer oldPicture = activity.getPictureId();
-        if (oldPicture != null){
-            pictureMapper.reduceIconCount(oldPicture);
         }
         if (pictureId != null){
             picturePath = pictureMapper.getById(pictureId).getPicturePath();
-            pictureMapper.addIconCount(pictureId);
         }
         return activityMapper.updateActivityIcon(activityId, pictureId, picturePath);
     }

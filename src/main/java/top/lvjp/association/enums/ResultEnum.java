@@ -28,8 +28,9 @@ public enum ResultEnum {
     FILE_IS_EMPTY(19, "文件为空,请重新选择文件"),
     IDENTIFY_VALID_FAILED(20, "身份验证失败"),
     PARAMETERS_IS_ERROR(21, "参数错误"),
-    PICTURE_NOT_EXSIST(22, "图片不存在"),
-    VIDEO_NOT_EXSIST(23, "视频不存在");
+    PICTURE_NOT_EXIST(22, "图片不存在"),
+    VIDEO_NOT_EXIST(23, "视频不存在"),
+    PICTURE_HAS_USED(24, "该图片已经作为其他标志使用");
 
     private Integer code;
 

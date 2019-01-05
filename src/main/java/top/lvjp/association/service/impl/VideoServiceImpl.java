@@ -19,6 +19,8 @@ import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.UserMapper;
 import top.lvjp.association.mapper.VideoMapper;
 import top.lvjp.association.service.VideoService;
+import top.lvjp.association.util.FileUtil;
+import top.lvjp.association.util.RightsTestUtil;
 
 import java.util.List;
 
@@ -33,6 +35,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private FileUtil fileUtil;
 
     @Override
     public List<VideoInfo> listLatest(Integer count) {
@@ -79,8 +84,7 @@ public class VideoServiceImpl implements VideoService {
     @Transactional
     public int update(Video video, String associationId) {
         Video v = videoMapper.getById(video.getVideoId());
-        if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !associationId.equals(v.getAssociationId())){
+        if (!RightsTestUtil.hasRights(associationId, v.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         return videoMapper.update(video);
@@ -90,10 +94,13 @@ public class VideoServiceImpl implements VideoService {
     @Transactional
     public int delete(Integer videoId, String associationId) {
         Video video = videoMapper.getById(videoId);
-        if (!associationId.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)
-                && !associationId.equals(video.getAssociationId())){
+        if (!RightsTestUtil.hasRights(associationId, video.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
-        return videoMapper.delete(videoId);
+        if (videoMapper.delete(videoId) == 1){
+            fileUtil.deleteFile(video.getVideoPath(), FileUtil.VIDEO_FILE);
+            return 1;
+        }
+        return 0;
     }
 }

@@ -6,7 +6,7 @@ import lombok.Getter;
 public enum TextStatusEnum {
 
     PUBLISH(1,"发布"),
-    UNPUBLISH(0,"草稿箱");
+    UN_PUBLISH(0,"草稿箱");
 
     private Integer Status;
 

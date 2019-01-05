@@ -59,7 +59,7 @@ public interface VideoService {
      * 普通人只能删除本社团的视频
      * @param videoId
      * @param associationId
-     * @return
+     * @return 返回成功删除的数量
      */
     int delete(Integer videoId, String associationId);
 }

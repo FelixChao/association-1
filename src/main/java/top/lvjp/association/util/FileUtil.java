@@ -35,44 +35,44 @@ public class FileUtil {
     @Value("${video-types}")
     private String videoTypes;
 
-
     public static final int VIDEO_FILE = 1;
     public static final int IMAGE_FILE = 2;
 
-
     /**
      * 根据指定类型, 上传视频或图片文件
+     * 文件储存路径上一级为社团 id
      * @param file 要上传的文件
-     * @param userId 上传用户
+     * @param associationId 上传用户所属社团
      * @param type 指定类型, 必须为 IMAGE_FILE 或 VIDEO_FILE
      * @return 返回上传的文件的访问地址 ( 自定义资源路径 + 文件名 )
      */
-    public String uploadFile(MultipartFile file, Integer userId, int type){
+    public String uploadFile(MultipartFile file, String associationId, int type){
         String path = null;
         String accessPath = null;
+        String associationPath = associationId + "/";
         if (file == null || file.isEmpty()) {
             throw new MyException(ResultEnum.FILE_IS_EMPTY);
         }
         String contentType = file.getContentType();
         String fileType = contentType.substring(contentType.indexOf("/") + 1).toUpperCase();
-        if (fileType == null) {
+        if (fileType.isEmpty()) {
             throw new MyException(ResultEnum.FILE_TYPE_ERROR);
         }
         if (type == IMAGE_FILE){
             String[] types = imageTypes.split(",");
-            for (int i = 0; i < types.length; i++) {
-                if (fileType.equals(types[i])){
-                    path = imagePath;
-                    accessPath = MyWebMvcConfigurer.IMAGE_ACCESS_PATH;
+            for (String type1 : types) {
+                if (fileType.equals(type1)) {
+                    path = imagePath + associationPath;
+                    accessPath = MyWebMvcConfigurer.IMAGE_ACCESS_PATH + associationPath;
                     break;
                 }
             }
         } else if (type == VIDEO_FILE){
             String[] types = videoTypes.split(",");
-            for (int i = 0; i < types.length; i++) {
-                if (fileType.equals(types[i])){
-                    path = videoPath;
-                    accessPath = MyWebMvcConfigurer.VIDEO_ACCESS_PATH;
+            for (String type1 : types) {
+                if (fileType.equals(type1)) {
+                    path = videoPath + associationPath;
+                    accessPath = MyWebMvcConfigurer.VIDEO_ACCESS_PATH + associationPath;
                     break;
                 }
             }
@@ -92,13 +92,25 @@ public class FileUtil {
         }
         try {
             file.transferTo(dest);
-            log.info("用户:{} 上传文件 {} 成功!",userId, fileName);
+            log.info("上传文件 {} 成功!", fileName);
         } catch (IOException e) {
-            log.error("用户:{} 上传文件 {} 失败!",userId, fileName);
+            log.error("上传文件 {} 失败!", fileName);
             e.printStackTrace();
             throw new MyException(ResultEnum.FILL_UPLOAD_FAILED);
         }
         return accessPath + fileName;
     }
-}
 
+    public void deleteFile(String filePath, int type) {
+        String fileName = filePath.substring(filePath.indexOf("/",2) + 1);
+        if (type == IMAGE_FILE) {
+            filePath = imagePath + fileName;
+        } else if (type == VIDEO_FILE) {
+            filePath = videoPath + fileName;
+        } else throw new IllegalArgumentException("参数type只能为 FileUtil.VIDEO_FILE 或 FileUtil.IMAGE_FILE");
+        File file = new File(filePath);
+        if (file.delete()){
+            log.info("成功删除 {} 文件", filePath);
+        }
+    }
+}

@@ -12,13 +12,20 @@ import top.lvjp.association.VO.PictureVO;
 import top.lvjp.association.entity.Association;
 import top.lvjp.association.entity.Picture;
 import top.lvjp.association.entity.User;
-import top.lvjp.association.mapper.ActivityMapper;
+import top.lvjp.association.enums.PictureIconEnum;
+import top.lvjp.association.enums.ResultEnum;
+import top.lvjp.association.exception.MyException;
 import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.PictureMapper;
 import top.lvjp.association.mapper.UserMapper;
 import top.lvjp.association.service.PictureService;
+import top.lvjp.association.util.FileUtil;
+import top.lvjp.association.util.RightsTestUtil;
 
 import java.util.List;
+
+import static top.lvjp.association.enums.PictureIconEnum.HEAD_ICON;
+import static top.lvjp.association.enums.PictureIconEnum.NOT_ICON;
 
 @Service
 public class PictureServiceImpl implements PictureService {
@@ -30,10 +37,10 @@ public class PictureServiceImpl implements PictureService {
     private AssociationMapper associationMapper;
 
     @Autowired
-    private ActivityMapper activityMapper;
+    private UserMapper userMapper;
 
     @Autowired
-    private UserMapper userMapper;
+    private FileUtil fileUtil;
 
 
     @Override
@@ -45,7 +52,7 @@ public class PictureServiceImpl implements PictureService {
     }
 
     @Override
-    public PageVO<PictureInfo> listByAssciation(String associationId, Integer pageNum, Integer size) {
+    public PageVO<PictureInfo> listByAssociation(String associationId, Integer pageNum, Integer size) {
         PageHelper.startPage(pageNum, size);
         List<PictureInfo> pictureList = pictureMapper.listByAssociation(associationId);
         PageInfo<PictureInfo> picturePageInfo = new PageInfo<>(pictureList);
@@ -92,9 +99,51 @@ public class PictureServiceImpl implements PictureService {
     @Override
     @Transactional
     public int delete(Integer[] pictureIds, String associationId) {
-        int length = pictureIds.length;
-        int count = pictureMapper.delete(pictureIds, associationId);
+        int count = 0;
+        String path;
+        Picture picture;
+        for (Integer id : pictureIds) {
+            picture = pictureMapper.getById(id);
+            if (RightsTestUtil.hasRights(associationId, picture.getAssociationId())) continue;
+            path = picture.getPicturePath();
+            if (pictureMapper.delete(id) == 1){
+                fileUtil.deleteFile(path, FileUtil.IMAGE_FILE);
+                count++;
+            }
+        }
         return count;
     }
 
+    @Override
+    public List<PictureInfo> listHeadPicture() {
+        return pictureMapper.listHeadPicture();
+    }
+
+    @Override
+    @Transactional
+    public void replaceHeadIcon(Integer oldId, Integer newId) {
+        pictureMapper.updateIcon(oldId, NOT_ICON.getValue());
+        Picture picture = pictureMapper.getById(newId);
+        if (picture.getIsIcon() != PictureIconEnum.NOT_ICON.getValue()){
+            throw new MyException(ResultEnum.PICTURE_HAS_USED);
+        }
+        pictureMapper.updateIcon(newId, HEAD_ICON.getValue());
+    }
+
+    @Override
+    public void updateHeadIcon(Integer pictureId, Integer isIcon) {
+        if (isIcon.equals(HEAD_ICON.getValue())){
+            Picture picture = pictureMapper.getById(pictureId);
+            if (picture.getIsIcon() != PictureIconEnum.NOT_ICON.getValue()){
+                throw new MyException(ResultEnum.PICTURE_HAS_USED);
+            }
+            pictureMapper.updateIcon(pictureId, HEAD_ICON.getValue());
+            return;
+        }
+        if (isIcon.equals(NOT_ICON.getValue())){
+            pictureMapper.updateIcon(pictureId, NOT_ICON.getValue());
+            return;
+        }
+        throw new MyException(ResultEnum.PARAMETERS_IS_ERROR);
+    }
 }
