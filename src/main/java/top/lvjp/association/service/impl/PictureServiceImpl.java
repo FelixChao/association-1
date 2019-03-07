@@ -20,7 +20,7 @@ import top.lvjp.association.mapper.PictureMapper;
 import top.lvjp.association.mapper.UserMapper;
 import top.lvjp.association.service.PictureService;
 import top.lvjp.association.util.FileUtil;
-import top.lvjp.association.util.RightsTestUtil;
+import top.lvjp.association.util.RightsUtil;
 
 import java.util.List;
 
@@ -98,13 +98,13 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     @Transactional
-    public int delete(Integer[] pictureIds, String associationId) {
+    public int delete(Integer[] pictureIds, String associationId, Integer userType) {
         int count = 0;
         String path;
         Picture picture;
         for (Integer id : pictureIds) {
             picture = pictureMapper.getById(id);
-            if (RightsTestUtil.hasRights(associationId, picture.getAssociationId())) continue;
+            if (RightsUtil.hasRights(associationId, picture.getAssociationId(), userType)) continue;
             path = picture.getPicturePath();
             if (pictureMapper.delete(id) == 1){
                 fileUtil.deleteFile(path, FileUtil.IMAGE_FILE);

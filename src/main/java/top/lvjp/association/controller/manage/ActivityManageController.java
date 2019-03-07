@@ -7,6 +7,7 @@ import top.lvjp.association.VO.ActivityInfo;
 import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
 import top.lvjp.association.constant.SessionConstant;
+import top.lvjp.association.enums.UserTypeEnum;
 import top.lvjp.association.form.ActivityForm;
 import top.lvjp.association.service.ActivityService;
 import top.lvjp.association.util.ResultUtil;
@@ -23,7 +24,7 @@ public class ActivityManageController {
 
     /**
      * 查询本社团的发布状态为 status 的正在进行活动
-     * 最高管理员查询全部社团活动
+     * 最高管理员查询全部社团活动, 其他用户查询结果为本社团活动
      * @param status 活动发布状态
      * @param pageNum 当前页
      * @param size 每页显示数量
@@ -35,7 +36,8 @@ public class ActivityManageController {
                                       @RequestParam("pageNum") Integer pageNum,
                                       @RequestParam("size") Integer size,HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (userType.equals(UserTypeEnum.ROOT.getValue())){
             userAssociation = null;
         }
         PageVO<ActivityInfo> pageInfo = activityService.selectCurrentByStatus(status, userAssociation, pageNum, size);
@@ -44,7 +46,7 @@ public class ActivityManageController {
 
     /**
      * 查询本社团的发布状态为 status 的即将进行活动
-     * 最高管理员查询全部社团活动
+     * 最高管理员查询全部社团活动, 其他用户查询结果为本社团活动
      * @param status 活动发布状态
      * @param pageNum 当前页
      * @param size 每页显示数量
@@ -54,14 +56,18 @@ public class ActivityManageController {
     public Result listFutureByStatus(@RequestParam("status") Integer status,
                                      @RequestParam("pageNum") Integer pageNum,
                                      @RequestParam("size") Integer size,HttpServletRequest request){
-        String associationId = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        PageVO<ActivityInfo> pageInfo = activityService.selectFutureByStatus(status,associationId,pageNum,size);
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (userType.equals(UserTypeEnum.ROOT.getValue())){
+            userAssociation = null;
+        }
+        PageVO<ActivityInfo> pageInfo = activityService.selectFutureByStatus(status,userAssociation,pageNum,size);
        return ResultUtil.success(pageInfo);
     }
 
     /**
      * 查询本社团的发布状态为 status 的已经结束活动
-     * 最高管理员查询全部社团活动
+     * 最高管理员查询全部社团活动, 其他用户查询结果为本社团活动
      * @param status 活动发布状态
      * @param pageNum 当前页
      * @param size 每页显示数量
@@ -71,8 +77,12 @@ public class ActivityManageController {
     public Result listPastByStatus(@RequestParam("status") Integer status,
                                    @RequestParam("pageNum") Integer pageNum,
                                    @RequestParam("size") Integer size, HttpServletRequest request){
-        String associationId = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        PageVO<ActivityInfo> pageInfo = activityService.selectPastByStatus(status,associationId,pageNum,size);
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (userType.equals(UserTypeEnum.ROOT.getValue())){
+            userAssociation = null;
+        }
+        PageVO<ActivityInfo> pageInfo = activityService.selectPastByStatus(status ,userAssociation, pageNum, size);
         return ResultUtil.success(pageInfo);
     }
 
@@ -89,6 +99,10 @@ public class ActivityManageController {
                              @RequestParam("pageNum") Integer pageNum,
                              @RequestParam("size") Integer size, HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (userType.equals(UserTypeEnum.ROOT.getValue())){
+            userAssociation = null;
+        }
         PageVO<ActivityInfo> pageInfo = activityService.queryByKey(key,userAssociation,pageNum,size);
         return ResultUtil.success(pageInfo);
     }
@@ -101,7 +115,8 @@ public class ActivityManageController {
     @PostMapping("/publish")
     public Result publish(@RequestParam("id") Integer id,HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        int count = activityService.publish(id, userAssociation);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        int count = activityService.publish(id, userAssociation, userType);
         return ResultUtil.success(count);
     }
 
@@ -114,7 +129,8 @@ public class ActivityManageController {
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("id") Integer id,HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        int count = activityService.delete(id,userAssociation);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        int count = activityService.delete(id, userAssociation, userType);
         return ResultUtil.success(count);
     }
 
@@ -143,7 +159,8 @@ public class ActivityManageController {
             return ResultUtil.validError(bindingResult.getFieldError().getDefaultMessage());
         }
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        int count = activityService.update(activityForm, userAssociation);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        int count = activityService.update(activityForm, userAssociation, userType);
         return ResultUtil.success(count);
     }
 
@@ -168,7 +185,8 @@ public class ActivityManageController {
             return ResultUtil.validError(bindingResult.getFieldError().getDefaultMessage());
         }
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        activityService.insert(activityForm, userAssociation);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        activityService.insert(activityForm, userAssociation, userType);
         return ResultUtil.success();
     }
 }

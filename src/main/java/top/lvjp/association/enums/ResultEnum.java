@@ -17,7 +17,7 @@ public enum ResultEnum {
     APPLY_IS_FINISHED(8,"报名已结束！"),
     NOW_NOT_APPLY(9,"当前不能报名"),
     USER_NOT_EXISTS(10,"用户不存在"),
-    USER_IS_EXISTS(11,"用户名已存在"),
+    NAME_IS_EXISTS(11,"用户名已存在"),
     OPERATE_IS_FAIL(12,"操作失败"),
     APPLY_ALREADY_EXISTS(13,"报名信息已存在"),
     NEWS_NOT_EXISTS(14,"新闻不存在"),
@@ -30,7 +30,10 @@ public enum ResultEnum {
     PARAMETERS_IS_ERROR(21, "参数错误"),
     PICTURE_NOT_EXIST(22, "图片不存在"),
     VIDEO_NOT_EXIST(23, "视频不存在"),
-    PICTURE_HAS_USED(24, "该图片已经作为其他标志使用");
+    PICTURE_HAS_USED(24, "该图片已被使用, 请更换图片或重新上传图片"),
+    ACCOUNT_IS_KICKED(25, "您的账号在其他设备登录, 如非本人操作请更改密码"),
+    USER_HAS_LOGIN(26, "用户已经登录, 请勿重复登录"),
+    USER_NOT_LOGIN(27, "用户未登录, 请先登录");
 
     private Integer code;
 

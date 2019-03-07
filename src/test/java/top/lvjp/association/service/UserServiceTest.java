@@ -1,5 +1,6 @@
 package top.lvjp.association.service;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mybatis.spring.annotation.MapperScan;
@@ -19,6 +20,6 @@ public class UserServiceTest {
     @Test
     public void getUserVO() {
         UserVO userVO = userService.getUserVO(1);
-        System.out.println(userVO.getAssociationName());
+        Assert.assertEquals("合工大社团联合会",userVO.getAssociationName());
     }
 }

@@ -8,6 +8,7 @@
         <result column="user_password" property="userPassword" />
         <result column="user_type" property="userType" />
         <result column="association_id" property="associationId"/>
+        <result column="salt"  property="salt" />
     </resultMap>
 
     <resultMap id="userVO" type="UserVO">
@@ -17,11 +18,26 @@
         <result column="type_name" property="userType" />
     </resultMap>
 
-    <select id="getByNameAndPassword" resultMap="user">
-        select user_id,user_name,user_password,user_type,association_id
+    <!--<resultMap id="userInfo" type="top.lvjp.association.VO.UserInfo">-->
+        <!--<id property="userId" column="user_id" />-->
+        <!--<result property="userName" column="user_name" />-->
+        <!--<result property="password" column="user_password" />-->
+        <!--<result property="associationId" column="association_id" />-->
+        <!--<result property="userType" column="user_type" />-->
+        <!--<result property="salt" column="salt" />-->
+    <!--</resultMap>-->
+
+    <select id="getByName" resultMap="user">
+        select user_id, user_name, user_password, user_type, association_id, salt
         from user
-        where user_name = #{name} and user_password = #{password}
+        where user_name = #{name}
     </select>
+
+    <!--<select id="getByNameAndPassword" resultMap="user">-->
+        <!--select user_id,user_name,user_password,user_type,association_id-->
+        <!--from user-->
+        <!--where user_name = #{name} and user_password = #{password}-->
+    <!--</select>-->
 
     <select id="getById" parameterType="integer" resultMap="user">
         select user_id,user_name,user_type,association_id
@@ -44,15 +60,15 @@
         join user_type_name as ut on u.user_type = ut.user_type
     </select>
 
-    <select id="getByName" parameterType="string" resultMap="user">
-        select  user_id,user_name,user_password,user_type,association_id
-        from user
-        where user_name = #{name}
-    </select>
+    <!--<select id="getByName" parameterType="string" resultMap="user">-->
+        <!--select  user_id,user_name,user_password,user_type,association_id-->
+        <!--from user-->
+        <!--where user_name = #{name}-->
+    <!--</select>-->
 
     <insert id="insert" parameterType="UserForm">
-        insert user (user_name,user_password,user_type,association_id)
-        values (#{userName},#{userPassword},#{userType},#{associationId})
+        insert user (user_name,user_password,user_type,association_id, salt)
+        values (#{userName},#{userPassword},#{userType},#{associationId}, #{salt})
     </insert>
 
     <update id="update" parameterType="UserForm" >

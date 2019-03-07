@@ -1,9 +1,12 @@
 package top.lvjp.association.handler;
 
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import top.lvjp.association.VO.Result;
+import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.util.ResultUtil;
 
@@ -15,7 +18,6 @@ public class MyExceptionHandler {
     public Result handle(Exception e){
         if(e instanceof MyException){
             MyException myException = (MyException)e;
-            System.out.println(e.getMessage());
             return ResultUtil.error(myException.getCode(),myException.getMessage());
         }
         else {
@@ -24,4 +26,16 @@ public class MyExceptionHandler {
 //            return ResultUtil.error(ResultEnum.UNKNOW_ERROR);
         }
     }
+
+    @ExceptionHandler(value = UnauthorizedException.class)
+    @ResponseBody
+    public Result handleUnauthorized(UnauthorizedException e){
+        return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
+    }
+
+    @ExceptionHandler(value = UnauthenticatedException.class)
+    public String handleUnauthorized(UnauthenticatedException e){
+        return "redirect:/login.html";
+    }
+
 }

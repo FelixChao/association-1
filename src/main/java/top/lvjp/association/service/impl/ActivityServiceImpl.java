@@ -20,7 +20,7 @@ import top.lvjp.association.mapper.ActivityMapper;
 import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.PictureMapper;
 import top.lvjp.association.service.ActivityService;
-import top.lvjp.association.util.RightsTestUtil;
+import top.lvjp.association.util.RightsUtil;
 
 import java.util.List;
 
@@ -145,9 +145,9 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public int publish(Integer id,String associationId) {
+    public int publish(Integer id, String associationId, Integer userType) {
         Activity activity = activityMapper.getById(id);
-        if (!RightsTestUtil.hasRights(associationId, activity.getAssociationId())){
+        if (!RightsUtil.hasRights(associationId, activity.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         return activityMapper.publish(id);
@@ -155,12 +155,12 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public int delete(Integer activityId,String associationId) {
+    public int delete(Integer activityId,String associationId, Integer userType) {
         Activity activity = activityMapper.getById(activityId);
         if (activity == null) {
             throw new MyException(ResultEnum.ACTIVITY_NOT_EXISTS);
         }
-        if (!RightsTestUtil.hasRights(associationId, activity.getAssociationId())){
+        if (!RightsUtil.hasRights(associationId, activity.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         activityApplyMapper.deleteActivityApply(activityId);
@@ -177,16 +177,12 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public int update(ActivityForm activityForm, String associationId) {
-//        Association associationName = associationMapper.getById(activityForm.getAssociationId());
-//        if (associationName == null) {
-//            throw new MyException(ResultEnum.ASSOCIATION_NOT_EXISTS);
-//        }
-        if (!RightsTestUtil.hasRights(associationId, activityForm.getAssociationId())){
+    public int update(ActivityForm activityForm, String associationId, Integer userType) {
+        if (!RightsUtil.hasRights(associationId, activityForm.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY.getCode(), "非最高管理员只能将活动所属社团设为本社团!");
         }
         Activity activity = activityMapper.getById(activityForm.getActivityId());
-        if (!RightsTestUtil.hasRights(associationId, activity.getAssociationId())){
+        if (!RightsUtil.hasRights(associationId, activity.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         String picturePath = null;
@@ -204,12 +200,8 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public int insert(ActivityForm activityForm, String userAssociation) {
-//        Association associationName = associationMapper.getById(activityForm.getAssociationId());
-//        if (associationName == null) {
-//            throw new MyException(ResultEnum.ASSOCIATION_NOT_EXISTS);
-//        }
-        if (!RightsTestUtil.hasRights(userAssociation, activityForm.getAssociationId())){
+    public int insert(ActivityForm activityForm, String userAssociation, Integer userType) {
+        if (!RightsUtil.hasRights(userAssociation, activityForm.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY.getCode(), "非最高管理员只能将活动所属社团设为本社团!");
         }
         String picturePath = null;
@@ -226,10 +218,10 @@ public class ActivityServiceImpl implements ActivityService {
 
     @Override
     @Transactional
-    public int updateActivityIcon(Integer activityId, Integer pictureId, String userAssociation) {
+    public int updateActivityIcon(Integer activityId, Integer pictureId, String userAssociation, Integer userType) {
         String picturePath = null;
         Activity activity = activityMapper.getById(activityId);
-        if (!RightsTestUtil.hasRights(userAssociation, activity.getAssociationId())){
+        if (!RightsUtil.hasRights(userAssociation, activity.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         if (pictureId != null){

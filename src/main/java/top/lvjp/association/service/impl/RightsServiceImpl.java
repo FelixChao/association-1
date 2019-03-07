@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.RightsInfo;
 import top.lvjp.association.VO.RightsVO;
-import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.entity.Association;
 import top.lvjp.association.entity.Rights;
 import top.lvjp.association.enums.ResultEnum;
@@ -18,7 +17,7 @@ import top.lvjp.association.form.RightsForm;
 import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.RightsMapper;
 import top.lvjp.association.service.RightsService;
-import top.lvjp.association.util.RightsTestUtil;
+import top.lvjp.association.util.RightsUtil;
 
 import java.util.List;
 
@@ -32,9 +31,9 @@ public class RightsServiceImpl implements RightsService {
     private AssociationMapper associationMapper;
 
     @Override
-    public RightsVO getById(Integer rightsId, String associationId) {
+    public RightsVO getById(Integer rightsId, String associationId, Integer userType) {
         Rights rights = rightsMapper.getById(rightsId);
-        if (!RightsTestUtil.hasRights(associationId, rights.getAssociationId())){
+        if (!RightsUtil.hasRights(associationId, rights.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         Association association = associationMapper.getById(rights.getAssociationId());
@@ -80,9 +79,9 @@ public class RightsServiceImpl implements RightsService {
 
     @Override
     @Transactional
-    public int update(String associationId, Integer rightsId, Integer status, String solution) {
+    public int update(String associationId, Integer rightsId, Integer status, String solution, Integer userType) {
         Rights rights = rightsMapper.getById(rightsId);
-        if (!RightsTestUtil.hasRights(associationId, rights.getAssociationId())){
+        if (!RightsUtil.hasRights(associationId, rights.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         return rightsMapper.update(rightsId, status, solution);

@@ -14,11 +14,12 @@ import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.service.PictureService;
 import top.lvjp.association.util.FileUtil;
 import top.lvjp.association.util.ResultUtil;
-import top.lvjp.association.util.RightsTestUtil;
+import top.lvjp.association.util.RightsUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static top.lvjp.association.constant.SessionConstant.USER_ASSOCIATION;
+import static top.lvjp.association.constant.SessionConstant.USER_TYPE;
 
 @RestController
 @RequestMapping("/manage/picture")
@@ -55,7 +56,8 @@ public class PictureManageController {
                                     @RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer size,
                                     HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (RightsTestUtil.hasRights(userAssociation, associationId)){
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (RightsUtil.hasRights(userAssociation, associationId, userType)){
             return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         PageVO<PictureInfo> pictureInfo = pictureService.listByAssociation(associationId, pageNum, size);
@@ -100,8 +102,8 @@ public class PictureManageController {
             picture.setPictureTitle(title);
         }
         Integer userId = (Integer) request.getSession().getAttribute(SessionConstant.USER_ID);
-        picture.setUserId(userId);
         String associationId = (String) request.getSession().getAttribute(USER_ASSOCIATION);
+        picture.setUserId(userId);
         picture.setAssociationId(associationId);
         String path = fileUtil.uploadFile(file, associationId, FileUtil.IMAGE_FILE);
         picture.setPicturePath(path);
@@ -109,28 +111,55 @@ public class PictureManageController {
         return ResultUtil.success(count);
     }
 
+    /**
+     * 删除一组图片
+     * @param ids
+     * @param request
+     * @return
+     */
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("ids") Integer[] ids, HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(USER_ASSOCIATION);
-        int success = pictureService.delete(ids, userAssociation);
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        int success = pictureService.delete(ids, userAssociation, userType);
         int fails = ids.length - success;
-        return ResultUtil.success("成功删除" + success + "条数据, " + fails + "数据删除失败, 可能权限不足或有图片被作为社徽使用");
+        String message = fails > 0 ? ", 可能权限不足或有图片被作为社徽使用!" : "";
+        return ResultUtil.success("成功删除" + success + "张图片, " + fails + "张删除失败" + message);
     }
 
+    /**
+     * 替换头图, 首页顶层展示的图片
+     * 需最高管理员权限
+     * @param oldId
+     * @param newId
+     * @return
+     */
     @PostMapping("/head/replace")
     public Result updateHead(@RequestParam("oldId") Integer oldId, @RequestParam("newId") Integer newId){
         pictureService.replaceHeadIcon(oldId, newId);
         return ResultUtil.success();
     }
 
+    /**
+     * 添加头图
+     * 最高管理员权限
+     * @param id
+     * @return
+     */
     @PostMapping("/head/add")
     public Result addHead(@RequestParam("id") Integer id){
         pictureService.updateHeadIcon(id, PictureIconEnum.HEAD_ICON.getValue());
         return ResultUtil.success();
     }
 
+    /**
+     * 删除头图
+     * 最高管理员权限
+     * @param id
+     * @return
+     */
     @DeleteMapping("/head/delete")
-    public Result delete(@RequestParam("id") Integer id){
+    public Result deleteHead(@RequestParam("id") Integer id){
         pictureService.updateHeadIcon(id, PictureIconEnum.NOT_ICON.getValue());
         return ResultUtil.success();
     }

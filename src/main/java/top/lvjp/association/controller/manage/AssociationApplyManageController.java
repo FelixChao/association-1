@@ -8,12 +8,13 @@ import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.entity.AssociationApply;
 import top.lvjp.association.enums.ApplyStatusEnum;
 import top.lvjp.association.enums.ResultEnum;
+import top.lvjp.association.enums.UserTypeEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.form.QueryForm;
 import top.lvjp.association.service.AssociationApplyService;
 import top.lvjp.association.service.AssociationService;
 import top.lvjp.association.util.ResultUtil;
-import top.lvjp.association.util.RightsTestUtil;
+import top.lvjp.association.util.RightsUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -41,7 +42,8 @@ public class AssociationApplyManageController {
                                     @RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer size,
                                     HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (RightsTestUtil.hasRights(userAssociation, associationId)){
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (RightsUtil.hasRights(userAssociation, associationId, userType)){
             PageVO<AssociationApply> applyPageVO = associationApplyService.listByAssociation(associationId, pageNum, size);
             return ResultUtil.success(applyPageVO);
         }
@@ -62,7 +64,8 @@ public class AssociationApplyManageController {
                         @RequestParam("size") Integer size, HttpServletRequest request){
         queryForm.setAssociationId(null);
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (!userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)) {
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (!userType.equals(UserTypeEnum.ROOT.getValue())) {
             queryForm.setAssociationId(userAssociation);
         }
         PageVO<AssociationApply> applyPageVO = associationApplyService.query(queryForm, pageNum, size);
@@ -80,12 +83,13 @@ public class AssociationApplyManageController {
     @PostMapping("/updateApply")
     public Result updateStatus(@RequestParam("associationId") String associationId,
             @RequestParam("status") Integer status,HttpServletRequest request){
-        String userAssociation= (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
         if (!ApplyStatusEnum.FORBID_APPLY.getStatus().equals(status)
                 && !ApplyStatusEnum.ALLOW_APPLY.getStatus().equals(status)) {
             throw new MyException(ResultEnum.PARAMETERS_IS_ERROR);
         }
-        if (RightsTestUtil.hasRights(userAssociation, associationId)){
+        if (RightsUtil.hasRights(userAssociation, associationId, userType)){
             associationService.updateApplyStatus(status, associationId);
             return ResultUtil.success();
         }
@@ -102,8 +106,9 @@ public class AssociationApplyManageController {
     @DeleteMapping("/clean")
     public Result clean(@RequestParam("associationId") String associationId,HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
         int count;
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE) || userAssociation.equals(associationId)){
+        if (RightsUtil.hasRights(userAssociation, associationId, userType)){
             count = associationApplyService.deleteAll(associationId);
             return ResultUtil.success(count);
         }
@@ -121,7 +126,8 @@ public class AssociationApplyManageController {
     public Result delete(@RequestParam("ids") Integer[] ids, @RequestParam("associationId") String associationId,
                          HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (RightsTestUtil.hasRights(userAssociation, associationId)){
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (RightsUtil.hasRights(userAssociation, associationId, userType)){
             int count = associationApplyService.deleteByIds(ids, associationId);
             return ResultUtil.success(count);
         }

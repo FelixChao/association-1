@@ -5,15 +5,12 @@ import lombok.Getter;
 @Getter
 public enum TextStatusEnum {
 
-    PUBLISH(1,"发布"),
-    UN_PUBLISH(0,"草稿箱");
+    PUBLISH(1),
+    UN_PUBLISH(0);
 
     private Integer Status;
 
-    private String message;
-
-    TextStatusEnum(int status, String message) {
+    TextStatusEnum(int status) {
         Status = status;
-        this.message = message;
     }
 }

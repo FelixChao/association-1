@@ -13,19 +13,20 @@
 <body>
 <div>
     <!-- 后面添加参数起到清除缓存作用 -->
-    <img alt="验证码" id="imageCode" src="http://localhost:8080/manage/getVerify" />
+    <img alt="验证码" id="imageCode" src="http://localhost:8080/getVerify" />
     <a href="javascript:reloadCode();">看不清楚,换一张</a>
 </div>
-<form action="http://localhost:8080/manage/login" method="post" >
-    用户名:<input type="text" name="name" /><br>
+<form action="http://localhost:8080/login" method="post" >
+    用户名:<input type="text" name="username" /><br>
     密码:<input type="text" name="password" /><br>
     验证码:<input type="text" name="code" /><br>
+    记住我: <input type="radio" name="remember" value="true"/><br>
     <input type="submit" value="提交" />
 </form>
 </body>
 <script type="text/javascript">
     function reloadCode() {
-        document.getElementById("imageCode").src="http://localhost:8080/manage/getVerify?d='+new Date()*1";
+        document.getElementById("imageCode").src="http://localhost:8080/getVerify?d='+new Date()*1";
     }
 </script>
 </html>

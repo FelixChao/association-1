@@ -3,9 +3,9 @@ package top.lvjp.association.form;
 import lombok.Data;
 import top.lvjp.association.constant.RegexpConstant;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 
 @Data
 public class AssociationApplyForm {
@@ -19,7 +19,7 @@ public class AssociationApplyForm {
     /**
      * 学生姓名
      */
-    @Size(min = 1,message = "姓名不能为空")
+    @NotBlank(message = "姓名不能为空")
     private String studentName;
 
     /**
@@ -32,7 +32,7 @@ public class AssociationApplyForm {
     /**
      * 性别
      */
-    @NotNull(message = "性别不能为空")
+    @NotBlank(message = "性别不能为空")
     private String sex;
 
     /**

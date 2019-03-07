@@ -11,9 +11,9 @@ import top.lvjp.association.entity.User;
 import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.exception.MyException;
 import top.lvjp.association.form.UserForm;
-import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.UserMapper;
 import top.lvjp.association.service.UserService;
+import top.lvjp.association.util.MD5Util;
 
 import java.util.List;
 
@@ -23,13 +23,13 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
-    @Autowired
-    private AssociationMapper associationMapper;
+//    @Autowired
+//    private AssociationMapper associationMapper;
 
-    @Override
-    public User selectByNameAndPassword(String name, String password) {
-        return userMapper.getByNameAndPassword(name,password);
-    }
+//    @Override
+//    public User selectByNameAndPassword(String name, String password) {
+//        return userMapper.getByNameAndPassword(name,password);
+//    }
 
 //    @Override
 //    public User getById(Integer id) {
@@ -49,14 +49,18 @@ public class UserServiceImpl implements UserService {
     public int insert(UserForm userForm) {
         User user = userMapper.getByName(userForm.getUserName());
         if (user != null) {
-            throw new MyException(ResultEnum.USER_IS_EXISTS);
+            throw new MyException(ResultEnum.NAME_IS_EXISTS);
         }
+        userForm.setSalt(MD5Util.getSalt());
+        userForm.setUserPassword(MD5Util.hashed(userForm.getUserPassword(), userForm.getSalt()));
         return userMapper.insert(userForm);
     }
 
     @Override
-    public int update(UserForm user) {
-        return userMapper.update(user);
+    public int update(UserForm userForm) {
+        User user = userMapper.getById(userForm.getUserId());
+        userForm.setUserPassword(MD5Util.hashed(userForm.getUserPassword(), user.getSalt()));
+        return userMapper.update(userForm);
     }
 
     @Override

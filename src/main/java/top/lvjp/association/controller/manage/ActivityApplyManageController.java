@@ -5,13 +5,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
-import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.entity.ActivityApply;
 import top.lvjp.association.form.QueryForm;
 import top.lvjp.association.service.ActivityApplyService;
 import top.lvjp.association.util.ResultUtil;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static top.lvjp.association.constant.SessionConstant.USER_ASSOCIATION;
+import static top.lvjp.association.constant.SessionConstant.USER_TYPE;
 
 @RestController
 @RequestMapping("manage/activity/apply")
@@ -33,8 +35,9 @@ public class ActivityApplyManageController {
     public Result selectByActivity(@RequestParam("activityId") Integer activityId,
                                    @RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer size,
                                    HttpServletRequest request){
-        String userAssociation = request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION).toString();
-        PageVO<ActivityApply> activityApply = activityApplyService.getByActivity(userAssociation, activityId, pageNum, size);
+        String userAssociation = request.getSession().getAttribute(USER_ASSOCIATION).toString();
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        PageVO<ActivityApply> activityApply = activityApplyService.getByActivity(userAssociation, userType, activityId, pageNum, size);
         return ResultUtil.success(activityApply);
     }
 
@@ -50,8 +53,9 @@ public class ActivityApplyManageController {
     @GetMapping("/query")
     public Result query(QueryForm queryForm, @RequestParam("pageNum") Integer pageNum,
                         @RequestParam("size") Integer size, HttpServletRequest request){
-        String userAssociation = request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION).toString();
-        PageVO<ActivityApply> activityApply = activityApplyService.query(queryForm, userAssociation, pageNum, size);
+        String userAssociation = request.getSession().getAttribute(USER_ASSOCIATION).toString();
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        PageVO<ActivityApply> activityApply = activityApplyService.query(queryForm, userAssociation, userType, pageNum, size);
         return ResultUtil.success(activityApply);
     }
 
@@ -63,8 +67,9 @@ public class ActivityApplyManageController {
      */
     @DeleteMapping("/clean")
     public Result clean(@RequestParam("activityId") Integer activityId, HttpServletRequest request){
-        String userAssociation = request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION).toString();
-        int count = activityApplyService.deleteByActivityId(activityId, userAssociation);
+        String userAssociation = request.getSession().getAttribute(USER_ASSOCIATION).toString();
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        int count = activityApplyService.deleteByActivityId(activityId, userAssociation, userType);
         return ResultUtil.success(count);
     }
 
@@ -78,8 +83,9 @@ public class ActivityApplyManageController {
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("ids") Integer[] ids,@RequestParam("activityId") Integer activityId,
                          HttpServletRequest request){
-        String userAssociation = request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION).toString();
-        int count = activityApplyService.deleteByIds(ids, activityId, userAssociation);
+        String userAssociation = request.getSession().getAttribute(USER_ASSOCIATION).toString();
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        int count = activityApplyService.deleteByIds(ids, activityId, userAssociation, userType);
         return ResultUtil.success(count);
     }
 }

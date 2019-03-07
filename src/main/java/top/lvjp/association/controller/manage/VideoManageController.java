@@ -13,12 +13,13 @@ import top.lvjp.association.form.VideoForm;
 import top.lvjp.association.service.VideoService;
 import top.lvjp.association.util.FileUtil;
 import top.lvjp.association.util.ResultUtil;
-import top.lvjp.association.util.RightsTestUtil;
+import top.lvjp.association.util.RightsUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
 import static top.lvjp.association.constant.SessionConstant.USER_ASSOCIATION;
 import static top.lvjp.association.constant.SessionConstant.USER_ID;
+import static top.lvjp.association.constant.SessionConstant.USER_TYPE;
 
 @RestController
 @RequestMapping("/manage/video")
@@ -39,10 +40,12 @@ public class VideoManageController {
      * @return
      */
     @GetMapping("/list")
-    public Result selectByAssociation(@RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer size,
+    public Result selectByAssociation(@RequestParam("pageNum") Integer pageNum,
+                                      @RequestParam("size") Integer size,
                                       @RequestParam("associationId") String associationId, HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(USER_ASSOCIATION);
-        if (RightsTestUtil.hasRights(userAssociation, associationId)){
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        if (RightsUtil.hasRights(userAssociation, associationId, userType)){
             PageVO<VideoInfo> videoPageVO = videoService.listByAssociation(associationId,pageNum,size);
             return ResultUtil.success(videoPageVO);
         }
@@ -89,6 +92,7 @@ public class VideoManageController {
     public Result update(@RequestParam("videoId") Integer videoId, @RequestParam("title") String title ,
                          @RequestParam("desc") String description, HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(USER_ASSOCIATION);
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
         if (title == null || title.isEmpty()){
             return ResultUtil.error(ResultEnum.PARAMETERS_IS_ERROR.getCode(), "标题不能为空");
         }
@@ -96,14 +100,21 @@ public class VideoManageController {
         video.setVideoId(videoId);
         video.setVideoTitle(title);
         video.setVideoDescription(description);
-        int count = videoService.update(video, userAssociation);
+        int count = videoService.update(video, userAssociation, userType);
         return ResultUtil.success(count);
     }
 
+    /**
+     * 删除视频
+     * @param videoId
+     * @param request
+     * @return
+     */
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("id") Integer videoId, HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(USER_ASSOCIATION);
-        int count = videoService.delete(videoId, userAssociation);
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        int count = videoService.delete(videoId, userAssociation, userType);
         return ResultUtil.success(count);
     }
 }

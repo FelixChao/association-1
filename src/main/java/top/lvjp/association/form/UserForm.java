@@ -30,4 +30,6 @@ public class UserForm {
 
     @NotNull
     private String associationId;
+
+    private String salt;
 }

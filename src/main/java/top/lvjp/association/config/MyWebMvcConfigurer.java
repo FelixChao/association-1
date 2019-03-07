@@ -24,8 +24,11 @@ public class MyWebMvcConfigurer implements WebMvcConfigurer {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler(IMAGE_ACCESS_PATH + "**")
-                .addResourceLocations("file:" + imagePath + "**");
+                .addResourceLocations("file:" + imagePath);
         registry.addResourceHandler(VIDEO_ACCESS_PATH + "**")
-                .addResourceLocations("file:" + videoPath + "**");
+                .addResourceLocations("file:" + videoPath);
     }
+
+
+
 }

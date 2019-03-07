@@ -9,7 +9,7 @@ import top.lvjp.association.enums.ResultEnum;
 import top.lvjp.association.form.AssociationForm;
 import top.lvjp.association.service.AssociationService;
 import top.lvjp.association.util.ResultUtil;
-import top.lvjp.association.util.RightsTestUtil;
+import top.lvjp.association.util.RightsUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -32,7 +32,8 @@ public class AssociationManageController {
     public Result updateIcon(@RequestParam("associationId") String associationId,
                              @RequestParam("pictureId") Integer pictureId, HttpServletRequest request){
        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (RightsTestUtil.hasRights(userAssociation, associationId)){
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (RightsUtil.hasRights(userAssociation, associationId, userType)){
             associationService.updateAssociationIcon(associationId, pictureId);
             return ResultUtil.success();
         }
@@ -49,8 +50,9 @@ public class AssociationManageController {
     @PostMapping("/update/desc")
     public Result updateDesc(@RequestParam("associationId") String associationId,
                              @RequestParam("description") String description, HttpServletRequest request){
-       String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (RightsTestUtil.hasRights(userAssociation, associationId)){
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (RightsUtil.hasRights(userAssociation, associationId, userType)){
             int count = associationService.updateAssociationDesc(associationId, description);
             return ResultUtil.success(count);
         }
@@ -66,8 +68,9 @@ public class AssociationManageController {
      */
     @GetMapping("/form")
     public Result getForm(@RequestParam("associationId") String associationId, HttpServletRequest request){
-       String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (RightsTestUtil.hasRights(userAssociation, associationId)){
+        String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (RightsUtil.hasRights(userAssociation, associationId, userType)){
             AssociationForm associationForm = associationService.getAssociationForm(associationId);
             return ResultUtil.success(associationForm);
         }
@@ -77,7 +80,7 @@ public class AssociationManageController {
 
     /**
      * 更新社团信息
-     * 需要最高管理员权限
+     * 需要最高管理员权限, shiro 拦截
      * @param form 社团信息表单
      * @param bindingResult
      * @return

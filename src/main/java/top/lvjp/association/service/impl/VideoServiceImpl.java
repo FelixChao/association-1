@@ -2,14 +2,12 @@ package top.lvjp.association.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sun.org.apache.xerces.internal.dom.PSVIDOMImplementationImpl;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.VideoInfo;
-import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.entity.Association;
 import top.lvjp.association.entity.User;
 import top.lvjp.association.entity.Video;
@@ -20,7 +18,7 @@ import top.lvjp.association.mapper.UserMapper;
 import top.lvjp.association.mapper.VideoMapper;
 import top.lvjp.association.service.VideoService;
 import top.lvjp.association.util.FileUtil;
-import top.lvjp.association.util.RightsTestUtil;
+import top.lvjp.association.util.RightsUtil;
 
 import java.util.List;
 
@@ -82,9 +80,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     @Transactional
-    public int update(Video video, String associationId) {
+    public int update(Video video, String associationId, Integer userType) {
         Video v = videoMapper.getById(video.getVideoId());
-        if (!RightsTestUtil.hasRights(associationId, v.getAssociationId())){
+        if (!RightsUtil.hasRights(associationId, v.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         return videoMapper.update(video);
@@ -92,9 +90,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Override
     @Transactional
-    public int delete(Integer videoId, String associationId) {
+    public int delete(Integer videoId, String associationId, Integer userType) {
         Video video = videoMapper.getById(videoId);
-        if (!RightsTestUtil.hasRights(associationId, video.getAssociationId())){
+        if (!RightsUtil.hasRights(associationId, video.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         if (videoMapper.delete(videoId) == 1){

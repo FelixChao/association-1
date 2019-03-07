@@ -6,10 +6,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestParam;
 import top.lvjp.association.VO.NewsInfo;
 import top.lvjp.association.VO.PageVO;
-import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.entity.Association;
 import top.lvjp.association.entity.News;
 import top.lvjp.association.entity.Picture;
@@ -20,8 +18,7 @@ import top.lvjp.association.mapper.AssociationMapper;
 import top.lvjp.association.mapper.NewsMapper;
 import top.lvjp.association.mapper.PictureMapper;
 import top.lvjp.association.service.NewsService;
-import top.lvjp.association.util.ResultUtil;
-import top.lvjp.association.util.RightsTestUtil;
+import top.lvjp.association.util.RightsUtil;
 
 import java.util.List;
 
@@ -89,9 +86,9 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public int publish(Integer id, String userAssociation) {
+    public int publish(Integer id, String userAssociation, Integer userType) {
         News news = newsMapper.getById(id);
-        if(!RightsTestUtil.hasRights(userAssociation, news.getAssociationId())){
+        if(!RightsUtil.hasRights(userAssociation, news.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         return newsMapper.publish(id);
@@ -99,10 +96,10 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public int update(NewsForm newsForm, String userAssociation) {
+    public int update(NewsForm newsForm, String userAssociation, Integer userType) {
         News news = newsMapper.getById(newsForm.getNewsId());
-        if (RightsTestUtil.hasRights(userAssociation, news.getAssociationId())
-                    || !userAssociation.equals(newsForm.getAssociationId())){
+        if (RightsUtil.hasRights(userAssociation, news.getAssociationId(), userType)
+                    || !news.getAssociationId().equals(newsForm.getAssociationId())){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         newsForm.setPicturePath(null);
@@ -118,12 +115,12 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public int insert(NewsForm newsForm, String userAssociation) {
-        Association association = associationMapper.getById(newsForm.getAssociationId());
-        if (association == null) {
-            throw new MyException(ResultEnum.ASSOCIATION_NOT_EXISTS);
-        }
-        if (!RightsTestUtil.hasRights(userAssociation, newsForm.getAssociationId())){
+    public int insert(NewsForm newsForm, String userAssociation, Integer userType) {
+//        Association association = associationMapper.getById(newsForm.getAssociationId());
+//        if (association == null) {
+//            throw new MyException(ResultEnum.ASSOCIATION_NOT_EXISTS);
+//        }
+        if (!RightsUtil.hasRights(userAssociation, newsForm.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY.getCode(), "非最高管理员只能发布本社团新闻");
         }
         newsForm.setPicturePath(null);
@@ -139,9 +136,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     @Transactional
-    public int delete(Integer id, String userAssociation) {
+    public int delete(Integer id, String userAssociation, Integer userType) {
         News news = newsMapper.getById(id);
-        if (RightsTestUtil.hasRights(userAssociation, news.getAssociationId())){
+        if (RightsUtil.hasRights(userAssociation, news.getAssociationId(), userType)){
             throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         return newsMapper.delete(id);

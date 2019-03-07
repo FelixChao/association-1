@@ -4,10 +4,11 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class User {
+public class User implements Serializable {
 
     /**
      * 用户编号
@@ -48,4 +49,9 @@ public class User {
      * 更新时间
      */
     private Date updateTime;
+
+    /**
+     * 加密使用的盐
+     */
+    private String salt;
 }

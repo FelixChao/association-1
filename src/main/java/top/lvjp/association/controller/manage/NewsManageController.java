@@ -8,6 +8,7 @@ import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
 import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.enums.ResultEnum;
+import top.lvjp.association.enums.UserTypeEnum;
 import top.lvjp.association.form.NewsForm;
 import top.lvjp.association.service.NewsService;
 import top.lvjp.association.util.ResultUtil;
@@ -33,7 +34,7 @@ public class NewsManageController {
     }
 
     /**
-     * 查询社团文章状态为 status 的新闻
+     * 查询本社团文章状态为 status 的新闻
      * @param status 文章发布状态
      * @param pageNum 请求显示的页数
      * @param size 每页大小
@@ -45,7 +46,8 @@ public class NewsManageController {
                                            @RequestParam("pageNum") Integer pageNum,
                                            @RequestParam("size") Integer size,HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (userType.equals(UserTypeEnum.ROOT.getValue())){
             userAssociation = null;
         }
         PageVO<NewsInfo> newsInfo = newsService.listByStatus(status, userAssociation, pageNum, size);
@@ -62,7 +64,8 @@ public class NewsManageController {
                                         @RequestParam("pageNum") Integer pageNum,
                                         @RequestParam("size") Integer size, HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        if (userType.equals(UserTypeEnum.ROOT.getValue())){
             userAssociation = null;
         }
         PageVO<NewsInfo> newsInfoPageVO = newsService.queryByKey(key, userAssociation, pageNum, size);
@@ -77,7 +80,8 @@ public class NewsManageController {
     @PostMapping("/publish")
     public Result publish(@RequestParam("id") Integer id, HttpServletRequest request){
         String associationId = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        int count = newsService.publish(id, associationId);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        int count = newsService.publish(id, associationId, userType);
         return ResultUtil.success(count);
     }
 
@@ -92,7 +96,8 @@ public class NewsManageController {
             return ResultUtil.error(ResultEnum.FORM_VALID_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
         }
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        newsService.update(newsForm, userAssociation);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        newsService.update(newsForm, userAssociation, userType);
         return ResultUtil.success();
     }
 
@@ -107,7 +112,8 @@ public class NewsManageController {
             return ResultUtil.error(ResultEnum.FORM_VALID_ERROR.getCode(),bindingResult.getFieldError().getDefaultMessage());
         }
         String userAssociation = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        newsService.insert(newsForm, userAssociation);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        newsService.insert(newsForm, userAssociation, userType);
         return ResultUtil.success();
     }
 
@@ -119,7 +125,8 @@ public class NewsManageController {
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("id") Integer id,HttpServletRequest request){
         String associationId = (String) request.getSession().getAttribute(SessionConstant.USER_ASSOCIATION);
-        int count = newsService.delete(id, associationId);
+        Integer userType = (Integer) request.getSession().getAttribute(SessionConstant.USER_TYPE);
+        int count = newsService.delete(id, associationId, userType);
         return ResultUtil.success(count);
     }
 

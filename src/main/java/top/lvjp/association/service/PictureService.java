@@ -63,7 +63,7 @@ public interface PictureService {
      * @param associationId
      * @return 返回成功删除的数量
      */
-    int delete(Integer[] pictureIds, String associationId);
+    int delete(Integer[] pictureIds, String associationId, Integer userType);
 
     /**
      * 获取头图, 首页滑动图片

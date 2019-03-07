@@ -51,32 +51,37 @@ public interface NewsService {
      * 发布新闻
      * @param id 新闻编号
      * @param userAssociation 用户社团编号
+     * @param userType 用户类型
      * @return
      */
-    int publish(Integer id, String userAssociation);
+    int publish(Integer id, String userAssociation, Integer userType);
 
     /**
      * 更新新闻
+     * 非最高管理员只能修改本社团新闻, 且不能修改所属社团
      * @param newsForm 新闻表单
      * @param userAssociation 用户所属社团
+     * @param userType
      * @return 成功返回1,失败0
      */
-    int update(NewsForm newsForm, String userAssociation);
+    int update(NewsForm newsForm, String userAssociation, Integer userType);
 
     /**
      * 填写新闻
      * 非最高管理员只能填写本社团新闻
      * @param newsForm 新闻表单
      * @param userAssociation
+     * @param userType
      * @return
      */
-    int insert(NewsForm newsForm, String userAssociation);
+    int insert(NewsForm newsForm, String userAssociation, Integer userType);
 
     /**
      * 删除新闻
      * @param id 新闻编号
      * @param userAssociation 用户社团编号
+     * @param userType
      * @return
      */
-    int delete(Integer id,String userAssociation);
+    int delete(Integer id,String userAssociation, Integer userType);
 }

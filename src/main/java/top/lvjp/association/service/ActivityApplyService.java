@@ -22,17 +22,18 @@ public interface ActivityApplyService {
      * @param size
      * @return
      */
-    PageVO<ActivityApply> getByActivity(String userAssociation, Integer activityId, Integer pageNum, Integer size);
+    PageVO<ActivityApply> getByActivity(String userAssociation, Integer userType, Integer activityId, Integer pageNum, Integer size);
 
     /**
      * 通过查询条件查询本社团的活动报名表
      * @param queryForm 查询表单
      * @param associationId 执行操作的用户所属社团
+     * @param userType
      * @param pageNum
      * @param size
      * @return
      */
-    PageVO<ActivityApply> query(QueryForm queryForm, String associationId, Integer pageNum, Integer size);
+    PageVO<ActivityApply> query(QueryForm queryForm, String associationId, Integer userType, Integer pageNum, Integer size);
 
     /**
      * 删除某个活动的全部报名信息
@@ -40,7 +41,7 @@ public interface ActivityApplyService {
      * @param userAssociation
      * @return
      */
-    int deleteByActivityId(Integer activityId, String userAssociation);
+    int deleteByActivityId(Integer activityId, String userAssociation, Integer userType);
 
     /**
      * 删除指定报名信息
@@ -49,5 +50,5 @@ public interface ActivityApplyService {
      * @param userAssociation
      * @return
      */
-    int deleteByIds(Integer[] ids, Integer activityId, String userAssociation);
+    int deleteByIds(Integer[] ids, Integer activityId, String userAssociation, Integer userType);
 }

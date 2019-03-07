@@ -50,9 +50,10 @@ public interface VideoService {
      * 修改视频信息, 非最高管理员只能修改本社团视频信息
      * @param video
      * @param associationId 执行操作的用户
+     * @param userType
      * @return
      */
-    int update(Video video, String associationId);
+    int update(Video video, String associationId, Integer userType);
 
     /**
      * 删除视频
@@ -61,5 +62,5 @@ public interface VideoService {
      * @param associationId
      * @return 返回成功删除的数量
      */
-    int delete(Integer videoId, String associationId);
+    int delete(Integer videoId, String associationId, Integer userType);
 }

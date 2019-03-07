@@ -5,7 +5,7 @@ import lombok.Data;
 import org.springframework.format.annotation.DateTimeFormat;
 import top.lvjp.association.constant.RegexpConstant;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import java.util.Date;
@@ -27,7 +27,7 @@ public class ActivityForm {
     /**
      * 活动标题
      */
-    @NotEmpty(message = "活动标题不能为空")
+    @NotBlank(message = "活动标题不能为空")
     private String activityTitle;
 
     /**
@@ -49,7 +49,7 @@ public class ActivityForm {
     /**
      * 活动内容
      */
-    @NotEmpty(message = "请输入活动内容")
+    @NotBlank(message = "请输入活动内容")
     private String activityContent;
 
     /**

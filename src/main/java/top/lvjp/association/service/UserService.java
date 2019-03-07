@@ -2,18 +2,17 @@ package top.lvjp.association.service;
 
 import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.UserVO;
-import top.lvjp.association.entity.User;
 import top.lvjp.association.form.UserForm;
 
 public interface UserService {
 
-    /**
-     * 通过名字查询用户
-     * @param name
-     * @param password
-     * @return user
-     */
-    User selectByNameAndPassword(String name, String password);
+//    /**
+//     * 通过名字查询用户
+//     * @param name
+//     * @param password
+//     * @return user
+//     */
+//    User selectByNameAndPassword(String name, String password);
 
 //    /**
 //     * 通过id查询用户

@@ -10,8 +10,4 @@ public class SessionConstant {
 
     public  static final String USER_TYPE = "userType";
 
-    public static final String ROOT_ASSOCIATION_VALUE = "000";
-
-    public static final String ROOT_TYPE_VALUE = "root";
-
 }

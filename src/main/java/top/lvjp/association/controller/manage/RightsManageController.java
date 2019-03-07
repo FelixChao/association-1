@@ -6,17 +6,17 @@ import top.lvjp.association.VO.PageVO;
 import top.lvjp.association.VO.Result;
 import top.lvjp.association.VO.RightsInfo;
 import top.lvjp.association.VO.RightsVO;
-import top.lvjp.association.constant.SessionConstant;
 import top.lvjp.association.enums.ResultEnum;
-import top.lvjp.association.exception.MyException;
+import top.lvjp.association.enums.RightsStatusEnum;
+import top.lvjp.association.enums.UserTypeEnum;
 import top.lvjp.association.service.RightsService;
 import top.lvjp.association.util.ResultUtil;
-import top.lvjp.association.util.RightsTestUtil;
+import top.lvjp.association.util.RightsUtil;
 
 import javax.servlet.http.HttpServletRequest;
 
-import static top.lvjp.association.constant.SessionConstant.ROOT_ASSOCIATION_VALUE;
 import static top.lvjp.association.constant.SessionConstant.USER_ASSOCIATION;
+import static top.lvjp.association.constant.SessionConstant.USER_TYPE;
 
 @RequestMapping("/manage/rights")
 @RestController
@@ -50,7 +50,8 @@ public class RightsManageController {
                                     @RequestParam("pageNum") Integer pageNum, @RequestParam("size") Integer size,
                                     HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(USER_ASSOCIATION);
-        if (!RightsTestUtil.hasRights(userAssociation, associationId)) {
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        if (!RightsUtil.hasRights(userAssociation, associationId, userType)) {
             return ResultUtil.error(ResultEnum.RIGHTS_NOT_SATISFY);
         }
         PageVO<RightsInfo> rightsInfoPageVO = rightsService.listByAssociation(associationId, pageNum, size);
@@ -70,7 +71,8 @@ public class RightsManageController {
                                @RequestParam("pageNum") Integer pageNum,
                                @RequestParam("size") Integer size, HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(USER_ASSOCIATION);
-        if (userAssociation.equals(SessionConstant.ROOT_ASSOCIATION_VALUE)){
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        if (userType.equals(UserTypeEnum.ROOT.getValue())){
             userAssociation = null;
         }
         PageVO<RightsInfo> rightsInfo = rightsService.listByStatus(status, userAssociation, pageNum, size);
@@ -86,7 +88,8 @@ public class RightsManageController {
     @GetMapping("/detail")
     public Result getById(@RequestParam("id") Integer rightsId, HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(USER_ASSOCIATION);
-        RightsVO rightsVO = rightsService.getById(rightsId,userAssociation);
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        RightsVO rightsVO = rightsService.getById(rightsId, userAssociation, userType);
         return  ResultUtil.success(rightsVO);
     }
 
@@ -103,25 +106,23 @@ public class RightsManageController {
                          @RequestParam("status") Integer status,
                          @RequestParam("solution") String solution, HttpServletRequest request){
         String userAssociation = (String) request.getSession().getAttribute(USER_ASSOCIATION);
-        if (status != 1 && status != 2){
+        Integer userType = (Integer) request.getSession().getAttribute(USER_TYPE);
+        if (!status.equals(RightsStatusEnum.PROCESSING.getValue())
+                && !status.equals(RightsStatusEnum.RESOLVED.getValue())){
             return ResultUtil.error(ResultEnum.PARAMETERS_IS_ERROR);
         }
-        int count = rightsService.update(userAssociation, rightsId, status, solution);
+        int count = rightsService.update(userAssociation, rightsId, status, solution, userType);
         return ResultUtil.success(count);
     }
 
     /**
-     * 删除维权信息, 要求最高管理员身份
+     * 删除维权信息, 要求最高管理员身份, shiro 拦截
      * @param id
      * @param request
      * @return
      */
     @DeleteMapping("/delete")
     public Result delete(@RequestParam("id") Integer id, HttpServletRequest request){
-        String userAssociation = (String) request.getSession().getAttribute(USER_ASSOCIATION);
-        if (!userAssociation.equals(ROOT_ASSOCIATION_VALUE)){
-            throw new MyException(ResultEnum.RIGHTS_NOT_SATISFY);
-        }
         int count = rightsService.delete(id);
         return ResultUtil.success(count);
     }
